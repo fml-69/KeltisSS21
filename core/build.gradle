@@ -1,27 +1,31 @@
 apply plugin: "java"
 apply plugin: "jacoco"
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 //sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = [ "src/main/java/" ]
+sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 
 eclipse.project.name = appName + "-core"
 
-jacoco {
+/*jacoco {
     toolVersion = "0.8.6"
-}
+}*/
 
 test {
-    testLogging {
-        events "failed"
-        exceptionFormat "full"
-    }
-}
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter', 'junit-vintage'
+        // excludeEngines 'custom-engine'
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled true
+        // includeTags 'fast'
+        excludeTags 'slow'
     }
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+
+    finalizedBy(jacocoTestReport)
 }
