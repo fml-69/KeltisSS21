@@ -1,31 +1,52 @@
 package com.groupd.keltis;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.groupd.keltis.management.SceneManager;
+import com.groupd.keltis.utils.AssetPaths;
 
-public class Keltis extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+public class Keltis extends Game {
+
+	public SceneManager sceneManager;
+	public AssetManager assetManager;
+
+	public SpriteBatch batch;
+	public ShapeRenderer shapeRenderer;
+
+	public static int SCALE_WIDTH = 1920;
+	public static int SCALE_HEIGHT = 1080;
+	public static int FPS = 60;
+
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		shapeRenderer = new ShapeRenderer();
+		assetManager = new AssetManager();
+		loadAssets();
+		sceneManager = new SceneManager(this);
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		super.render();
+
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+		shapeRenderer.dispose();
+		assetManager.dispose();
+		sceneManager.dispose();
+	}
+
+	private void loadAssets(){
+		assetManager.load(AssetPaths.BOARD_BACKGROUND, Texture.class);
+		assetManager.load(AssetPaths.BOARD_BRANCHES, Texture.class);
+		assetManager.finishLoading();
 	}
 }
