@@ -12,7 +12,7 @@ public abstract class AbstractScene implements Screen {
 
     public AbstractScene(final Keltis keltis){
         this.keltis = keltis;
-        this.stage = new Stage();
+        //this.stage = new Stage();
     }
 
     public abstract void update(float delta);
