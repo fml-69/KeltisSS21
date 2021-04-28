@@ -1,7 +1,7 @@
 package com.groupd.keltis.utils;
 
 
-public class AssetPaths {
+public final class AssetPaths {
     private AssetPaths() {}
 
     public static final String BOARD_BACKGROUND = "board/board_background.png";
