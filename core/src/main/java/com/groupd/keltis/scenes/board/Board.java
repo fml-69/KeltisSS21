@@ -3,53 +3,57 @@ package com.groupd.keltis.scenes.board;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
+import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.AssetPaths;
+
 
 
 public class Board extends AbstractScene {
 
     private OrthographicCamera camera;
-    private World world;
-    private Texture board;
-    private Texture branches;
+    private Image board;
+    private Image branches;
+    private Image hudBar;
+    private Player playerBlue1;
 
 
     public Board(final Keltis keltis){
         super(keltis);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
         keltis.batch.setProjectionMatrix(camera.combined);
-        keltis.shapeRenderer.setProjectionMatrix(camera.combined);
-        world = new World(new Vector2(0f, 0f), false);
+        Gdx.input.setInputProcessor(stage);
 
-        board = keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND);
-        branches = keltis.assetManager.get(AssetPaths.BOARD_BRANCHES);
+        board = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
+        branches = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BRANCHES));
+        hudBar = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_HUD_BAR));
     }
 
     @Override
     public void update(float delta) {
-        world.step(1/(float)Keltis.FPS, 6, 2);
         stage.act(delta);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        keltis.batch.begin();
-        keltis.batch.draw(board,0,0, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
-        keltis.batch.draw(branches,0,0, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
-        keltis.batch.end();
-        stage.act();
         stage.draw();
     }
 
     @Override
     public void show() {
+        stage.addActor(board);
+        stage.addActor(branches);
+        stage.addActor(hudBar);
+        playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
+        playerBlue1.spritePos(960, 200);
+        stage.addActor(playerBlue1);
 
     }
 
