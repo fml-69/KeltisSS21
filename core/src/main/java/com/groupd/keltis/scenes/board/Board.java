@@ -20,6 +20,25 @@ public class Board extends AbstractScene {
     private Image branches;
     private Image hudBar;
     private Player playerBlue1;
+    private Player playerGreen1;
+    private Player playerRed1;
+    private Player playerYellow1;
+    private Player playerBlue2;
+    private Player playerGreen2;
+    private Player playerRed2;
+    private Player playerYellow2;
+    private Player playerBlue3;
+    private Player playerGreen3;
+    private Player playerRed3;
+    private Player playerYellow3;
+    private Player playerBlue4;
+    private Player playerGreen4;
+    private Player playerRed4;
+    private Player playerYellow4;
+    private Player playerBlue5;
+    private Player playerGreen5;
+    private Player playerRed5;
+    private Player playerYellow5;
 
 
     public Board(final Keltis keltis){
@@ -50,10 +69,72 @@ public class Board extends AbstractScene {
     public void show() {
         stage.addActor(board);
         stage.addActor(branches);
-        stage.addActor(hudBar);
         playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
-        playerBlue1.spritePos(960, 200);
+        playerBlue1.spritePos(565, 124);
+        playerGreen1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen1");
+        playerGreen1.spritePos(595, 124);
+        playerRed1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed1");
+        playerRed1.spritePos(625, 124);
+        playerYellow1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow1");
+        playerYellow1.spritePos(655, 124);
+
+        playerBlue2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue2");
+        playerBlue2.spritePos(785, 124);
+        playerGreen2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen2");
+        playerGreen2.spritePos(815, 124);
+        playerRed2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed2");
+        playerRed2.spritePos(845, 124);
+        playerYellow2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow2");
+        playerYellow2.spritePos(875, 124);
+
+        playerBlue3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue3");
+        playerBlue3.spritePos(1005, 124);
+        playerGreen3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen3");
+        playerGreen3.spritePos(1035, 124);
+        playerRed3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed3");
+        playerRed3.spritePos(1065, 124);
+        playerYellow3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow3");
+        playerYellow3.spritePos(1095, 124);
+
+        playerBlue4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue4");
+        playerBlue4.spritePos(1225, 124);
+        playerGreen4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen4");
+        playerGreen4.spritePos(1255, 124);
+        playerRed4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed4");
+        playerRed4.spritePos(1285, 124);
+        playerYellow4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow4");
+        playerYellow4.spritePos(1315, 124);
+
+        playerBlue5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue5");
+        playerBlue5.spritePos(1445, 124);
+        playerGreen5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen5");
+        playerGreen5.spritePos(1475, 124);
+        playerRed5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed5");
+        playerRed5.spritePos(1505, 124);
+        playerYellow5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow5");
+        playerYellow5.spritePos(1535, 124);
+
         stage.addActor(playerBlue1);
+        stage.addActor(playerGreen1);
+        stage.addActor(playerRed1);
+        stage.addActor(playerYellow1);
+        stage.addActor(playerBlue2);
+        stage.addActor(playerGreen2);
+        stage.addActor(playerRed2);
+        stage.addActor(playerYellow2);
+        stage.addActor(playerBlue3);
+        stage.addActor(playerGreen3);
+        stage.addActor(playerRed3);
+        stage.addActor(playerYellow3);
+        stage.addActor(playerBlue4);
+        stage.addActor(playerGreen4);
+        stage.addActor(playerRed4);
+        stage.addActor(playerYellow4);
+        stage.addActor(playerBlue5);
+        stage.addActor(playerGreen5);
+        stage.addActor(playerRed5);
+        stage.addActor(playerYellow5);
+        stage.addActor(hudBar);
 
     }
 
