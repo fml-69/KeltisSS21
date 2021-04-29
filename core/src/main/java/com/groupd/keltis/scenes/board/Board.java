@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Player;
-import com.groupd.keltis.scenes.road_cards.Abstract_roadcards;
-import com.groupd.keltis.scenes.road_cards.Road_cards_list;
+import com.groupd.keltis.scenes.board.road_cards.Abstract_roadcards;
+import com.groupd.keltis.scenes.board.road_cards.Road_cards_list;
 import com.groupd.keltis.utils.AssetPaths;
 
 import java.util.HashMap;

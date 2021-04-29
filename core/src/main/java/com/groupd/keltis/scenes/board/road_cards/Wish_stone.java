@@ -1,4 +1,4 @@
-package com.groupd.keltis.scenes.road_cards;
+package com.groupd.keltis.scenes.board.road_cards;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
