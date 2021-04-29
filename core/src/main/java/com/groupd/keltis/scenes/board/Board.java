@@ -11,6 +11,7 @@ import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.AssetPaths;
 
+import java.util.HashMap;
 
 
 public class Board extends AbstractScene {
@@ -39,6 +40,8 @@ public class Board extends AbstractScene {
     private Player playerGreen5;
     private Player playerRed5;
     private Player playerYellow5;
+    private HashMap<String, Player> playerHashMap = new HashMap<>();
+    private int x = 0;
 
 
     public Board(final Keltis keltis){
@@ -57,6 +60,18 @@ public class Board extends AbstractScene {
     @Override
     public void update(float delta) {
         stage.act(delta);
+
+        //we use the following if statement just to test functionality of advancePlayer()
+        if(x==200){
+            advancePlayer("playerBlue1");
+            advancePlayer("playerRed3");
+            x=0;
+        } else if(x==150){
+            advancePlayer("playerYellow5");
+            x++;
+        } else {
+            x++;
+        }
     }
 
     @Override
@@ -70,48 +85,68 @@ public class Board extends AbstractScene {
         stage.addActor(board);
         stage.addActor(branches);
         playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
+        playerHashMap.put("playerBlue1", playerBlue1);
         playerBlue1.spritePos(565, 124);
         playerGreen1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen1");
+        playerHashMap.put("playerGreen1", playerGreen1);
         playerGreen1.spritePos(595, 124);
         playerRed1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed1");
+        playerHashMap.put("playerRed1", playerRed1);
         playerRed1.spritePos(625, 124);
         playerYellow1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow1");
+        playerHashMap.put("playerYellow1", playerYellow1);
         playerYellow1.spritePos(655, 124);
 
         playerBlue2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue2");
+        playerHashMap.put("playerBlue2", playerBlue2);
         playerBlue2.spritePos(785, 124);
         playerGreen2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen2");
+        playerHashMap.put("playerGreen2", playerGreen2);
         playerGreen2.spritePos(815, 124);
         playerRed2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed2");
+        playerHashMap.put("playerRed2", playerRed2);
         playerRed2.spritePos(845, 124);
         playerYellow2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow2");
+        playerHashMap.put("playerYellow2", playerYellow2);
         playerYellow2.spritePos(875, 124);
 
         playerBlue3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue3");
+        playerHashMap.put("playerBlue3", playerBlue3);
         playerBlue3.spritePos(1005, 124);
         playerGreen3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen3");
+        playerHashMap.put("playerGreen3", playerGreen3);
         playerGreen3.spritePos(1035, 124);
         playerRed3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed3");
+        playerHashMap.put("playerRed3", playerRed3);
         playerRed3.spritePos(1065, 124);
         playerYellow3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow3");
+        playerHashMap.put("playerYellow3", playerYellow3);
         playerYellow3.spritePos(1095, 124);
 
         playerBlue4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue4");
+        playerHashMap.put("playerBlue4", playerBlue4);
         playerBlue4.spritePos(1225, 124);
         playerGreen4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen4");
+        playerHashMap.put("playerGreen4", playerGreen4);
         playerGreen4.spritePos(1255, 124);
         playerRed4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed4");
+        playerHashMap.put("playerRed4", playerRed4);
         playerRed4.spritePos(1285, 124);
         playerYellow4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow4");
+        playerHashMap.put("playerYellow4", playerYellow4);
         playerYellow4.spritePos(1315, 124);
 
         playerBlue5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue5");
+        playerHashMap.put("playerBlue5", playerBlue5);
         playerBlue5.spritePos(1445, 124);
         playerGreen5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen5");
+        playerHashMap.put("playerGreen5", playerGreen5);
         playerGreen5.spritePos(1475, 124);
         playerRed5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed5");
+        playerHashMap.put("playerRed4", playerRed4);
         playerRed5.spritePos(1505, 124);
         playerYellow5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow5");
+        playerHashMap.put("playerYellow5", playerYellow5);
         playerYellow5.spritePos(1535, 124);
 
         stage.addActor(playerBlue1);
@@ -151,5 +186,8 @@ public class Board extends AbstractScene {
     @Override
     public void hide() {
 
+    }
+    public void advancePlayer(String player){
+        playerHashMap.get(player).moveUp();
     }
 }
