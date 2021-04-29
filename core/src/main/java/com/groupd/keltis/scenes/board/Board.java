@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.scenes.road_cards.Abstract_roadcards;
+import com.groupd.keltis.scenes.road_cards.Road_cards_list;
 import com.groupd.keltis.utils.AssetPaths;
 
 import java.util.HashMap;
@@ -42,6 +44,7 @@ public class Board extends AbstractScene {
     private Player playerYellow5;
     private HashMap<String, Player> playerHashMap = new HashMap<>();
     private int x = 0;
+    private Road_cards_list road_cards_list = new Road_cards_list();
 
 
     public Board(final Keltis keltis){
@@ -84,6 +87,11 @@ public class Board extends AbstractScene {
     public void show() {
         stage.addActor(board);
         stage.addActor(branches);
+        stage.addActor(hudBar);
+        road_cards_list.assignRoadcards(keltis);
+        for(Abstract_roadcards abstract_roadcards : road_cards_list.getRoadcardsArrayList()){
+            stage.addActor(abstract_roadcards.getImage());
+        }
         playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
         playerHashMap.put("playerBlue1", playerBlue1);
         playerBlue1.spritePos(565, 124);
