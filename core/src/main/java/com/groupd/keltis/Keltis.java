@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
 
 import static com.groupd.keltis.utils.AssetPaths.UI_FONT;
+import static com.groupd.keltis.utils.AssetPaths.UI_SKIN;
 
 public class Keltis extends Game {
 
@@ -72,6 +74,7 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.BOARD_PLAYER_GREEN, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_RED, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_YELLOW, Texture.class);
+		assetManager.load(AssetPaths.UI_SKIN, Skin.class);
 		assetManager.finishLoading();
 	}
 }

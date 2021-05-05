@@ -13,4 +13,5 @@ public final class AssetPaths {
     public static final String BOARD_PLAYER_YELLOW = "board/player_yellow.png";
 
     public static final String UI_FONT = "fonts/JetBrainsMono-Regular.ttf";
+    public static final String UI_SKIN = "ui/uiskin.json";
 }
