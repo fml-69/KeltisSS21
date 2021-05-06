@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
 
@@ -35,6 +36,9 @@ public class Board extends AbstractScene {
     public void update(float delta) {
         world.step(1/(float)Keltis.FPS, 6, 2);
         stage.act(delta);
+        if(ShakeDetector.phoneIsShaking()) {
+            ShakeDetector.wasShaken();
+        }
     }
 
     @Override
