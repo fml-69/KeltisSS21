@@ -47,6 +47,7 @@ public class Keltis extends Game {
 	private void loadAssets(){
 		assetManager.load(AssetPaths.BOARD_BACKGROUND, Texture.class);
 		assetManager.load(AssetPaths.BOARD_BRANCHES, Texture.class);
+		//assetManager.load(AssetPaths.MENU_ASSET, Texture.class);
 		assetManager.finishLoading();
 	}
 }
