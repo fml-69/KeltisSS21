@@ -2,13 +2,21 @@ package com.groupd.keltis.scenes.board;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.physics.box2d.World;
+
+
+
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.scenes.AbstractScene;
+
 import com.groupd.keltis.scenes.board.actors.Figure;
+
+import com.groupd.keltis.scenes.board.road_cards.Roadcards;
+import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
+
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 
@@ -17,6 +25,7 @@ import java.util.HashMap;
 public class Board extends AbstractScene {
 
     private OrthographicCamera camera;
+
 
     private final Image board;
     private final Image branches;
@@ -43,6 +52,7 @@ public class Board extends AbstractScene {
     @Override
     public void update(float delta) {
         stage.act(delta);
+
         if(x % 200 == 0){
             Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("Spieler1").getScore()));
             Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("Spieler2").getScore()));
@@ -51,6 +61,13 @@ public class Board extends AbstractScene {
             Gdx.app.log("----------------", "-------------------------------");
         }
         x++;
+
+
+        if(ShakeDetector.phoneIsShaking()) {
+            ShakeDetector.wasShaken();
+
+        }
+
     }
 
 
@@ -64,6 +81,7 @@ public class Board extends AbstractScene {
     public void show() {
         stage.addActor(board);
         stage.addActor(branches);
+
 
 
         Player player1 = new Player(keltis);
@@ -114,6 +132,10 @@ public class Board extends AbstractScene {
             stage.addActor(figure);
         }
         stage.addActor(hudBar);
+        roadcardsList.assignRoadcards(keltis);
+        for(Roadcards roadcards : roadcardsList.getRoadcardsArrayList()){
+            stage.addActor(roadcards);
+        }
 
     }
 
@@ -131,11 +153,10 @@ public class Board extends AbstractScene {
     public void hide() {
 
     }
+
     public boolean pressed(String player){
         return false;
     }
 
-    public void advancePlayer(String player){
 
-    }
 }
