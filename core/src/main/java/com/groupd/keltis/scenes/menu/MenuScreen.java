@@ -21,7 +21,6 @@ public class MenuScreen extends AbstractScene {
 
     public MenuScreen(final Keltis keltis){
         super(keltis);
-        Gdx.app.log("DEBUG", "menuscreen was called");
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

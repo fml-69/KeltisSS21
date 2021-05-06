@@ -3,6 +3,7 @@ package com.groupd.keltis.management;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.Board;
+import com.groupd.keltis.scenes.menu.MenuScreen;
 
 import java.util.HashMap;
 
@@ -20,6 +21,7 @@ public class SceneManager {
     private void sceneMapper(){
         this.sceneHashMap = new HashMap<GAMESTATE, AbstractScene>();
         this.sceneHashMap.put(GAMESTATE.PLAYING, new Board(keltis));
+        this.sceneHashMap.put(GAMESTATE.MENU, new MenuScreen(keltis));
     }
 
     public void setScene(GAMESTATE scene){
