@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
@@ -64,19 +65,9 @@ public class Board extends AbstractScene {
     public void update(float delta) {
         stage.act(delta);
 
-        //we use the following if statement just to test functionality of advancePlayer()
-        if(x==200){
-            advancePlayer("playerBlue1");
-            Roadcards.checkRoadcards("playerBlue1",this.playerHashMap,this.roadcardsList);
-            advancePlayer("playerRed3");
-            Roadcards.checkRoadcards("playerRed3",this.playerHashMap,this.roadcardsList);
-            x=0;
-        } else if(x==150){
-            advancePlayer("playerYellow5");
-            Roadcards.checkRoadcards("playerYellow5",this.playerHashMap,this.roadcardsList);
-            x++;
-        } else {
-            x++;
+        if(ShakeDetector.phoneIsShaking()) {
+            ShakeDetector.wasShaken();
+
         }
     }
 

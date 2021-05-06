@@ -6,6 +6,7 @@ public final class AssetPaths {
 
     public static final String BOARD_BACKGROUND = "board/board_background.png";
     public static final String BOARD_BRANCHES = "board/board_branches.png";
+
     public static final String BOARD_HUD_BAR = "board/hud_bar.png";
     public static final String ROADCARD_SHAMROCK = "road_cards/shamrock.png";
     public static final String ROADCARD_WISHSTONE = "road_cards/wish_stone.png";
@@ -16,4 +17,8 @@ public final class AssetPaths {
     public static final String BOARD_PLAYER_GREEN = "board/player_green.png";
     public static final String BOARD_PLAYER_RED = "board/player_red.png";
     public static final String BOARD_PLAYER_YELLOW = "board/player_yellow.png";
+
+
+    public static final String MENU_ASSET = "menu/glassy-ui.json";
+
 }
