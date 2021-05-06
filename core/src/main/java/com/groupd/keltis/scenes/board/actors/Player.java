@@ -1,6 +1,5 @@
 package com.groupd.keltis.scenes.board.actors;
 
-
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.utils.AssetPaths;
 
