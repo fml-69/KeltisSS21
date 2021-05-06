@@ -64,8 +64,4 @@ public class Player extends Actor {
     public String getName(){
         return this.name;
     }
-
-    public int getCurrentFieldPosition() {
-        return currentFieldPosition;
-    }
 }

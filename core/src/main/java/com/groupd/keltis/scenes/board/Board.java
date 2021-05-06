@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Player;
-import com.groupd.keltis.scenes.board.road_cards.Roadcards;
-import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
+import com.groupd.keltis.scenes.board.road_cards.Abstract_roadcards;
+import com.groupd.keltis.scenes.board.road_cards.Road_cards_list;
 import com.groupd.keltis.utils.AssetPaths;
 
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class Board extends AbstractScene {
     private Player playerYellow5;
     private HashMap<String, Player> playerHashMap = new HashMap<>();
     private int x = 0;
-    private RoadcardsList roadcardsList = new RoadcardsList();
+    private Road_cards_list road_cards_list = new Road_cards_list();
 
 
     public Board(final Keltis keltis){
@@ -67,13 +67,10 @@ public class Board extends AbstractScene {
         //we use the following if statement just to test functionality of advancePlayer()
         if(x==200){
             advancePlayer("playerBlue1");
-            Roadcards.checkRoadcards("playerBlue1",this.playerHashMap,this.roadcardsList);
             advancePlayer("playerRed3");
-            Roadcards.checkRoadcards("playerRed3",this.playerHashMap,this.roadcardsList);
             x=0;
         } else if(x==150){
             advancePlayer("playerYellow5");
-            Roadcards.checkRoadcards("playerYellow5",this.playerHashMap,this.roadcardsList);
             x++;
         } else {
             x++;
@@ -91,9 +88,9 @@ public class Board extends AbstractScene {
         stage.addActor(board);
         stage.addActor(branches);
         stage.addActor(hudBar);
-        roadcardsList.assignRoadcards(keltis);
-        for(Roadcards roadcards : roadcardsList.getRoadcardsArrayList()){
-            stage.addActor(roadcards);
+        road_cards_list.assignRoadcards(keltis);
+        for(Abstract_roadcards abstract_roadcards : road_cards_list.getRoadcardsArrayList()){
+            stage.addActor(abstract_roadcards.getImage());
         }
         playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
         playerHashMap.put("playerBlue1", playerBlue1);
