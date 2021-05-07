@@ -20,7 +20,7 @@ public final class AssetPaths {
     public static final String BOARD_PLAYER_RED = "board/player_red.png";
     public static final String BOARD_PLAYER_YELLOW = "board/player_yellow.png";
 
-}
+
 
 
 

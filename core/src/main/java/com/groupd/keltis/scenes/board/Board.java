@@ -35,6 +35,8 @@ public class Board extends AbstractScene {
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
     private int x = 1;
 
+    private RoadcardsList roadcardsList = new RoadcardsList();
+
     public Board(final Keltis keltis){
         super(keltis);
         this.camera = new OrthographicCamera();
