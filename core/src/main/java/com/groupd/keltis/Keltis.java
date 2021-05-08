@@ -4,22 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
-
-import static com.groupd.keltis.utils.AssetPaths.UI_FONT;
-import static com.groupd.keltis.utils.AssetPaths.UI_SKIN;
 
 public class Keltis extends Game {
 
 	public SceneManager sceneManager;
 	public AssetManager assetManager;
-
-	public BitmapFont font;
 
 	public SpriteBatch batch;
 
@@ -44,12 +36,6 @@ public class Keltis extends Game {
 		batch = new SpriteBatch();
 		assetManager = new AssetManager();
 		loadAssets();
-
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(AssetPaths.UI_FONT));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 24;
-		font = generator.generateFont(parameter);
-
 		sceneManager = new SceneManager(this);
 	}
 
@@ -69,12 +55,20 @@ public class Keltis extends Game {
 	private void loadAssets(){
 		assetManager.load(AssetPaths.BOARD_BACKGROUND, Texture.class);
 		assetManager.load(AssetPaths.BOARD_BRANCHES, Texture.class);
+
 		assetManager.load(AssetPaths.BOARD_HUD_BAR, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_BLUE, Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_SHAMROCK,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_WISHSTONE,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_POINTCARDONE,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_POINTCARDTWO,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_POINTCARDTHREE,Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_GREEN, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_RED, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_YELLOW, Texture.class);
-		assetManager.load(AssetPaths.UI_SKIN, Skin.class);
+
+		//assetManager.load(AssetPaths.MENU_ASSET, Texture.class);
+
 		assetManager.finishLoading();
 	}
 }

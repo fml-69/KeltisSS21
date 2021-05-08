@@ -7,8 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.scenes.board.road_cards.Roadcards;
+import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 
 import java.util.HashMap;
@@ -42,6 +45,7 @@ public class Board extends AbstractScene {
     private Player playerYellow5;
     private HashMap<String, Player> playerHashMap = new HashMap<>();
     private int x = 0;
+    private RoadcardsList roadcardsList = new RoadcardsList();
 
 
     public Board(final Keltis keltis){
@@ -61,16 +65,9 @@ public class Board extends AbstractScene {
     public void update(float delta) {
         stage.act(delta);
 
-        //we use the following if statement just to test functionality of advancePlayer()
-        if(x==200){
-            advancePlayer("playerBlue1");
-            advancePlayer("playerRed3");
-            x=0;
-        } else if(x==150){
-            advancePlayer("playerYellow5");
-            x++;
-        } else {
-            x++;
+        if(ShakeDetector.phoneIsShaking()) {
+            ShakeDetector.wasShaken();
+
         }
     }
 
@@ -84,6 +81,11 @@ public class Board extends AbstractScene {
     public void show() {
         stage.addActor(board);
         stage.addActor(branches);
+        stage.addActor(hudBar);
+        roadcardsList.assignRoadcards(keltis);
+        for(Roadcards roadcards : roadcardsList.getRoadcardsArrayList()){
+            stage.addActor(roadcards);
+        }
         playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
         playerHashMap.put("playerBlue1", playerBlue1);
         playerBlue1.spritePos(565, 124);

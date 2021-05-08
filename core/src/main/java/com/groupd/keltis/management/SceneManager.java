@@ -4,6 +4,7 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.login.EntryScene;
+import com.groupd.keltis.scenes.menu.MenuScreen;
 
 import java.util.HashMap;
 
@@ -11,7 +12,6 @@ public class SceneManager {
     private final Keltis keltis;
     private HashMap<GAMESTATE, AbstractScene> sceneHashMap;
     public enum GAMESTATE{LOGIN, PLAYING, MENU, SETTINGS}
-
 
     public SceneManager(final Keltis keltis){
         this.keltis = keltis;
@@ -23,7 +23,10 @@ public class SceneManager {
     private void sceneMapper(){
         this.sceneHashMap = new HashMap<GAMESTATE, AbstractScene>();
         this.sceneHashMap.put(GAMESTATE.PLAYING, new Board(keltis));
+        this.sceneHashMap.put(GAMESTATE.MENU, new MenuScreen(keltis));
+
         this.sceneHashMap.put(GAMESTATE.LOGIN, new EntryScene(keltis));
+
     }
 
     public void setScene(GAMESTATE scene){
