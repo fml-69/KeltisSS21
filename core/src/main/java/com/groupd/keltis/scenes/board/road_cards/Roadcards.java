@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class Roadcards extends Actor {
         return position;
     }
 
-    public static void checkRoadcards(String player, HashMap<String, Player> playerHashMap, RoadcardsList roadcardsList){
+    public static void checkRoadcards(String player, HashMap<String, Figure> playerHashMap, RoadcardsList roadcardsList){
         int fieldPlayer = playerHashMap.get(player).getCurrentFieldPosition();
         int branchPlayer = Integer.valueOf(player.substring(player.length()-1));
         Wishstone wishstone = null;
@@ -69,7 +70,6 @@ public class Roadcards extends Actor {
         }
         if(wishstone !=null){
             roadcardsList.getRoadcardsArrayList().remove(wishstone);
-            wishstone.addAction(Actions.removeActor());
         }
     }
 }

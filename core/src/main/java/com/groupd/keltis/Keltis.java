@@ -22,7 +22,7 @@ public class Keltis extends Game {
 
 	public static int FPS = 60;
 
-	
+
 	@Override
 	public void create () {
 		if(Gdx.graphics.getHeight()<Gdx.graphics.getWidth()){
@@ -44,7 +44,7 @@ public class Keltis extends Game {
 		super.render();
 
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -68,7 +68,6 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.BOARD_PLAYER_YELLOW, Texture.class);
 
 		//assetManager.load(AssetPaths.MENU_ASSET, Texture.class);
-
 		assetManager.finishLoading();
 	}
 }
