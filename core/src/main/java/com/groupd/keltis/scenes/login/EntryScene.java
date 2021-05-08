@@ -18,12 +18,19 @@ import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
 
+import javax.xml.soap.Text;
+
 public class EntryScene extends AbstractScene {
 
     private Stage stage;
     private Button startButton;
+    private Button hostButton;
     private TextField text;
     private Label errorLabel;
+    private TextField textIP;
+    private TextField textPort;
+
+
 
     public EntryScene(Keltis keltis) {
         super(keltis);
@@ -67,6 +74,21 @@ public class EntryScene extends AbstractScene {
 
         vg.addActor(text);
 
+        Label labelIP = new Label("Enter IP", skin);
+        vg.addActor(labelIP);
+        textIP = new TextField("127.0.0.1", skin);
+        vg.addActor(textIP);
+
+        Label labelPort = new Label("Enter port", skin);
+        vg.addActor(labelPort);
+        textPort = new TextField("20000", skin);
+        vg.addActor(textPort);
+
+
+
+        hostButton = new TextButton("Host", skin);
+        vg.addActor(hostButton);
+
         startButton = new TextButton("Start", skin);
         //stage.addActor(startButton);
         vg.addActor(startButton);
@@ -75,6 +97,14 @@ public class EntryScene extends AbstractScene {
         vg.addActor(errorLabel);
 
 
+        hostButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                requestEntry();
+                return true;
+            }
+        });
+
         startButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -82,6 +112,8 @@ public class EntryScene extends AbstractScene {
                 return true;
             }
         });
+
+
 
     }
 

@@ -18,13 +18,13 @@ public class SceneManager {
         sceneMapper();
         //setScene(GAMESTATE.PLAYING);
         setScene(GAMESTATE.LOGIN);
+        //setScene(GAMESTATE.MENU);
     }
 
     private void sceneMapper(){
         this.sceneHashMap = new HashMap<GAMESTATE, AbstractScene>();
         this.sceneHashMap.put(GAMESTATE.PLAYING, new Board(keltis));
         this.sceneHashMap.put(GAMESTATE.MENU, new MenuScreen(keltis));
-
         this.sceneHashMap.put(GAMESTATE.LOGIN, new EntryScene(keltis));
 
     }
