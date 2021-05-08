@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
+
+import javafx.scene.Scene;
 
 public class MenuScreen extends AbstractScene {
 
@@ -47,6 +50,20 @@ public class MenuScreen extends AbstractScene {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
+            }
+        });
+
+        newGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOGIN);
+            }
+        });
+
+        preferences.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOGIN);
             }
         });
 
