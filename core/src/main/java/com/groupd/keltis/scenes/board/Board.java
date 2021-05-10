@@ -1,52 +1,41 @@
 package com.groupd.keltis.scenes.board;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+
+
+
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.scenes.AbstractScene;
-import com.groupd.keltis.scenes.board.actors.Player;
+
+import com.groupd.keltis.scenes.board.actors.Figure;
+
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
+
 import com.groupd.keltis.utils.AssetPaths;
+import com.groupd.keltis.scenes.board.actors.Player;
 
 import java.util.HashMap;
-
 
 public class Board extends AbstractScene {
 
     private OrthographicCamera camera;
-    private Image board;
-    private Image branches;
-    private Image hudBar;
-    private Player playerBlue1;
-    private Player playerGreen1;
-    private Player playerRed1;
-    private Player playerYellow1;
-    private Player playerBlue2;
-    private Player playerGreen2;
-    private Player playerRed2;
-    private Player playerYellow2;
-    private Player playerBlue3;
-    private Player playerGreen3;
-    private Player playerRed3;
-    private Player playerYellow3;
-    private Player playerBlue4;
-    private Player playerGreen4;
-    private Player playerRed4;
-    private Player playerYellow4;
-    private Player playerBlue5;
-    private Player playerGreen5;
-    private Player playerRed5;
-    private Player playerYellow5;
-    private HashMap<String, Player> playerHashMap = new HashMap<>();
-    private int x = 0;
-    private RoadcardsList roadcardsList = new RoadcardsList();
 
+
+    private final Image board;
+    private final Image branches;
+    private final Image hudBar;
+
+    private HashMap<String, Player> player = new HashMap<>();
+    private HashMap<String, Figure> playerHashMap = new HashMap<>();
+    private int x = 1;
+
+    private RoadcardsList roadcardsList = new RoadcardsList();
 
     public Board(final Keltis keltis){
         super(keltis);
@@ -54,6 +43,7 @@ public class Board extends AbstractScene {
         this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
         this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
         keltis.batch.setProjectionMatrix(camera.combined);
+
         Gdx.input.setInputProcessor(stage);
 
         board = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
@@ -65,11 +55,23 @@ public class Board extends AbstractScene {
     public void update(float delta) {
         stage.act(delta);
 
+        if(x % 200 == 0){
+            Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("Spieler1").getScore()));
+            Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("Spieler2").getScore()));
+            Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(player.get("Spieler3").getScore()));
+            Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(player.get("Spieler4").getScore()));
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        x++;
+
+
         if(ShakeDetector.phoneIsShaking()) {
             ShakeDetector.wasShaken();
 
         }
+
     }
+
 
     @Override
     public void render(float delta) {
@@ -81,97 +83,61 @@ public class Board extends AbstractScene {
     public void show() {
         stage.addActor(board);
         stage.addActor(branches);
+
+
+
+        Player player1 = new Player(keltis);
+        player1.setColor("blue");
+        player1.initializePlayers();
+        player.put("Spieler1", player1);
+        playerHashMap.putAll(player1.getFigures());
+        playerHashMap.get("blueBig").spritePos(565, 124);
+        playerHashMap.get("blueSmall1").spritePos(785, 124);
+        playerHashMap.get("blueSmall2").spritePos(1005, 124);
+        playerHashMap.get("blueSmall3").spritePos(1225, 124);
+        playerHashMap.get("blueSmall4").spritePos(1445, 124);
+
+        Player player2 = new Player(keltis);
+        player2.setColor("red");
+        player2.initializePlayers();
+        player.put("Spieler2", player2);
+        playerHashMap.putAll(player2.getFigures());
+        playerHashMap.get("redBig").spritePos(595, 124);
+        playerHashMap.get("redSmall1").spritePos(815, 124);
+        playerHashMap.get("redSmall2").spritePos(1035, 124);
+        playerHashMap.get("redSmall3").spritePos(1255, 124);
+        playerHashMap.get("redSmall4").spritePos(1475, 124);
+
+        Player player3 = new Player(keltis);
+        player3.setColor("green");
+        player3.initializePlayers();
+        player.put("Spieler3", player3);
+        playerHashMap.putAll(player3.getFigures());
+        playerHashMap.get("greenBig").spritePos(625, 124);
+        playerHashMap.get("greenSmall1").spritePos(845, 124);
+        playerHashMap.get("greenSmall2").spritePos(1065, 124);
+        playerHashMap.get("greenSmall3").spritePos(1285, 124);
+        playerHashMap.get("greenSmall4").spritePos(1505, 124);
+
+        Player player4 = new Player(keltis);
+        player4.setColor("yellow");
+        player4.initializePlayers();
+        player.put("Spieler4", player4);
+        playerHashMap.putAll(player4.getFigures());
+        playerHashMap.get("yellowBig").spritePos(655, 124);
+        playerHashMap.get("yellowSmall1").spritePos(875, 124);
+        playerHashMap.get("yellowSmall2").spritePos(1095, 124);
+        playerHashMap.get("yellowSmall3").spritePos(1315, 124);
+        playerHashMap.get("yellowSmall4").spritePos(1535, 124);
+
+        for(Figure figure :playerHashMap.values()){
+            stage.addActor(figure);
+        }
         stage.addActor(hudBar);
         roadcardsList.assignRoadcards(keltis);
         for(Roadcards roadcards : roadcardsList.getRoadcardsArrayList()){
             stage.addActor(roadcards);
         }
-        playerBlue1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue1");
-        playerHashMap.put("playerBlue1", playerBlue1);
-        playerBlue1.spritePos(565, 124);
-        playerGreen1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen1");
-        playerHashMap.put("playerGreen1", playerGreen1);
-        playerGreen1.spritePos(595, 124);
-        playerRed1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed1");
-        playerHashMap.put("playerRed1", playerRed1);
-        playerRed1.spritePos(625, 124);
-        playerYellow1 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow1");
-        playerHashMap.put("playerYellow1", playerYellow1);
-        playerYellow1.spritePos(655, 124);
-
-        playerBlue2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue2");
-        playerHashMap.put("playerBlue2", playerBlue2);
-        playerBlue2.spritePos(785, 124);
-        playerGreen2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen2");
-        playerHashMap.put("playerGreen2", playerGreen2);
-        playerGreen2.spritePos(815, 124);
-        playerRed2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed2");
-        playerHashMap.put("playerRed2", playerRed2);
-        playerRed2.spritePos(845, 124);
-        playerYellow2 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow2");
-        playerHashMap.put("playerYellow2", playerYellow2);
-        playerYellow2.spritePos(875, 124);
-
-        playerBlue3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue3");
-        playerHashMap.put("playerBlue3", playerBlue3);
-        playerBlue3.spritePos(1005, 124);
-        playerGreen3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen3");
-        playerHashMap.put("playerGreen3", playerGreen3);
-        playerGreen3.spritePos(1035, 124);
-        playerRed3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed3");
-        playerHashMap.put("playerRed3", playerRed3);
-        playerRed3.spritePos(1065, 124);
-        playerYellow3 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow3");
-        playerHashMap.put("playerYellow3", playerYellow3);
-        playerYellow3.spritePos(1095, 124);
-
-        playerBlue4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue4");
-        playerHashMap.put("playerBlue4", playerBlue4);
-        playerBlue4.spritePos(1225, 124);
-        playerGreen4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen4");
-        playerHashMap.put("playerGreen4", playerGreen4);
-        playerGreen4.spritePos(1255, 124);
-        playerRed4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed4");
-        playerHashMap.put("playerRed4", playerRed4);
-        playerRed4.spritePos(1285, 124);
-        playerYellow4 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow4");
-        playerHashMap.put("playerYellow4", playerYellow4);
-        playerYellow4.spritePos(1315, 124);
-
-        playerBlue5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE), "playerBlue5");
-        playerHashMap.put("playerBlue5", playerBlue5);
-        playerBlue5.spritePos(1445, 124);
-        playerGreen5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN), "playerGreen5");
-        playerHashMap.put("playerGreen5", playerGreen5);
-        playerGreen5.spritePos(1475, 124);
-        playerRed5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED), "playerRed5");
-        playerHashMap.put("playerRed4", playerRed4);
-        playerRed5.spritePos(1505, 124);
-        playerYellow5 = new Player(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW), "playerYellow5");
-        playerHashMap.put("playerYellow5", playerYellow5);
-        playerYellow5.spritePos(1535, 124);
-
-        stage.addActor(playerBlue1);
-        stage.addActor(playerGreen1);
-        stage.addActor(playerRed1);
-        stage.addActor(playerYellow1);
-        stage.addActor(playerBlue2);
-        stage.addActor(playerGreen2);
-        stage.addActor(playerRed2);
-        stage.addActor(playerYellow2);
-        stage.addActor(playerBlue3);
-        stage.addActor(playerGreen3);
-        stage.addActor(playerRed3);
-        stage.addActor(playerYellow3);
-        stage.addActor(playerBlue4);
-        stage.addActor(playerGreen4);
-        stage.addActor(playerRed4);
-        stage.addActor(playerYellow4);
-        stage.addActor(playerBlue5);
-        stage.addActor(playerGreen5);
-        stage.addActor(playerRed5);
-        stage.addActor(playerYellow5);
-        stage.addActor(hudBar);
 
     }
 
@@ -189,7 +155,10 @@ public class Board extends AbstractScene {
     public void hide() {
 
     }
-    public void advancePlayer(String player){
-        playerHashMap.get(player).moveUp();
+
+    public boolean pressed(String player){
+        return false;
     }
+
+
 }
