@@ -2,6 +2,7 @@ package com.groupd.keltis.scenes.login;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,8 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.SceneManager;
+import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.scenes.AbstractScene;
+import com.groupd.keltis.server.ServerRunnable;
 import com.groupd.keltis.utils.AssetPaths;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.soap.Text;
 
@@ -61,7 +67,8 @@ public class EntryScene extends AbstractScene {
         vg.addActor(label);
 
         text = new TextField("", skin);
-        text.addListener(new InputListener(){
+
+/*        text.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(keycode == Input.Keys.ENTER){
@@ -70,7 +77,7 @@ public class EntryScene extends AbstractScene {
                 }
                 return super.keyDown(event, keycode);
             }
-        });
+        });*/
 
         vg.addActor(text);
 
@@ -100,7 +107,23 @@ public class EntryScene extends AbstractScene {
         hostButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                requestEntry();
+
+                CountDownLatch serverStartLatch = new CountDownLatch(1);
+
+                // start server & provide port
+                Thread serverThread = new Thread(new ServerRunnable(Integer.parseInt(textPort.getText()), serverStartLatch));
+                serverThread.setDaemon(true);
+                serverThread.start();
+
+                try {
+                    serverStartLatch.await(2, TimeUnit.SECONDS);
+                    requestEntry();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    errorLabel.setText("Could not start server.");
+                }
+
                 return true;
             }
         });
@@ -122,7 +145,15 @@ public class EntryScene extends AbstractScene {
             errorLabel.setText("No name, no game.");
         }
         else{
-            keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
+
+            // create client & connect it to server
+            NetworkClient client = new NetworkClient(textIP.getText(), Integer.parseInt(textPort.getText()), text.getText());
+            if(!client.isConnected()){
+                errorLabel.setText(client.getMessage());
+
+            } else {
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
+            }
 
         }
     }
