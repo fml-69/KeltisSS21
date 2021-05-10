@@ -22,57 +22,50 @@ public class Player {
 
     private boolean cheat;
 
-    public Player(Keltis keltis){
+    public Player(Keltis keltis, String color) {
         this.wishingStones = 0;
         this.handCards = new ArrayList();
         this.discardPile = new ArrayList();
         this.cheat = false;
         this.keltis = keltis;
+        this.color = color;
+        initializePlayers();
     }
 
     public void initializePlayers(){
         figures = new HashMap<String, Figure>();
         switch (this.color){
             case "blue":
-                figures.put(this.color + "Big", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "Big",2));
-                figures.put(this.color + "Small1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "Small1",1));
-                figures.put(this.color + "Small2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "Small2",1));
-                figures.put(this.color + "Small3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "Small3",1));
-                figures.put(this.color + "Small4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "Small4",1));
+                figures.put(this.color + "1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "1"));
+                figures.put(this.color + "2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "2"));
+                figures.put(this.color + "3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "3"));
+                figures.put(this.color + "4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "4"));
+                figures.put(this.color + "5", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_BLUE),this.color + "5"));
                 break;
             case "red":
-                figures.put(this.color + "Big", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "Big",2));
-                figures.put(this.color + "Small1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "Small1",1));
-                figures.put(this.color + "Small2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "Small2",1));
-                figures.put(this.color + "Small3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "Small3",1));
-                figures.put(this.color + "Small4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "Small4",1));
+                figures.put(this.color + "1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "1"));
+                figures.put(this.color + "2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "2"));
+                figures.put(this.color + "3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "3"));
+                figures.put(this.color + "4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "4"));
+                figures.put(this.color + "5", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_RED),this.color + "5"));
                 break;
             case "green":
-                figures.put(this.color + "Big", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "Big",2));
-                figures.put(this.color + "Small1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "Small1",1));
-                figures.put(this.color + "Small2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "Small2",1));
-                figures.put(this.color + "Small3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "Small3",1));
-                figures.put(this.color + "Small4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "Small4",1));
+                figures.put(this.color + "1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "1"));
+                figures.put(this.color + "2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "2"));
+                figures.put(this.color + "3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "3"));
+                figures.put(this.color + "4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "4"));
+                figures.put(this.color + "5", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_GREEN),this.color + "5"));
                 break;
             case "yellow":
-                figures.put(this.color + "Big", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "Big",2));
-                figures.put(this.color + "Small1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "Small1",1));
-                figures.put(this.color + "Small2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "Small2",1));
-                figures.put(this.color + "Small3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "Small3",1));
-                figures.put(this.color + "Small4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "Small4",1));
+                figures.put(this.color + "1", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "1"));
+                figures.put(this.color + "2", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "2"));
+                figures.put(this.color + "3", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "3"));
+                figures.put(this.color + "4", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "4"));
+                figures.put(this.color + "5", new Figure(keltis.assetManager.get(AssetPaths.BOARD_PLAYER_YELLOW),this.color + "5"));
                 break;
         }
     }
 
-    public void setColor(String color){
-        switch(color){
-            case "red": this.color = "red"; break;
-            case "blue": this.color = "blue"; break;
-            case "yellow": this.color = "yellow"; break;
-            case "green": this.color = "green"; break;
-            default: throw new InvalidParameterException();
-        }
-    }
 
     public String getName() {
         return name;

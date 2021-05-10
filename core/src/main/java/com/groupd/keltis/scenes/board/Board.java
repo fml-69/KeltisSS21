@@ -56,10 +56,11 @@ public class Board extends AbstractScene {
         stage.act(delta);
 
         if(x % 200 == 0){
-            Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("Spieler1").getScore()));
-            Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("Spieler2").getScore()));
-            Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(player.get("Spieler3").getScore()));
-            Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(player.get("Spieler4").getScore()));
+            advanceFigure("blue1");
+            Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("player1").getScore()));
+            Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("player2").getScore()));
+            Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(player.get("player3").getScore()));
+            Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(player.get("player4").getScore()));
             Gdx.app.log("----------------", "-------------------------------");
         }
         x++;
@@ -84,60 +85,77 @@ public class Board extends AbstractScene {
         stage.addActor(board);
         stage.addActor(branches);
 
-
-
-        Player player1 = new Player(keltis);
-        player1.setColor("blue");
-        player1.initializePlayers();
-        player.put("Spieler1", player1);
-        playerHashMap.putAll(player1.getFigures());
-        playerHashMap.get("blueBig").spritePos(565, 124);
-        playerHashMap.get("blueSmall1").spritePos(785, 124);
-        playerHashMap.get("blueSmall2").spritePos(1005, 124);
-        playerHashMap.get("blueSmall3").spritePos(1225, 124);
-        playerHashMap.get("blueSmall4").spritePos(1445, 124);
-
-        Player player2 = new Player(keltis);
-        player2.setColor("red");
-        player2.initializePlayers();
-        player.put("Spieler2", player2);
-        playerHashMap.putAll(player2.getFigures());
-        playerHashMap.get("redBig").spritePos(595, 124);
-        playerHashMap.get("redSmall1").spritePos(815, 124);
-        playerHashMap.get("redSmall2").spritePos(1035, 124);
-        playerHashMap.get("redSmall3").spritePos(1255, 124);
-        playerHashMap.get("redSmall4").spritePos(1475, 124);
-
-        Player player3 = new Player(keltis);
-        player3.setColor("green");
-        player3.initializePlayers();
-        player.put("Spieler3", player3);
-        playerHashMap.putAll(player3.getFigures());
-        playerHashMap.get("greenBig").spritePos(625, 124);
-        playerHashMap.get("greenSmall1").spritePos(845, 124);
-        playerHashMap.get("greenSmall2").spritePos(1065, 124);
-        playerHashMap.get("greenSmall3").spritePos(1285, 124);
-        playerHashMap.get("greenSmall4").spritePos(1505, 124);
-
-        Player player4 = new Player(keltis);
-        player4.setColor("yellow");
-        player4.initializePlayers();
-        player.put("Spieler4", player4);
-        playerHashMap.putAll(player4.getFigures());
-        playerHashMap.get("yellowBig").spritePos(655, 124);
-        playerHashMap.get("yellowSmall1").spritePos(875, 124);
-        playerHashMap.get("yellowSmall2").spritePos(1095, 124);
-        playerHashMap.get("yellowSmall3").spritePos(1315, 124);
-        playerHashMap.get("yellowSmall4").spritePos(1535, 124);
-
-        for(Figure figure :playerHashMap.values()){
-            stage.addActor(figure);
-        }
-        stage.addActor(hudBar);
         roadcardsList.assignRoadcards(keltis);
         for(Roadcards roadcards : roadcardsList.getRoadcardsArrayList()){
             stage.addActor(roadcards);
         }
+
+        Player player1 = new Player(keltis, "blue");
+        player.put("player1", player1);
+        playerHashMap.putAll(player1.getFigures());
+        playerHashMap.get("blue1").spritePos(565, 124);
+        playerHashMap.get("blue2").spritePos(785, 124);
+        playerHashMap.get("blue3").spritePos(1005, 124);
+        playerHashMap.get("blue4").spritePos(1225, 124);
+        playerHashMap.get("blue5").spritePos(1445, 124);
+        for(int i = 1; i<6; i++) {
+            for (Figure figure : playerHashMap.values()) {
+                if (figure.getName().equals("blue"+i)) {
+                    stage.addActor(figure);
+                }
+            }
+        }
+
+        Player player2 = new Player(keltis, "red");
+        player.put("player2", player2);
+        playerHashMap.putAll(player2.getFigures());
+        playerHashMap.get("red1").spritePos(595, 124);
+        playerHashMap.get("red2").spritePos(815, 124);
+        playerHashMap.get("red3").spritePos(1035, 124);
+        playerHashMap.get("red4").spritePos(1255, 124);
+        playerHashMap.get("red5").spritePos(1475, 124);
+        for(int i = 1; i<6; i++) {
+            for (Figure figure : playerHashMap.values()) {
+                if (figure.getName().equals("red"+i)) {
+                    stage.addActor(figure);
+                }
+            }
+        }
+
+        Player player3 = new Player(keltis, "green");
+        player.put("player3", player3);
+        playerHashMap.putAll(player3.getFigures());
+        playerHashMap.get("green1").spritePos(625, 124);
+        playerHashMap.get("green2").spritePos(845, 124);
+        playerHashMap.get("green3").spritePos(1065, 124);
+        playerHashMap.get("green4").spritePos(1285, 124);
+        playerHashMap.get("green5").spritePos(1505, 124);
+        for(int i = 1; i<6; i++) {
+            for (Figure figure : playerHashMap.values()) {
+                if (figure.getName().equals("green"+i)) {
+                    stage.addActor(figure);
+                }
+            }
+        }
+
+        Player player4 = new Player(keltis, "yellow");
+        player.put("player4", player4);
+        playerHashMap.putAll(player4.getFigures());
+        playerHashMap.get("yellow1").spritePos(655, 124);
+        playerHashMap.get("yellow2").spritePos(875, 124);
+        playerHashMap.get("yellow3").spritePos(1095, 124);
+        playerHashMap.get("yellow4").spritePos(1315, 124);
+        playerHashMap.get("yellow5").spritePos(1535, 124);
+        for(int i = 1; i<6; i++) {
+            for (Figure figure : playerHashMap.values()) {
+                if (figure.getName().equals("yellow"+i)) {
+                    stage.addActor(figure);
+                }
+            }
+        }
+
+
+        stage.addActor(hudBar);
 
     }
 
@@ -156,8 +174,8 @@ public class Board extends AbstractScene {
 
     }
 
-    public boolean pressed(String player){
-        return false;
+    public void advanceFigure(String figure){
+        playerHashMap.get(figure).moveUp();
     }
 
 
