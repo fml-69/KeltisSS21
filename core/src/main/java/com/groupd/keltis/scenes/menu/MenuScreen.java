@@ -1,8 +1,6 @@
 package com.groupd.keltis.scenes.menu;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,8 +13,6 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
-
-import javafx.scene.Scene;
 
 public class MenuScreen extends AbstractScene {
 
