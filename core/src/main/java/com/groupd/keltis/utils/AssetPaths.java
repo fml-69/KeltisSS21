@@ -26,5 +26,7 @@ public final class AssetPaths {
 
     public static final String MENU_ASSET = "menu/glassy-ui.json";
 
+    public static final String DIALOG_SKIN = "skin_shade/uiskin.json";
+
 }
 
