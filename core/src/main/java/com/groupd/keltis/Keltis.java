@@ -129,6 +129,12 @@ public class Keltis extends Game {
 
 		assetManager.load(AssetPaths.CARD_BACK, Texture.class);
 
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_BLUE, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_GREEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_PURPLE, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_RED, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_YELLOW, Texture.class);
+
 		//assetManager.load(AssetPaths.MENU_ASSET, Texture.class);
 		assetManager.finishLoading();
 	}

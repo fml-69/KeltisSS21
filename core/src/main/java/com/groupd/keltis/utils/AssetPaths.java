@@ -81,6 +81,12 @@ public final class AssetPaths {
 
     public static final String CARD_BACK = "board/cards/cards_back.png";
 
+    public static final String CARD_EMPTY_STACK_BLUE = "board/cards/cards_empty_stack_blue.png";
+    public static final String CARD_EMPTY_STACK_GREEN = "board/cards/cards_empty_stack_green.png";
+    public static final String CARD_EMPTY_STACK_PURPLE = "board/cards/cards_empty_stack_purple.png";
+    public static final String CARD_EMPTY_STACK_RED = "board/cards/cards_empty_stack_red.png";
+    public static final String CARD_EMPTY_STACK_YELLOW = "board/cards/cards_empty_stack_yellow.png";
+
     public static final String MENU_ASSET = "menu/glassy-ui.json";
 
 }
