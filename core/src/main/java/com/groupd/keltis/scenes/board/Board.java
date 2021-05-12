@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 
-
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
@@ -20,7 +22,10 @@ import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board extends AbstractScene {
 
@@ -37,6 +42,8 @@ public class Board extends AbstractScene {
 
     private RoadcardsList roadcardsList = new RoadcardsList();
 
+    private boolean isCheatingDialogShowing = false;
+
     public Board(final Keltis keltis){
         super(keltis);
         this.camera = new OrthographicCamera();
@@ -44,7 +51,6 @@ public class Board extends AbstractScene {
         this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
         keltis.batch.setProjectionMatrix(camera.combined);
 
-        Gdx.input.setInputProcessor(stage);
 
         board = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
         branches = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BRANCHES));
@@ -64,24 +70,67 @@ public class Board extends AbstractScene {
             Gdx.app.log("----------------", "-------------------------------");
         }
         x++;
-
-
-        if(ShakeDetector.phoneIsShaking()) {
-            ShakeDetector.wasShaken();
-
-        }
-
     }
 
+    private void checkShaking() {
+        if(ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing) {
+            isCheatingDialogShowing = true;
+            YesNoDialog dialog = new YesNoDialog("Schummelverdacht",
+                    keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                    new YesNoDialog.Callback() {
+                        @Override
+                        public void result(boolean result) {
+                            isCheatingDialogShowing = false;
+                            // accuseOfCheating(result);
+                        }
+                    });
+
+            showDialog(dialog, stage, 3);
+        }
+    }
+
+    /*
+    //Will be implemented on server side (currently just here till the server is ready)
+    private void accuseOfCheating(boolean result) {
+        Collection<Player> cheaters = getCheatingPlayers();
+
+        if (cheaters.isEmpty()) {
+            //return negative answer --> punish accusing player
+        } else  {
+            //return positive answer --> punish all cheaters and reward accusing player
+        }
+    }
+
+    //Will be implemented on server side (currently just here till the server is ready)
+    private Collection<Player> getCheatingPlayers() {
+        List<Player> cheaters = new ArrayList<>();
+
+        for (Player p : player.values()) {
+            if (p.getCheat()) {
+                cheaters.add(p);
+            }
+        }
+        return cheaters;
+    }
+     */
 
     @Override
     public void render(float delta) {
         super.render(delta);
         stage.draw();
+        checkShaking();
+    }
+
+    public void showDialog(Dialog dialog, Stage stage, float scale) {
+        dialog.show(stage);
+        dialog.setScale(scale);
+        dialog.setOrigin(Align.center);
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         stage.addActor(board);
         stage.addActor(branches);
 

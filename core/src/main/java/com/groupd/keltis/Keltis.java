@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
 
@@ -67,7 +68,10 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.BOARD_PLAYER_RED, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_YELLOW, Texture.class);
 
-		//assetManager.load(AssetPaths.MENU_ASSET, Texture.class);
+		assetManager.load(AssetPaths.MENU_ASSET, Skin.class);
+		assetManager.load(AssetPaths.DIALOG_SKIN, Skin.class);
+
+
 		assetManager.finishLoading();
 	}
 }
