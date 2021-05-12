@@ -22,7 +22,10 @@ import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board extends AbstractScene {
 
@@ -78,11 +81,35 @@ public class Board extends AbstractScene {
                         @Override
                         public void result(boolean result) {
                             isCheatingDialogShowing = false;
+                            accuseOfCheating(result);
                         }
                     });
 
             showDialog(dialog, stage, 3);
         }
+    }
+
+    //Will be implemented on server side (currently just here till the server is ready)
+    private void accuseOfCheating(boolean result) {
+        Collection<Player> cheaters = getCheatingPlayers();
+
+        if (cheaters.isEmpty()) {
+            //return negative answer --> punish accusing player
+        } else  {
+            //return positive answer --> punish all cheaters and reward accusing player
+        }
+    }
+
+    //Will be implemented on server side (currently just here till the server is ready)
+    private Collection<Player> getCheatingPlayers() {
+        List<Player> cheaters = new ArrayList<>();
+
+        for (Player p : player.values()) {
+            if (p.getCheat()) {
+                cheaters.add(p);
+            }
+        }
+        return cheaters;
     }
 
     @Override
