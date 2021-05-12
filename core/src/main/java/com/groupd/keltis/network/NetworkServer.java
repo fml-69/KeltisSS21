@@ -1,29 +1,24 @@
 package com.groupd.keltis.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.StartGameEvent;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-
-
-//import sun.rmi.transport.tcp.TCPChannel;
 
 public class NetworkServer {
 
     private ServerSocket socket;
     private CountDownLatch countDownLatch;
-    private Thread acceptorThread;
 
     // to store clients
-    private Map<String, NetworkClientChannel> clients = new HashMap<>();
+    private final Map<String, NetworkClientChannel> clients = new HashMap<>();
 
 
     public NetworkServer(int port, CountDownLatch countDownLatch){
@@ -31,7 +26,7 @@ public class NetworkServer {
 
             this.countDownLatch = countDownLatch;
             socket = new ServerSocket(port);
-            acceptorThread = new Thread(new AcceptorRunnable());
+            Thread acceptorThread = new Thread(new AcceptorRunnable());
             acceptorThread.setDaemon(true);
             acceptorThread.start();
 
@@ -69,8 +64,53 @@ public class NetworkServer {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         }
+    }
+
+    public void receivePackets(){
+
+        for(Map.Entry<String, NetworkClientChannel> client:clients.entrySet()){
+            NetworkClientChannel channel = client.getValue();
+
+            try {
+
+                if(channel.dataIn.available() > 0){
+                    int eventID = channel.dataIn.readInt();
+                    if(eventID == 1){
+                        JoinEvent event = new JoinEvent();
+                        event.decode(channel.dataIn);
+
+                    } else if (eventID == 2){
+                        StartGameEvent startEvent = new StartGameEvent();
+                        startEvent.decode(channel.dataIn);
+
+                    } else {
+                        System.out.print("Invalid Network EventID");
+                    }
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void sendEvent(String receiver, NetworkEvent event){
+
+        NetworkClientChannel channel = clients.get(receiver);
+        if(channel != null){
+            try {
+                channel.dataOut.writeInt(event.getEventID());
+                event.encode(channel.dataOut);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

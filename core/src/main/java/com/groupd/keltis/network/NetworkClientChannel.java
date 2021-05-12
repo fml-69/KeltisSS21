@@ -9,9 +9,9 @@ import java.net.Socket;
 
 public class NetworkClientChannel {
 
-    public Socket socket;
-    public DataInputStream dataIn;
-    public DataOutputStream dataOut;
+    protected Socket socket;
+    protected DataInputStream dataIn;
+    protected DataOutputStream dataOut;
 
 
     public NetworkClientChannel(Socket socket) throws IOException {
@@ -25,7 +25,6 @@ public class NetworkClientChannel {
         dataOut = new DataOutputStream(out);
 
     }
-
 
 
 

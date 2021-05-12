@@ -1,15 +1,13 @@
 package com.groupd.keltis.scenes.login;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Net;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
@@ -24,13 +22,9 @@ import com.groupd.keltis.utils.AssetPaths;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import javax.xml.soap.Text;
 
 public class EntryScene extends AbstractScene {
 
-    private Stage stage;
-    private Button startButton;
-    private Button hostButton;
     private TextField text;
     private Label errorLabel;
     private TextField textIP;
@@ -42,21 +36,20 @@ public class EntryScene extends AbstractScene {
         super(keltis);
 
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-
 
     }
 
     @Override
     public void update(float delta) {
-
+        // TODO Auto-generated method stub
     }
 
     @Override
     public void show() {
 
-        // ----> old way of loading Skin followed by new one (that works for Android)
-        //Skin skin = keltis.assetManager.get(AssetPaths.UI_SKIN);
+        Gdx.input.setInputProcessor(stage);
+
+
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
 
@@ -66,22 +59,9 @@ public class EntryScene extends AbstractScene {
 
 
         Label label = new Label("Enter your name", skin);
-        //stage.addActor(label);
         vg.addActor(label);
 
         text = new TextField("", skin);
-
-/*        text.addListener(new InputListener(){
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if(keycode == Input.Keys.ENTER){
-                    requestEntry();
-                    return true;
-                }
-                return super.keyDown(event, keycode);
-            }
-        });*/
-
         vg.addActor(text);
 
         Label labelIP = new Label("Enter IP", skin);
@@ -95,12 +75,10 @@ public class EntryScene extends AbstractScene {
         vg.addActor(textPort);
 
 
-
-        hostButton = new TextButton("Host", skin);
+        Button hostButton = new TextButton("Host", skin);
         vg.addActor(hostButton);
 
-        startButton = new TextButton("Start", skin);
-        //stage.addActor(startButton);
+        Button startButton = new TextButton("Start", skin);
         vg.addActor(startButton);
 
         errorLabel = new Label("", skin);
@@ -119,12 +97,16 @@ public class EntryScene extends AbstractScene {
                 serverThread.start();
 
                 try {
-                    serverStartLatch.await(2, TimeUnit.SECONDS);
-                    requestEntry();
+                    if(!serverStartLatch.await(2, TimeUnit.SECONDS)){
+                        errorLabel.setText("Latch failed!");
+                    } else {
+                        requestEntry();
+                    }
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     errorLabel.setText("Could not start server.");
+                    Thread.currentThread().interrupt();
                 }
 
                 return true;
@@ -163,22 +145,21 @@ public class EntryScene extends AbstractScene {
 
     @Override
     public void pause() {
-
+        // TODO Auto-generated method stub
     }
 
     @Override
     public void resume() {
-
+        // TODO Auto-generated method stub
     }
 
     @Override
     public void hide() {
-
+        // TODO Auto-generated method stub
     }
 
     @Override
     public void resize(int width, int height) {
-        //super.resize(width, height);
         stage.getViewport().update(width, height);
     }
 
@@ -191,7 +172,6 @@ public class EntryScene extends AbstractScene {
 
     @Override
     public void dispose() {
-        //super.dispose();
         stage.dispose();
 
     }

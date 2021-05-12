@@ -1,14 +1,16 @@
 package com.groupd.keltis.network;
 
+import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.StartGameEvent;
+
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class NetworkClient {
 
-    private Socket client;
     private DataInputStream dataIn;
     private DataOutputStream dataOut;
     private boolean connected;
@@ -16,9 +18,9 @@ public class NetworkClient {
 
 
 
-    public NetworkClient(String IP, int port, String nick){
+    public NetworkClient(String iP, int port, String nick){
         try {
-            client = new Socket(IP, port);
+            Socket client = new Socket(iP, port);
 
             dataIn = new DataInputStream(client.getInputStream());
             dataOut = new DataOutputStream(client.getOutputStream());
@@ -26,11 +28,7 @@ public class NetworkClient {
             // upon connecting to server, client sends nick
             dataOut.writeUTF(nick);
             message = dataIn.readUTF();
-            if(message.equals("OK")){
-                connected = true;
-            } else {
-                connected = false;
-            }
+            connected = message.equals("OK");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,5 +43,38 @@ public class NetworkClient {
 
     public String getMessage(){
         return message;
+    }
+
+    public void sendEvent(NetworkEvent event){
+        try {
+            dataOut.writeInt(event.getEventID());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        event.encode(dataOut);
+    }
+
+
+    public void receiveEvents(){
+        try {
+
+            if(dataIn.available() > 0){
+                int eventID = dataIn.readInt();
+                if(eventID == 1){
+                    JoinEvent event = new JoinEvent();
+                    event.decode(dataIn);
+
+                } else if (eventID == 2){
+                    StartGameEvent startEvent = new StartGameEvent();
+                    startEvent.decode(dataIn);
+
+                } else {
+                    System.out.print("Invalid Network EventID");
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
