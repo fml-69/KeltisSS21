@@ -81,7 +81,7 @@ public class Board extends AbstractScene {
                         @Override
                         public void result(boolean result) {
                             isCheatingDialogShowing = false;
-                            accuseOfCheating(result);
+                            // accuseOfCheating(result);
                         }
                     });
 
@@ -89,6 +89,7 @@ public class Board extends AbstractScene {
         }
     }
 
+    /*
     //Will be implemented on server side (currently just here till the server is ready)
     private void accuseOfCheating(boolean result) {
         Collection<Player> cheaters = getCheatingPlayers();
@@ -111,6 +112,7 @@ public class Board extends AbstractScene {
         }
         return cheaters;
     }
+     */
 
     @Override
     public void render(float delta) {
