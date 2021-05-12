@@ -18,7 +18,6 @@ import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
 
-//import javafx.scene.Scene;
 
 public class MenuScreen extends AbstractScene {
 

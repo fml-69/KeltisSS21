@@ -16,9 +16,8 @@ public class SceneManager {
     public SceneManager(final Keltis keltis){
         this.keltis = keltis;
         sceneMapper();
-        //setScene(GAMESTATE.PLAYING);
         setScene(GAMESTATE.LOGIN);
-        //setScene(GAMESTATE.MENU);
+
     }
 
     private void sceneMapper(){
