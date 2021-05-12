@@ -55,7 +55,10 @@ public class EntryScene extends AbstractScene {
     @Override
     public void show() {
 
-        Skin skin = keltis.assetManager.get(AssetPaths.UI_SKIN);
+        // ----> old way of loading Skin followed by new one (that works for Android)
+        //Skin skin = keltis.assetManager.get(AssetPaths.UI_SKIN);
+        Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
+
 
         VerticalGroup vg = new VerticalGroup().space(3).pad(5).fill();
         vg.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
