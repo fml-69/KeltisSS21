@@ -158,6 +158,7 @@ public class EntryScene extends AbstractScene {
         // TODO Auto-generated method stub
     }
 
+
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);

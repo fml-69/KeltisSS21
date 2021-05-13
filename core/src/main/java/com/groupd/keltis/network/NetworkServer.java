@@ -1,5 +1,6 @@
 package com.groupd.keltis.network;
 
+import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
@@ -44,14 +45,14 @@ public class NetworkServer {
 
             countDownLatch.countDown();
 
-            while(true){
+            do {
 
                 try {
                     Socket client = socket.accept();
 
                     NetworkClientChannel channel = new NetworkClientChannel(client);
                     String nick = channel.dataIn.readUTF();
-                    if(clients.containsKey(nick)){
+                    if (clients.containsKey(nick)) {
                         channel.dataOut.writeUTF("Nick already taken, chose another.");
                         client.close();
                     } else {
@@ -66,7 +67,7 @@ public class NetworkServer {
                     e.printStackTrace();
                     break;
                 }
-            }
+            } while (true);
         }
     }
 
@@ -88,7 +89,7 @@ public class NetworkServer {
                         startEvent.decode(channel.dataIn);
 
                     } else {
-                        System.out.print("Invalid Network EventID");
+                        Gdx.app.error("Error", "Invalid Network EventID");
                     }
 
                 }

@@ -1,5 +1,6 @@
 package com.groupd.keltis.network;
 
+import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
@@ -9,8 +10,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+
+
+
 public class NetworkClient {
 
+    private Socket client;
     private DataInputStream dataIn;
     private DataOutputStream dataOut;
     private boolean connected;
@@ -20,7 +25,7 @@ public class NetworkClient {
 
     public NetworkClient(String iP, int port, String nick){
         try {
-            Socket client = new Socket(iP, port);
+            client = new Socket(iP, port);
 
             dataIn = new DataInputStream(client.getInputStream());
             dataOut = new DataOutputStream(client.getOutputStream());
@@ -69,7 +74,7 @@ public class NetworkClient {
                     startEvent.decode(dataIn);
 
                 } else {
-                    System.out.print("Invalid Network EventID");
+                    Gdx.app.error("Error", "Invalid Network EventID");
                 }
 
             }

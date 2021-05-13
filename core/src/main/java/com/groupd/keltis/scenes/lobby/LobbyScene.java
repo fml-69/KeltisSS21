@@ -18,9 +18,6 @@ import com.groupd.keltis.utils.AssetPaths;
 public class LobbyScene extends AbstractScene {
 
 
-    public TextButton readyButton;
-    public List<String> playerList;
-
     public LobbyScene(Keltis keltis) {
         super(keltis);
 
@@ -47,11 +44,11 @@ public class LobbyScene extends AbstractScene {
         stage.addActor(vg);
 
 
-        playerList = new List<String>(skin);
+        List<String> playerList = new List<>(skin);
         vg.addActor(playerList);
 
 
-        readyButton = new TextButton("Ready", skin);
+        TextButton readyButton = new TextButton("Ready", skin);
         vg.addActor(readyButton);
 
         readyButton.addListener(new InputListener(){

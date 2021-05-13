@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 
 public abstract class NetworkEvent {
 
-    public String sender;
 
     public abstract int getEventID();
 
