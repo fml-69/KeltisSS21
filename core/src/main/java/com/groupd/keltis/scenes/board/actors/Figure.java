@@ -83,4 +83,8 @@ public class Figure extends Actor {
     public String getName(){
         return this.name;
     }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
 }

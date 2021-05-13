@@ -51,20 +51,35 @@ public class Roadcards extends Actor {
         return position;
     }
 
-    public static void checkRoadcards(String player, HashMap<String, Figure> playerHashMap, RoadcardsList roadcardsList){
-        int fieldPlayer = playerHashMap.get(player).getCurrentFieldPosition();
-        int branchPlayer = Integer.valueOf(player.substring(player.length()-1));
+    public static void checkRoadcards(String playerName, HashMap<String, Figure> playerHashMap, RoadcardsList roadcardsList, HashMap<String, Player> player){
+        int fieldPlayer = playerHashMap.get(playerName).getCurrentFieldPosition();
+        int branchPlayer = Integer.valueOf(playerName.substring(playerName.length()-1));
+        String colorPlayer = playerName.substring(0,playerName.length()-1);
         Wishstone wishstone = null;
         for(int i = 0; i < roadcardsList.getRoadcardsArrayList().size();i++){
             if(fieldPlayer == roadcardsList.getRoadcardsArrayList().get(i).getPosition().getField() && branchPlayer == roadcardsList.getRoadcardsArrayList().get(i).getPosition().getBranch()){
                 if(roadcardsList.getRoadcardsArrayList().get(i).getClass() == Wishstone.class){
                     roadcardsList.getRoadcardsArrayList().get(i).addAction(Actions.removeActor());
                     wishstone = (Wishstone) roadcardsList.getRoadcardsArrayList().get(i);
-                    //Wish-Stone bei Player hinzufügen
+                    switch(colorPlayer){
+                        case "blue": player.get("player1").addWishingStones(); break;
+                        case "red": player.get("player2").addWishingStones(); break;
+                        case "green": player.get("player3").addWishingStones(); break;
+                        case "yellow": player.get("player4").addWishingStones(); break;
+                    }
+                    break;
                 } else if (roadcardsList.getRoadcardsArrayList().get(i).getClass() == Shamrock.class){
+                    playerHashMap.get(playerName).getSprite().setY(playerHashMap.get(playerName).getSprite().getY()+5*18);
+                    playerHashMap.get(playerName).moveUp();
 
                 } else if (roadcardsList.getRoadcardsArrayList().get(i).getClass() == Pointcard.class){
-
+                    Pointcard pointcard = (Pointcard) roadcardsList.getRoadcardsArrayList().get(i);
+                    switch(colorPlayer){
+                        case "blue": player.get("player1").addPointcards(pointcard.getPoints()); break;
+                        case "red": player.get("player2").addPointcards(pointcard.getPoints()); break;
+                        case "green": player.get("player3").addPointcards(pointcard.getPoints()); break;
+                        case "yellow": player.get("player4").addPointcards(pointcard.getPoints()); break;
+                    }
                 }
             }
         }

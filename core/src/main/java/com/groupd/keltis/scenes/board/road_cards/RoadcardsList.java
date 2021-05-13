@@ -49,34 +49,34 @@ public class RoadcardsList {
         return roadcardsArrayList;
     }
     public void generateArray(ArrayList<Position> roadcardsPositionArray){
+        roadcardsPositionArray.add(new Position(610,308,1,2));
         roadcardsPositionArray.add(new Position(610,400,1,3));
         roadcardsPositionArray.add(new Position(610,584,1,5));
         roadcardsPositionArray.add(new Position(610,676,1,6));
         roadcardsPositionArray.add(new Position(610,768,1,7));
-        roadcardsPositionArray.add(new Position(610,952,1,9));
 
         roadcardsPositionArray.add(new Position(830,308,2,2));
         roadcardsPositionArray.add(new Position(830,492,2,4));
         roadcardsPositionArray.add(new Position(830,676,2,6));
         roadcardsPositionArray.add(new Position(830,768,2,7));
-        roadcardsPositionArray.add(new Position(830,952,2,9));
+        roadcardsPositionArray.add(new Position(830,860,2,8));
 
         roadcardsPositionArray.add(new Position(1050,308,3,2));
         roadcardsPositionArray.add(new Position(1050,400,3,3));
         roadcardsPositionArray.add(new Position(1050,584,3,5));
         roadcardsPositionArray.add(new Position(1050,768,3,7));
-        roadcardsPositionArray.add(new Position(1050,952,3,9));
+        roadcardsPositionArray.add(new Position(1050,860,3,8));
 
         roadcardsPositionArray.add(new Position(1275,308,4,2));
         roadcardsPositionArray.add(new Position(1275,492,4,4));
         roadcardsPositionArray.add(new Position(1275,584,4,5));
         roadcardsPositionArray.add(new Position(1275,768,4,7));
-        roadcardsPositionArray.add(new Position(1275,952,4,9));
+        roadcardsPositionArray.add(new Position(1275,860,4,8));
 
+        roadcardsPositionArray.add(new Position(1495,308,5,2));
         roadcardsPositionArray.add(new Position(1495,400,5,3));
         roadcardsPositionArray.add(new Position(1495,492,5,4));
         roadcardsPositionArray.add(new Position(1495,676,5,6));
         roadcardsPositionArray.add(new Position(1495,768,5,7));
-        roadcardsPositionArray.add(new Position(1495,952,5,9));
     }
 }

@@ -56,6 +56,8 @@ public class Board extends AbstractScene {
         stage.act(delta);
 
         if(x % 200 == 0){
+            //nur um die Funktionalität zu testen
+            Roadcards.checkRoadcards("blue1",this.playerHashMap,this.roadcardsList,this.player);
             advanceFigure("blue1");
             Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("player1").getScore()));
             Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("player2").getScore()));

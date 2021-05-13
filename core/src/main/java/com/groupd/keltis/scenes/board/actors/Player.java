@@ -4,7 +4,6 @@ package com.groupd.keltis.scenes.board.actors;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.utils.AssetPaths;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,6 +14,7 @@ public class Player {
     private String color;
 
     private int wishingStones;
+    private int pointcards;
 
     private HashMap<String, Figure> figures;
     private ArrayList handCards;
@@ -24,6 +24,7 @@ public class Player {
 
     public Player(Keltis keltis, String color) {
         this.wishingStones = 0;
+        this.pointcards = 0;
         this.handCards = new ArrayList();
         this.discardPile = new ArrayList();
         this.cheat = false;
@@ -88,7 +89,7 @@ public class Player {
         for(Figure figure : figures.values()){
             score += figure.getScore();
         }
-        score += getScoreWishingStones();
+        score = score + pointcards + getScoreWishingStones();
         return score;
     }
 
@@ -121,5 +122,13 @@ public class Player {
 
     public boolean getCheat() {
         return cheat;
+    }
+
+    public void addWishingStones() {
+        this.wishingStones++;
+    }
+
+    public void addPointcards(int points) {
+        this.pointcards +=points;
     }
 }
