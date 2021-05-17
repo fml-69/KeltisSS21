@@ -3,15 +3,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
-
-
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.scenes.AbstractScene;
 
+import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Figure;
 
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
@@ -20,6 +21,7 @@ import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Board extends AbstractScene {
@@ -31,9 +33,12 @@ public class Board extends AbstractScene {
     private final Image branches;
     private final Image hudBar;
 
-    private HashMap<String, Player> player = new HashMap<>();
+
+    private ArrayList<Player> player = new ArrayList<>();
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
     private int x = 1;
+
+    private final GameLogic gameLogic = new GameLogic();
 
     private RoadcardsList roadcardsList = new RoadcardsList();
 
@@ -49,18 +54,34 @@ public class Board extends AbstractScene {
         board = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
         branches = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BRANCHES));
         hudBar = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_HUD_BAR));
+
+        //GameLogic setDrawPile
+        gameLogic.setPlayerArrayList(player);
+        gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
     }
 
     @Override
     public void update(float delta) {
         stage.act(delta);
 
-        if(x % 200 == 0){
-            advanceFigure("blue1");
-            Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("player1").getScore()));
-            Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("player2").getScore()));
-            Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(player.get("player3").getScore()));
-            Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(player.get("player4").getScore()));
+        if(x % 180 == 0){
+            gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        if(x % 275 == 0){
+            gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        if(x % 350 == 0){
+            gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        if(x % 520 == 0){
+            gameLogic.playCard(player.get(3),new Card("purple", 6), "green");
+
             Gdx.app.log("----------------", "-------------------------------");
         }
         x++;
@@ -70,13 +91,19 @@ public class Board extends AbstractScene {
             ShakeDetector.wasShaken();
 
         }
-
     }
 
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get(0).getOverallScore()));
+        Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get(1).getOverallScore()));
+        Gdx.app.log("----------------", "-------------------------------");
+
+        if(gameLogic.verifyEndingCondition()){
+            //Gdx.app.exit();
+        }
         stage.draw();
     }
 
@@ -90,8 +117,8 @@ public class Board extends AbstractScene {
             stage.addActor(roadcards);
         }
 
-        Player player1 = new Player(keltis, "blue");
-        player.put("player1", player1);
+        Player player1 = new Player(keltis,"player1", "blue");
+        player.add(player1);
         playerHashMap.putAll(player1.getFigures());
         playerHashMap.get("blue1").spritePos(565, 124);
         playerHashMap.get("blue2").spritePos(785, 124);
@@ -106,8 +133,8 @@ public class Board extends AbstractScene {
             }
         }
 
-        Player player2 = new Player(keltis, "red");
-        player.put("player2", player2);
+        Player player2 = new Player(keltis,"player2", "red");
+        player.add(player2);
         playerHashMap.putAll(player2.getFigures());
         playerHashMap.get("red1").spritePos(595, 124);
         playerHashMap.get("red2").spritePos(815, 124);
@@ -122,8 +149,8 @@ public class Board extends AbstractScene {
             }
         }
 
-        Player player3 = new Player(keltis, "green");
-        player.put("player3", player3);
+        Player player3 = new Player(keltis, "player3","green");
+        player.add(player3);
         playerHashMap.putAll(player3.getFigures());
         playerHashMap.get("green1").spritePos(625, 124);
         playerHashMap.get("green2").spritePos(845, 124);
@@ -138,8 +165,8 @@ public class Board extends AbstractScene {
             }
         }
 
-        Player player4 = new Player(keltis, "yellow");
-        player.put("player4", player4);
+        Player player4 = new Player(keltis, "player4","yellow");
+        player.add(player4);
         playerHashMap.putAll(player4.getFigures());
         playerHashMap.get("yellow1").spritePos(655, 124);
         playerHashMap.get("yellow2").spritePos(875, 124);
@@ -153,7 +180,6 @@ public class Board extends AbstractScene {
                 }
             }
         }
-
 
         stage.addActor(hudBar);
 
@@ -177,6 +203,4 @@ public class Board extends AbstractScene {
     public void advanceFigure(String figure){
         playerHashMap.get(figure).moveUp();
     }
-
-
 }
