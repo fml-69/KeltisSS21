@@ -8,4 +8,8 @@ public class Pointcard extends Roadcards {
         super(texture,position);
         this.points = points;
     }
+
+    public int getPoints() {
+        return points;
+    }
 }
