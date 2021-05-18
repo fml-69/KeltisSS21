@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,6 +17,7 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
+
 
 public class MenuScreen extends AbstractScene {
 
@@ -43,6 +46,14 @@ public class MenuScreen extends AbstractScene {
         table.add(preferences).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
+
+
+        newGame.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOGIN);
+                return true;
+            }});
 
         exit.addListener(new ChangeListener() {
             @Override
