@@ -113,26 +113,31 @@ public class GameLogic {
      *      Move and CheckRoadCards
      */
     public void move(Player player, String colorPile) {
-        Figure figure = null;
         switch (colorPile) {
             case "red":
-                figure = player.getFigures().get(player.getColor() + 3);
+                Figure figure = player.getFigures().get(player.getColor() + 3);
+                moveFigure(player, figure);
                 break;
             case "blue":
                 figure = player.getFigures().get(player.getColor() + 4);
+                moveFigure(player, figure);
                 break;
             case "yellow":
                 figure = player.getFigures().get(player.getColor() + 2);
+                moveFigure(player, figure);
                 break;
             case "purple":
                 figure = player.getFigures().get(player.getColor() + 5);
+                moveFigure(player, figure);
                 break;
             case "green":
                 figure = player.getFigures().get(player.getColor() + 1);
+                moveFigure(player, figure);
                 break;
             default:
-
         }
+    }
+    public void moveFigure(Player player, Figure figure){
         figure.moveUp();
         checkIfCardIsOnField(player, figure);
     }
