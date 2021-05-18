@@ -18,12 +18,14 @@ public class Figure extends Actor {
     private final String name;
     private int currentFieldPosition;
     private int score;
+    private int branch;
 
-    public Figure(Texture texture, final String name){
+    public Figure(Texture texture, final String name, int branch){
         sprite = new Sprite(texture);
         this.name = name;
         this.currentFieldPosition = 0;
         this.score = 0;
+        this.branch = branch;
         spritePos(sprite.getX(), sprite.getY());
         setTouchable(Touchable.disabled);
     }
@@ -69,6 +71,18 @@ public class Figure extends Actor {
         return currentFieldPosition;
     }
 
+    public void setCurrentFieldPosition(int currentFieldPosition) {
+        this.currentFieldPosition = currentFieldPosition;
+    }
+
+    public void setLastPosY(float lastPosY) {
+        this.lastPosY = lastPosY;
+    }
+
+    public float getLastPosY() {
+        return lastPosY;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         sprite.draw(batch);
@@ -83,6 +97,11 @@ public class Figure extends Actor {
     public String getName(){
         return this.name;
     }
+
+    public int getBranch() {
+        return branch;
+    }
+
 
     public Sprite getSprite() {
         return sprite;

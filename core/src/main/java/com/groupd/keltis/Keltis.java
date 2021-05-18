@@ -68,6 +68,7 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.BOARD_PLAYER_RED, Texture.class);
 		assetManager.load(AssetPaths.BOARD_PLAYER_YELLOW, Texture.class);
 
+		
 		assetManager.load(AssetPaths.MENU_ASSET, Skin.class);
 		assetManager.load(AssetPaths.DIALOG_SKIN, Skin.class);
 
