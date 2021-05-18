@@ -57,6 +57,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+       
         
     }
 }
@@ -68,6 +69,8 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
         testImplementation(platform("org.junit:junit-bom:5.7.1"))
 
@@ -84,5 +87,18 @@ project(":core") {
             because 'allows tests to run from IDEs that bundle older version of launcher'
         }
         
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        //api "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
     }
 }
