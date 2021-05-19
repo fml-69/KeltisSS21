@@ -6,10 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.scenes.AbstractScene;
 
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -22,7 +27,13 @@ import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.PositioningConstants;
 
+import java.util.ArrayList;
+
+
+import java.util.Collection;
+
 import java.util.HashMap;
+import java.util.List;
 
 public class Board extends AbstractScene {
 
@@ -34,9 +45,14 @@ public class Board extends AbstractScene {
 
     private HashMap<String, Player> playerHashMap = new HashMap<>();
     private HashMap<String, Figure> figuresHashMap = new HashMap<>();
+
     private int x = 1;
 
+    private final GameLogic gameLogic = new GameLogic();
+
     private RoadcardsList roadcardsList = new RoadcardsList();
+
+    private boolean isCheatingDialogShowing = false;
 
     public Board(final Keltis keltis){
         super(keltis);
@@ -45,11 +61,14 @@ public class Board extends AbstractScene {
         this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
         keltis.batch.setProjectionMatrix(camera.combined);
 
-        Gdx.input.setInputProcessor(stage);
 
         board = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
         branches = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BRANCHES));
         hudBar = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_HUD_BAR));
+
+        //GameLogic setDrawPile
+        gameLogic.setPlayerArrayList(player);
+        gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
     }
 
     @Override
@@ -62,27 +81,96 @@ public class Board extends AbstractScene {
             Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(playerHashMap.get("player2").getScore()));
             Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(playerHashMap.get("player3").getScore()));
             Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(playerHashMap.get("player4").getScore()));
+
+        if(x % 180 == 0){
+            gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        if(x % 275 == 0){
+            gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        if(x % 350 == 0){
+            gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+
+            Gdx.app.log("----------------", "-------------------------------");
+        }
+        if(x % 520 == 0){
+            gameLogic.playCard(player.get(3),new Card("purple", 6), "green");
+
             Gdx.app.log("----------------", "-------------------------------");
         }
         x++;
-
-
-        if(ShakeDetector.phoneIsShaking()) {
-            ShakeDetector.wasShaken();
-
-        }
-
     }
 
+    private void checkShaking() {
+        if(ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing) {
+            isCheatingDialogShowing = true;
+            YesNoDialog dialog = new YesNoDialog("Schummelverdacht",
+                    keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                    new YesNoDialog.Callback() {
+                        @Override
+                        public void result(boolean result) {
+                            isCheatingDialogShowing = false;
+                            // accuseOfCheating(result);
+                        }
+                    });
+
+            showDialog(dialog, stage, 3);
+        }
+    }
+
+    /*
+    //Will be implemented on server side (currently just here till the server is ready)
+    private void accuseOfCheating(boolean result) {
+        Collection<Player> cheaters = getCheatingPlayers();
+
+        if (cheaters.isEmpty()) {
+            //return negative answer --> punish accusing player
+        } else  {
+            //return positive answer --> punish all cheaters and reward accusing player
+        }
+    }
+
+    //Will be implemented on server side (currently just here till the server is ready)
+    private Collection<Player> getCheatingPlayers() {
+        List<Player> cheaters = new ArrayList<>();
+
+        for (Player p : player.values()) {
+            if (p.getCheat()) {
+                cheaters.add(p);
+            }
+        }
+        return cheaters;
+    }
+     */
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get(0).getOverallScore()));
+        Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get(1).getOverallScore()));
+        Gdx.app.log("----------------", "-------------------------------");
+
+        if(gameLogic.verifyEndingCondition()){
+            //Gdx.app.exit();
+        }
         stage.draw();
+        checkShaking();
+    }
+
+    public void showDialog(Dialog dialog, Stage stage, float scale) {
+        dialog.show(stage);
+        dialog.setScale(scale);
+        dialog.setOrigin(Align.center);
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         stage.addActor(board);
         stage.addActor(branches);
 
@@ -99,6 +187,7 @@ public class Board extends AbstractScene {
         figuresHashMap.get("blue3").spritePos(1005, 124);
         figuresHashMap.get("blue4").spritePos(1225, 124);
         figuresHashMap.get("blue5").spritePos(1445, 124);
+
         for(int i = 1; i<6; i++) {
             for (Figure figure : figuresHashMap.values()) {
                 if (figure.getName().equals("blue"+i)) {
@@ -115,6 +204,7 @@ public class Board extends AbstractScene {
         figuresHashMap.get("red3").spritePos(1035, 124);
         figuresHashMap.get("red4").spritePos(1255, 124);
         figuresHashMap.get("red5").spritePos(1475, 124);
+
         for(int i = 1; i<6; i++) {
             for (Figure figure : figuresHashMap.values()) {
                 if (figure.getName().equals("red"+i)) {
@@ -131,6 +221,7 @@ public class Board extends AbstractScene {
         figuresHashMap.get("green3").spritePos(1065, 124);
         figuresHashMap.get("green4").spritePos(1285, 124);
         figuresHashMap.get("green5").spritePos(1505, 124);
+
         for(int i = 1; i<6; i++) {
             for (Figure figure : figuresHashMap.values()) {
                 if (figure.getName().equals("green"+i)) {
@@ -147,6 +238,7 @@ public class Board extends AbstractScene {
         figuresHashMap.get("yellow3").spritePos(1095, 124);
         figuresHashMap.get("yellow4").spritePos(1315, 124);
         figuresHashMap.get("yellow5").spritePos(1535, 124);
+
         for(int i = 1; i<6; i++) {
             for (Figure figure : figuresHashMap.values()) {
                 if (figure.getName().equals("yellow"+i)) {
@@ -223,6 +315,4 @@ public class Board extends AbstractScene {
     public void advanceFigure(String figure){
         figuresHashMap.get(figure).moveUp();
     }
-
-
 }

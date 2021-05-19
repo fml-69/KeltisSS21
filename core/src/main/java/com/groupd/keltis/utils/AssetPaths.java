@@ -67,6 +67,9 @@ public final class AssetPaths {
     public static final String CARD_RED_NINE = "board/cards/cards_red/cards_red_9.png";
     public static final String CARD_RED_TEN = "board/cards/cards_red/cards_red_10.png";
 
+    public static final String UI_FONT = "fonts/JetBrainsMono-Regular.ttf";
+    public static final String UI_SKIN = "ui/uiskin.json";
+
     public static final String CARD_YELLOW_ZERO = "board/cards/cards_yellow/cards_yellow_0.png";
     public static final String CARD_YELLOW_ONE = "board/cards/cards_yellow/cards_yellow_1.png";
     public static final String CARD_YELLOW_TWO = "board/cards/cards_yellow/cards_yellow_2.png";
@@ -88,6 +91,8 @@ public final class AssetPaths {
     public static final String CARD_EMPTY_STACK_YELLOW = "board/cards/cards_empty_stack_yellow.png";
 
     public static final String MENU_ASSET = "menu/glassy-ui.json";
+
+    public static final String DIALOG_SKIN = "skin_shade/uiskin.json";
 
 }
 

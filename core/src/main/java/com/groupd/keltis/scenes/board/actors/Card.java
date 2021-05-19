@@ -14,6 +14,7 @@ public class Card extends Actor {
 
     private final Sprite sprite;
     private final String name;
+    private final String color;
     private final int value;
 
     public Card(Texture texture, final String name, int value){
@@ -50,4 +51,26 @@ public class Card extends Actor {
     public String getName(){
         return this.name;
     }
+
+    public Card(String color, int value) {
+        this.color = color;
+        this.number = number;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getNumber() {
+        return value;
+    }
+
+    public void setNumber(int value) {
+        this.value = value;
+    }
 }
+
