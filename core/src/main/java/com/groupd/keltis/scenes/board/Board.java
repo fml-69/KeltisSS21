@@ -29,10 +29,8 @@ import com.groupd.keltis.scenes.board.actors.Player;
 import java.util.ArrayList;
 
 
-import java.util.Collection;
-
 import java.util.HashMap;
-import java.util.List;
+
 
 public class Board extends AbstractScene {
 
@@ -98,7 +96,7 @@ public class Board extends AbstractScene {
         x++;
     }
 
-    private void checkShaking() {
+    private void checkShaking(ArrayList<Player> player) {
         if(ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing) {
             isCheatingDialogShowing = true;
             YesNoDialog dialog = new YesNoDialog("Schummelverdacht",
@@ -106,8 +104,11 @@ public class Board extends AbstractScene {
                     new YesNoDialog.Callback() {
                         @Override
                         public void result(boolean result) {
+                            if (result) {
+                                accuseOfCheating();
+                            }
                             isCheatingDialogShowing = false;
-                            // accuseOfCheating(result);
+
                         }
                     });
 
@@ -115,30 +116,6 @@ public class Board extends AbstractScene {
         }
     }
 
-    /*
-    //Will be implemented on server side (currently just here till the server is ready)
-    private void accuseOfCheating(boolean result) {
-        Collection<Player> cheaters = getCheatingPlayers();
-
-        if (cheaters.isEmpty()) {
-            //return negative answer --> punish accusing player
-        } else  {
-            //return positive answer --> punish all cheaters and reward accusing player
-        }
-    }
-
-    //Will be implemented on server side (currently just here till the server is ready)
-    private Collection<Player> getCheatingPlayers() {
-        List<Player> cheaters = new ArrayList<>();
-
-        for (Player p : player.values()) {
-            if (p.getCheat()) {
-                cheaters.add(p);
-            }
-        }
-        return cheaters;
-    }
-     */
 
     @Override
     public void render(float delta) {
@@ -151,13 +128,33 @@ public class Board extends AbstractScene {
             //Gdx.app.exit();
         }
         stage.draw();
-        checkShaking();
+        checkShaking(player);
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
         dialog.show(stage);
         dialog.setScale(scale);
         dialog.setOrigin(Align.center);
+    }
+
+    public void accuseOfCheating() {
+
+        InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
+                keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                checkCheat());
+
+        showDialog(infoDialog, stage, 3);
+    }
+
+    public boolean checkCheat(){
+        for (Player p : player) {
+            if (p.getCheat()) {
+                if(!p.isHasAccused()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
