@@ -81,6 +81,7 @@ public class Board extends AbstractScene {
             Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(playerHashMap.get("player2").getScore()));
             Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(playerHashMap.get("player3").getScore()));
             Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(playerHashMap.get("player4").getScore()));
+        }
 
         if(x % 180 == 0){
             gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
