@@ -16,32 +16,49 @@ import com.groupd.keltis.utils.AssetPaths;
 
 public class MenuScreen extends AbstractScene {
 
-
+    private Table table;
+    private Skin skin;
+    private TextButton newGame;
+    private TextButton preferences;
+    private TextButton exit;
 
     public MenuScreen(final Keltis keltis){
         super(keltis);
 
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        Table table = new Table();
+
+        initTable();
+
+        initChangeListenerButtons();
+    }
+
+    private void initTable(){
+        table = new Table();
+
         table.setFillParent(true);
-        table.setDebug(true);
+        //table.setDebug(true);
         stage.addActor(table);
 
-        Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
+        skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        TextButton newGame = new TextButton("Spiel starten", skin);
-        TextButton preferences = new TextButton("Optionen", skin);
-        TextButton exit = new TextButton("Beenden", skin);
+        newGame = new TextButton("Spiel starten", skin);
+        preferences = new TextButton("Optionen", skin);
+        exit = new TextButton("Beenden", skin);
 
-        table.add(newGame).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(preferences).fillX().uniformX();
+
+
+        //before .uniform and .fill methods were used
+        table.add(newGame).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.row().pad(50, 0, 50, 0);
+        table.add(preferences).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row();
-        table.add(exit).fillX().uniformX();
+        table.add(exit).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
 
+    }
+
+    private void initChangeListenerButtons(){
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -59,15 +76,14 @@ public class MenuScreen extends AbstractScene {
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOGIN);
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.SETTINGS);
             }
         });
-
     }
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
