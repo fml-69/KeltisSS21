@@ -38,11 +38,17 @@ public class Board extends AbstractScene {
 
     private OrthographicCamera camera;
 
+    public enum State
+        {
+        RUN,
+        PAUSE
+    }
 
     private final Image board;
     private final Image branches;
     private final Image hudBar;
 
+    private State state;
 
     private ArrayList<Player> player = new ArrayList<>();
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
@@ -72,41 +78,40 @@ public class Board extends AbstractScene {
         //GameLogic setDrawPile
         gameLogic.setPlayerArrayList(player);
         gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
+        gameLogic.setBoard(this);
     }
 
     @Override
     public void update(float delta) {
-        stage.act(delta);
+        switch (state){
+            case RUN:
+                stage.act(delta);
 
-        if(x % 180 == 0){
-            gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+                if(x % 180 == 0){
+                    gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
 
-            Gdx.app.log("----------------", "-------------------------------");
+                    Gdx.app.log("----------------", "-------------------------------");
+                }
+                if(x % 275 == 0){
+                    gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+
+                    Gdx.app.log("----------------", "-------------------------------");
+                }
+                if(x % 350 == 0){
+                    gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+
+                    Gdx.app.log("----------------", "-------------------------------");
+                }
+                if(x % 520 == 0) {
+                    gameLogic.playCard(player.get(3), new Card("purple", 6), "green");
+                }
+                x++;
+                break;
+            case PAUSE:
+
+                break;
         }
-        if(x % 275 == 0){
-            gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
 
-            Gdx.app.log("----------------", "-------------------------------");
-        }
-        if(x % 350 == 0){
-            gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
-
-            Gdx.app.log("----------------", "-------------------------------");
-        }
-        if(x % 520 == 0){
-            gameLogic.playCard(player.get(3),new Card("purple", 6), "green");
-
-        if(x % 200 == 0){
-            //nur um die Funktionalität zu testen
-            Roadcards.checkRoadcards("blue1",this.playerHashMap,this.roadcardsList,this.player, this);
-            advanceFigure("blue1");
-            Gdx.app.log("Spieler1 Punkte: ",  String.valueOf(player.get("player1").getScore()));
-            Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get("player2").getScore()));
-            Gdx.app.log("Spieler3 Punkte: ",  String.valueOf(player.get("player3").getScore()));
-            Gdx.app.log("Spieler4 Punkte: ",  String.valueOf(player.get("player4").getScore()));
-            Gdx.app.log("----------------", "-------------------------------");
-        }
-        x++;
     }
 
     private void checkShaking() {
@@ -174,6 +179,7 @@ public class Board extends AbstractScene {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        state = State.RUN;
 
         stage.addActor(board);
         stage.addActor(branches);
@@ -253,12 +259,12 @@ public class Board extends AbstractScene {
 
     @Override
     public void pause() {
-
+        this.state = State.PAUSE;
     }
 
     @Override
     public void resume() {
-
+        this.state = State.RUN;
     }
 
     @Override

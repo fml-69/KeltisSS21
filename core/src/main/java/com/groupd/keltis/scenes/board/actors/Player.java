@@ -19,8 +19,6 @@ public class Player {
     private final ArrayList<Card> handCards = new ArrayList<Card>();
 
     private HashMap<String, Figure> figures;
-    private ArrayList handCards;
-    private ArrayList discardPile;
 
     private boolean cheat;
     private boolean turn;
