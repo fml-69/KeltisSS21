@@ -3,21 +3,24 @@ package com.groupd.keltis.management;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.Board;
-import com.groupd.keltis.scenes.menu.IngameMenuScreen;
+import com.groupd.keltis.scenes.lobby.LobbyScene;
+import com.groupd.keltis.scenes.login.EntryScene;
 import com.groupd.keltis.scenes.menu.MenuScreen;
 import com.groupd.keltis.scenes.menu.OptionsScreen;
+import com.groupd.keltis.scenes.menu.IngameMenuScreen;
 
 import java.util.HashMap;
 
 public class SceneManager {
     private final Keltis keltis;
     private HashMap<GAMESTATE, AbstractScene> sceneHashMap;
-    public enum GAMESTATE{LOGIN, PLAYING, MENU, SETTINGS, INGAME_MENU}
+    public enum GAMESTATE{LOGIN, LOBBY, PLAYING, MENU, SETTINGS, INGAME_MENU}
 
     public SceneManager(final Keltis keltis){
         this.keltis = keltis;
         sceneMapper();
-        setScene(GAMESTATE.MENU);
+        setScene(GAMESTATE.LOGIN);
+
     }
 
     private void sceneMapper(){
@@ -26,6 +29,8 @@ public class SceneManager {
         this.sceneHashMap.put(GAMESTATE.MENU, new MenuScreen(keltis));
         this.sceneHashMap.put(GAMESTATE.SETTINGS, new OptionsScreen(keltis));
         this.sceneHashMap.put(GAMESTATE.INGAME_MENU, new IngameMenuScreen(keltis));
+        this.sceneHashMap.put(GAMESTATE.LOGIN, new EntryScene(keltis));
+        this.sceneHashMap.put(GAMESTATE.LOBBY, new LobbyScene(keltis));
     }
 
     public void setScene(GAMESTATE scene){
@@ -39,5 +44,4 @@ public class SceneManager {
             }
         }
     }
-
 }

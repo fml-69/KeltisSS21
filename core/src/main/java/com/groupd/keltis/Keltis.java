@@ -1,10 +1,11 @@
 package com.groupd.keltis;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
 
@@ -14,17 +15,26 @@ public class Keltis extends Game {
 	public AssetManager assetManager;
 
 	public SpriteBatch batch;
-	public ShapeRenderer shapeRenderer;
 
 	public static int SCALE_WIDTH = 1920;
 	public static int SCALE_HEIGHT = 1080;
+	public int scaleFactorX;
+	public int scaleFactorY;
+
 	public static int FPS = 60;
 
-	
+
 	@Override
 	public void create () {
+		if(Gdx.graphics.getHeight()<Gdx.graphics.getWidth()){
+			scaleFactorX = Gdx.graphics.getWidth()/SCALE_WIDTH;
+			scaleFactorY = Gdx.graphics.getHeight()/SCALE_HEIGHT;
+		} else{
+			scaleFactorX = Gdx.graphics.getHeight()/SCALE_WIDTH;
+			scaleFactorY = Gdx.graphics.getWidth()/SCALE_HEIGHT;
+		}
+
 		batch = new SpriteBatch();
-		shapeRenderer = new ShapeRenderer();
 		assetManager = new AssetManager();
 		loadAssets();
 		sceneManager = new SceneManager(this);
@@ -35,11 +45,10 @@ public class Keltis extends Game {
 		super.render();
 
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
-		shapeRenderer.dispose();
 		assetManager.dispose();
 		sceneManager.dispose();
 	}
@@ -47,7 +56,90 @@ public class Keltis extends Game {
 	private void loadAssets(){
 		assetManager.load(AssetPaths.BOARD_BACKGROUND, Texture.class);
 		assetManager.load(AssetPaths.BOARD_BRANCHES, Texture.class);
-		//assetManager.load(AssetPaths.MENU_ASSET, Texture.class);
+
+		assetManager.load(AssetPaths.BOARD_HUD_BAR, Texture.class);
+		assetManager.load(AssetPaths.BOARD_PLAYER_BLUE, Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_SHAMROCK,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_WISHSTONE,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_POINTCARDONE,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_POINTCARDTWO,Texture.class);
+		assetManager.load(AssetPaths.ROADCARD_POINTCARDTHREE,Texture.class);
+		assetManager.load(AssetPaths.BOARD_PLAYER_GREEN, Texture.class);
+		assetManager.load(AssetPaths.BOARD_PLAYER_RED, Texture.class);
+		assetManager.load(AssetPaths.BOARD_PLAYER_YELLOW, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_BLUE_ZERO, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_ONE, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_TWO, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_THREE, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_FOUR, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_FIVE, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_SIX, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_SEVEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_EIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_NINE, Texture.class);
+		assetManager.load(AssetPaths.CARD_BLUE_TEN, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_GREEN_ZERO, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_ONE, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_TWO, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_THREE, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_FOUR, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_FIVE, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_SIX, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_SEVEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_EIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_NINE, Texture.class);
+		assetManager.load(AssetPaths.CARD_GREEN_TEN, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_PURPLE_ZERO, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_ONE, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_TWO, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_THREE, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_FOUR, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_FIVE, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_SIX, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_SEVEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_EIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_NINE, Texture.class);
+		assetManager.load(AssetPaths.CARD_PURPLE_TEN, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_RED_ZERO, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_ONE, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_TWO, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_THREE, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_FOUR, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_FIVE, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_SIX, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_SEVEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_EIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_NINE, Texture.class);
+		assetManager.load(AssetPaths.CARD_RED_TEN, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_YELLOW_ZERO, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_ONE, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_TWO, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_THREE, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_FOUR, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_FIVE, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_SIX, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_SEVEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_EIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_NINE, Texture.class);
+		assetManager.load(AssetPaths.CARD_YELLOW_TEN, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_BACK, Texture.class);
+
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_BLUE, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_GREEN, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_PURPLE, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_RED, Texture.class);
+		assetManager.load(AssetPaths.CARD_EMPTY_STACK_YELLOW, Texture.class);
+		
+		assetManager.load(AssetPaths.MENU_ASSET, Skin.class);
+		assetManager.load(AssetPaths.DIALOG_SKIN, Skin.class);
+
+
 		assetManager.finishLoading();
 	}
 }
