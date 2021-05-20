@@ -25,14 +25,13 @@ import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.utils.PositioningConstants;
 
 import java.util.ArrayList;
 
 
-import java.util.Collection;
-
 import java.util.HashMap;
-import java.util.List;
+
 
 public class Board extends AbstractScene {
 
@@ -114,7 +113,7 @@ public class Board extends AbstractScene {
 
     }
 
-    private void checkShaking() {
+    private void checkShaking(ArrayList<Player> player) {
         if(ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing) {
             isCheatingDialogShowing = true;
             YesNoDialog dialog = new YesNoDialog("Schummelverdacht",
@@ -122,8 +121,11 @@ public class Board extends AbstractScene {
                     new YesNoDialog.Callback() {
                         @Override
                         public void result(boolean result) {
+                            if (result) {
+                                accuseOfCheating();
+                            }
                             isCheatingDialogShowing = false;
-                            // accuseOfCheating(result);
+
                         }
                     });
 
@@ -131,30 +133,6 @@ public class Board extends AbstractScene {
         }
     }
 
-    /*
-    //Will be implemented on server side (currently just here till the server is ready)
-    private void accuseOfCheating(boolean result) {
-        Collection<Player> cheaters = getCheatingPlayers();
-
-        if (cheaters.isEmpty()) {
-            //return negative answer --> punish accusing player
-        } else  {
-            //return positive answer --> punish all cheaters and reward accusing player
-        }
-    }
-
-    //Will be implemented on server side (currently just here till the server is ready)
-    private Collection<Player> getCheatingPlayers() {
-        List<Player> cheaters = new ArrayList<>();
-
-        for (Player p : player.values()) {
-            if (p.getCheat()) {
-                cheaters.add(p);
-            }
-        }
-        return cheaters;
-    }
-     */
 
     @Override
     public void render(float delta) {
@@ -167,13 +145,33 @@ public class Board extends AbstractScene {
             //Gdx.app.exit();
         }
         stage.draw();
-        checkShaking();
+        checkShaking(player);
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
         dialog.show(stage);
         dialog.setScale(scale);
         dialog.setOrigin(Align.center);
+    }
+
+    public void accuseOfCheating() {
+
+        InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
+                keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                checkCheat());
+
+        showDialog(infoDialog, stage, 3);
+    }
+
+    public boolean checkCheat(){
+        for (Player p : player) {
+            if (p.getCheat()) {
+                if(!p.isHasAccused()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -252,6 +250,52 @@ public class Board extends AbstractScene {
                 }
             }
         }
+
+        Card emptyBranchStackGreen = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "emptyBranchStackGreen", -1);
+        emptyBranchStackGreen.spritePos(PositioningConstants.CARD_BRANCHSTACK_GREEN.x, PositioningConstants.CARD_BRANCHSTACK_GREEN.y);
+        stage.addActor(emptyBranchStackGreen);
+
+        Card emptyBranchStackYellow = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "emptyBranchStackYellow", -1);
+        emptyBranchStackYellow.spritePos(PositioningConstants.CARD_BRANCHSTACK_YELLOW.x, PositioningConstants.CARD_BRANCHSTACK_YELLOW.y);
+        stage.addActor(emptyBranchStackYellow);
+
+        Card emptyBranchStackRed = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "emptyBranchStackRed", -1);
+        emptyBranchStackRed.spritePos(PositioningConstants.CARD_BRANCHSTACK_RED.x, PositioningConstants.CARD_BRANCHSTACK_RED.y);
+        stage.addActor(emptyBranchStackRed);
+
+        Card emptyBranchStackBlue = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "emptyBranchStackBlue", -1);
+        emptyBranchStackBlue.spritePos(PositioningConstants.CARD_BRANCHSTACK_BLUE.x, PositioningConstants.CARD_BRANCHSTACK_BLUE.y);
+        stage.addActor(emptyBranchStackBlue);
+
+        Card emptyBranchStackPurple = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyBranchStackPurple", -1);
+        emptyBranchStackPurple.spritePos(PositioningConstants.CARD_BRANCHSTACK_PURPLE.x, PositioningConstants.CARD_BRANCHSTACK_PURPLE.y);
+        stage.addActor(emptyBranchStackPurple);
+
+
+
+        Card emptyPublicStackGreen = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "emptyPublicStackGreen", -1);
+        emptyPublicStackGreen.spritePos(PositioningConstants.CARD_PUBLICSTACK_GREEN.x, PositioningConstants.CARD_PUBLICSTACK_GREEN.y);
+        stage.addActor(emptyPublicStackGreen);
+
+        Card emptyPublicStackYellow = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "emptyPublicStackYellow", -1);
+        emptyPublicStackYellow.spritePos(PositioningConstants.CARD_PUBLICSTACK_YELLOW.x, PositioningConstants.CARD_PUBLICSTACK_YELLOW.y);
+        stage.addActor(emptyPublicStackYellow);
+
+        Card emptyPublicStackRed = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "emptyPublicStackRed", -1);
+        emptyPublicStackRed.spritePos(PositioningConstants.CARD_PUBLICSTACK_RED.x, PositioningConstants.CARD_PUBLICSTACK_RED.y);
+        stage.addActor(emptyPublicStackRed);
+
+        Card emptyPublicStackBlue = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "emptyPublicStackBlue", -1);
+        emptyPublicStackBlue.spritePos(PositioningConstants.CARD_PUBLICSTACK_BLUE.x, PositioningConstants.CARD_PUBLICSTACK_BLUE.y);
+        stage.addActor(emptyPublicStackBlue);
+
+        Card emptyPublicStackPurple = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyPublicStackPurple", -1);
+        emptyPublicStackPurple.spritePos(PositioningConstants.CARD_PUBLICSTACK_PURPLE.x, PositioningConstants.CARD_PUBLICSTACK_PURPLE.y);
+        stage.addActor(emptyPublicStackPurple);
+
+        Card drawStack = new Card(keltis.assetManager.get(AssetPaths.CARD_BACK), "drawStack", -1);
+        drawStack.spritePos(PositioningConstants.CARD_DRAWSTACK.x, PositioningConstants.CARD_DRAWSTACK.y);
+        stage.addActor(drawStack);
 
         stage.addActor(hudBar);
 

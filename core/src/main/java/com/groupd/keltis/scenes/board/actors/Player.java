@@ -20,8 +20,24 @@ public class Player {
 
     private HashMap<String, Figure> figures;
 
+
     private boolean cheat;
     private boolean turn;
+    private boolean hasAccused = false;
+
+
+    public boolean isHasAccused() {
+        return hasAccused;
+    }
+
+    public void setHasAccused(boolean hasAccused) {
+        this.hasAccused = hasAccused;
+    }
+
+    public void setCheat(boolean cheat) {
+        this.cheat = cheat;
+    }
+
 
     public Player(Keltis keltis, String name , String color) {
         this.keltis = keltis;

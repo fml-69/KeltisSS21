@@ -226,7 +226,7 @@ public class GameLogic {
      *      Set the Player Array
      */
     public boolean checkCheat(ArrayList<Card> pile, Card card, String color) {
-        return checkCheatNumber(pile, card.getNumber()) || checkCheatColor(card.getColor(), color);
+        return checkCheatNumber(pile, card.getNumber()) || checkCheatColor(card.getCardColor(), color);
     }
 
     //Check if it was cheated with the order of the numbers
