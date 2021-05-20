@@ -28,7 +28,7 @@ public class Card extends Actor {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("Touch down asset with name ", name);
+                Gdx.app.log("CARDTOUCH: Touch down asset with name ", name);
                 return true;
             }
         });
@@ -36,6 +36,7 @@ public class Card extends Actor {
 
     public void spritePos(float x, float y){
         sprite.setPosition(x, y);
+        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
     }
 
     @Override
