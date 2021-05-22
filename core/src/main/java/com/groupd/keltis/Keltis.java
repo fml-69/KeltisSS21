@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
 
@@ -13,7 +14,7 @@ public class Keltis extends Game {
 
 	public SceneManager sceneManager;
 	public AssetManager assetManager;
-
+	public GameLogic gameLogic;
 	public SpriteBatch batch;
 
 	public static int SCALE_WIDTH = 1920;
@@ -38,6 +39,8 @@ public class Keltis extends Game {
 		assetManager = new AssetManager();
 		loadAssets();
 		sceneManager = new SceneManager(this);
+
+		gameLogic = new GameLogic();
 	}
 
 	@Override

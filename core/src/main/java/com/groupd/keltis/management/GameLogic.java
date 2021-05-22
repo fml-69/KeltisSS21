@@ -85,23 +85,23 @@ public class GameLogic {
         switch (colorPile) {
             case "red":
                 redDiscardPile.add(card);
-                if (checkCheat(redDiscardPile, card, colorPile)) player.toggleCheat();
+                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
             case "blue":
                 blueDiscardPile.add(card);
-                if (checkCheat(blueDiscardPile, card, colorPile)) player.toggleCheat();
+                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
             case "green":
                 greenDiscardPile.add(card);
-                if (checkCheat(greenDiscardPile, card, colorPile)) player.toggleCheat();
+                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
             case "yellow":
                 yellowDiscardPile.add(card);
-                if (checkCheat(yellowDiscardPile, card, colorPile)) player.toggleCheat();
+                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
             case "purple":
                 purpleDiscardPile.add(card);
-                if (checkCheat(purpleDiscardPile, card, colorPile)) player.toggleCheat();
+                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
             case "discard":
                 discardPile.add(card);
@@ -189,12 +189,8 @@ public class GameLogic {
         return false;
     }
     /**
-     *      Set the Player Array
+     *      Check Cheat Condition
      */
-    public boolean checkCheat(ArrayList<Card> pile, Card card, String color) {
-        return checkCheatNumber(pile, card.getNumber()) || checkCheatColor(card.getColor(), color);
-    }
-
     //Check if it was cheated with the order of the numbers
     public boolean checkCheatNumber(ArrayList<Card> pile, int numberCard) {
         boolean greater = false;
@@ -207,11 +203,6 @@ public class GameLogic {
         if (greater && numberCard > pile.get(pile.size() - 1).getNumber()) {
             return true;
         } else return !greater && numberCard < pile.get(pile.size() - 1).getNumber();
-    }
-
-    //Check if it was cheated with the color of the cards
-    public boolean checkCheatColor(String colorCard, String colorPile) {
-        return colorCard.equals(colorPile);
     }
     /**
      *      Set the Player Array

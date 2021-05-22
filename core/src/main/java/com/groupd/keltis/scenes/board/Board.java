@@ -48,7 +48,7 @@ public class Board extends AbstractScene {
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
     private int x = 1;
 
-    private final GameLogic gameLogic = new GameLogic();
+
 
     private RoadcardsList roadcardsList = new RoadcardsList();
 
@@ -67,8 +67,8 @@ public class Board extends AbstractScene {
         hudBar = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_HUD_BAR));
 
         //GameLogic setDrawPile
-        gameLogic.setPlayerArrayList(player);
-        gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
+        keltis.gameLogic.setPlayerArrayList(player);
+        keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
     }
 
     @Override
@@ -76,22 +76,22 @@ public class Board extends AbstractScene {
         stage.act(delta);
 
         if(x % 180 == 0){
-            gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+            keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
 
             Gdx.app.log("----------------", "-------------------------------");
         }
         if(x % 275 == 0){
-            gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+            keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
 
             Gdx.app.log("----------------", "-------------------------------");
         }
         if(x % 350 == 0){
-            gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+            keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
 
             Gdx.app.log("----------------", "-------------------------------");
         }
         if(x % 520 == 0){
-            gameLogic.playCard(player.get(3),new Card("purple", 6), "green");
+            keltis.gameLogic.playCard(player.get(3),new Card("purple", 6), "green");
 
             Gdx.app.log("----------------", "-------------------------------");
         }
@@ -147,7 +147,7 @@ public class Board extends AbstractScene {
         Gdx.app.log("Spieler2 Punkte: ",  String.valueOf(player.get(1).getOverallScore()));
         Gdx.app.log("----------------", "-------------------------------");
 
-        if(gameLogic.verifyEndingCondition()){
+        if( keltis.gameLogic.verifyEndingCondition()){
             //Gdx.app.exit();
         }
         stage.draw();
