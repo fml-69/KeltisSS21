@@ -89,6 +89,11 @@ public class EntryScene extends AbstractScene {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
+                if (text.getText().isEmpty()) {
+                    errorLabel.setText("No name, no game.");
+                    return true;
+                }
+
                 CountDownLatch serverStartLatch = new CountDownLatch(1);
 
                 // start server & provide port
@@ -132,12 +137,13 @@ public class EntryScene extends AbstractScene {
         else{
 
             // create client & connect it to server
-            NetworkClient client = new NetworkClient(textIP.getText(), Integer.parseInt(textPort.getText()), text.getText());
+            NetworkClient client = NetworkClient.INSTANCE;
+           client.connect(keltis, textIP.getText(), Integer.parseInt(textPort.getText()), text.getText());
             if(!client.isConnected()){
                 errorLabel.setText(client.getMessage());
 
             } else {
-                keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOBBY);
             }
 
         }
