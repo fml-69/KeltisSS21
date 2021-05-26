@@ -14,55 +14,63 @@ import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
 
-public class OptionsScreen extends AbstractScene {
-
+public class IngameMenuScreen  extends AbstractScene {
     private Table table;
-
-    private TextButton mainMenuTB;
-
     private Skin skin;
+    private TextButton continueTB;
+    private TextButton exitToMainMenu;
 
-    public OptionsScreen(Keltis keltis) {
-
+    public IngameMenuScreen(final Keltis keltis){
         super(keltis);
 
-
-
         stage = new Stage(new ScreenViewport());
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
         initTable();
+
         initChangeListenerButtons();
     }
 
     private void initTable(){
         table = new Table();
-
         table.setFillParent(true);
         //table.setDebug(true);
         stage.addActor(table);
 
         skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        mainMenuTB = new TextButton("Hauptmenu", skin);
+        continueTB = new TextButton("Fortsetzen", skin);
+        exitToMainMenu = new TextButton("Hauptmenu", skin);
 
-        table.add(mainMenuTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
-        table.row();
+        table.add(continueTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.row().pad(50, 0, 50, 0);
+        table.add(exitToMainMenu).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
     }
 
-    private void initChangeListenerButtons() {
-        mainMenuTB.addListener(new ChangeListener() {
+    private void initChangeListenerButtons(){
+        exitToMainMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
             }
         });
+
+        continueTB.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
+            }
+        });
     }
 
     @Override
-    public void show() {
-        Gdx.input.setInputProcessor(this.stage);
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0.1f, 0.4f, 0.4f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     @Override
@@ -71,16 +79,8 @@ public class OptionsScreen extends AbstractScene {
     }
 
     @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -95,11 +95,6 @@ public class OptionsScreen extends AbstractScene {
 
     @Override
     public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
 
     }
 }
