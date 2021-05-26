@@ -85,37 +85,37 @@ public class EntryScene extends AbstractScene {
         vg.addActor(errorLabel);
 
 
-        hostButton.addListener(new InputListener(){
+        hostButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 if (text.getText().isEmpty()) {
                     errorLabel.setText("No name, no game.");
+                } else {
+
+                    CountDownLatch serverStartLatch = new CountDownLatch(1);
+
+                    // start server & provide port
+                    Thread serverThread = new Thread(new ServerRunnable(Integer.parseInt(textPort.getText()), serverStartLatch));
+                    serverThread.setDaemon(true);
+                    serverThread.start();
+
+                    try {
+                        if (!serverStartLatch.await(2, TimeUnit.SECONDS)) {
+                            errorLabel.setText("Latch failed!");
+                        } else {
+                            requestEntry();
+                        }
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        errorLabel.setText("Could not start server.");
+                        Thread.currentThread().interrupt();
+                    }
+                }
+
                     return true;
                 }
-
-                CountDownLatch serverStartLatch = new CountDownLatch(1);
-
-                // start server & provide port
-                Thread serverThread = new Thread(new ServerRunnable(Integer.parseInt(textPort.getText()), serverStartLatch));
-                serverThread.setDaemon(true);
-                serverThread.start();
-
-                try {
-                    if(!serverStartLatch.await(2, TimeUnit.SECONDS)){
-                        errorLabel.setText("Latch failed!");
-                    } else {
-                        requestEntry();
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    errorLabel.setText("Could not start server.");
-                    Thread.currentThread().interrupt();
-                }
-
-                return true;
-            }
         });
 
         startButton.addListener(new InputListener(){
@@ -129,6 +129,7 @@ public class EntryScene extends AbstractScene {
 
 
     }
+
 
     private void requestEntry() {
         if (text.getText().isEmpty()) {
