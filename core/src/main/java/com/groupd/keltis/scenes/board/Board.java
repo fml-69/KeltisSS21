@@ -18,6 +18,7 @@ import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.scenes.AbstractScene;
 
 import com.groupd.keltis.scenes.board.actors.Card;
+import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
@@ -37,6 +38,7 @@ public class Board extends AbstractScene {
 
     private OrthographicCamera camera;
 
+    private static CardDisplay highlightedCardDisplay;
 
     private final Image board;
     private final Image branches;
@@ -234,49 +236,49 @@ public class Board extends AbstractScene {
             }
         }
 
-        Card emptyBranchStackGreen = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "emptyBranchStackGreen", -1);
-        emptyBranchStackGreen.spritePos(PositioningConstants.CARD_BRANCHSTACK_GREEN.x, PositioningConstants.CARD_BRANCHSTACK_GREEN.y);
-        stage.addActor(emptyBranchStackGreen);
+        CardDisplay branchStackGreen = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "branchStackGreen", false);
+        branchStackGreen.spritePos(PositioningConstants.CARD_BRANCHSTACK_GREEN.x, PositioningConstants.CARD_BRANCHSTACK_GREEN.y);
+        stage.addActor(branchStackGreen);
 
-        Card emptyBranchStackYellow = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "emptyBranchStackYellow", -1);
-        emptyBranchStackYellow.spritePos(PositioningConstants.CARD_BRANCHSTACK_YELLOW.x, PositioningConstants.CARD_BRANCHSTACK_YELLOW.y);
-        stage.addActor(emptyBranchStackYellow);
+        CardDisplay branchStackYellow = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "branchStackYellow", false);
+        branchStackYellow.spritePos(PositioningConstants.CARD_BRANCHSTACK_YELLOW.x, PositioningConstants.CARD_BRANCHSTACK_YELLOW.y);
+        stage.addActor(branchStackYellow);
 
-        Card emptyBranchStackRed = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "emptyBranchStackRed", -1);
-        emptyBranchStackRed.spritePos(PositioningConstants.CARD_BRANCHSTACK_RED.x, PositioningConstants.CARD_BRANCHSTACK_RED.y);
-        stage.addActor(emptyBranchStackRed);
+        CardDisplay branchStackRed = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "branchStackRed", false);
+        branchStackRed.spritePos(PositioningConstants.CARD_BRANCHSTACK_RED.x, PositioningConstants.CARD_BRANCHSTACK_RED.y);
+        stage.addActor(branchStackRed);
 
-        Card emptyBranchStackBlue = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "emptyBranchStackBlue", -1);
-        emptyBranchStackBlue.spritePos(PositioningConstants.CARD_BRANCHSTACK_BLUE.x, PositioningConstants.CARD_BRANCHSTACK_BLUE.y);
-        stage.addActor(emptyBranchStackBlue);
+        CardDisplay branchStackBlue = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "branchStackBlue", false);
+        branchStackBlue.spritePos(PositioningConstants.CARD_BRANCHSTACK_BLUE.x, PositioningConstants.CARD_BRANCHSTACK_BLUE.y);
+        stage.addActor(branchStackBlue);
 
-        Card emptyBranchStackPurple = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyBranchStackPurple", -1);
-        emptyBranchStackPurple.spritePos(PositioningConstants.CARD_BRANCHSTACK_PURPLE.x, PositioningConstants.CARD_BRANCHSTACK_PURPLE.y);
-        stage.addActor(emptyBranchStackPurple);
+        CardDisplay branchStackPurple = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "branchStackPurple", false);
+        branchStackPurple.spritePos(PositioningConstants.CARD_BRANCHSTACK_PURPLE.x, PositioningConstants.CARD_BRANCHSTACK_PURPLE.y);
+        stage.addActor(branchStackPurple);
 
 
 
-        Card emptyPublicStackGreen = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "emptyPublicStackGreen", -1);
-        emptyPublicStackGreen.spritePos(PositioningConstants.CARD_PUBLICSTACK_GREEN.x, PositioningConstants.CARD_PUBLICSTACK_GREEN.y);
-        stage.addActor(emptyPublicStackGreen);
+        CardDisplay publicStackGreen = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "publicStackGreen", false);
+        publicStackGreen.spritePos(PositioningConstants.CARD_PUBLICSTACK_GREEN.x, PositioningConstants.CARD_PUBLICSTACK_GREEN.y);
+        stage.addActor(publicStackGreen);
 
-        Card emptyPublicStackYellow = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "emptyPublicStackYellow", -1);
-        emptyPublicStackYellow.spritePos(PositioningConstants.CARD_PUBLICSTACK_YELLOW.x, PositioningConstants.CARD_PUBLICSTACK_YELLOW.y);
-        stage.addActor(emptyPublicStackYellow);
+        CardDisplay publicStackYellow = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "publicStackYellow", false);
+        publicStackYellow.spritePos(PositioningConstants.CARD_PUBLICSTACK_YELLOW.x, PositioningConstants.CARD_PUBLICSTACK_YELLOW.y);
+        stage.addActor(publicStackYellow);
 
-        Card emptyPublicStackRed = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "emptyPublicStackRed", -1);
-        emptyPublicStackRed.spritePos(PositioningConstants.CARD_PUBLICSTACK_RED.x, PositioningConstants.CARD_PUBLICSTACK_RED.y);
-        stage.addActor(emptyPublicStackRed);
+        CardDisplay publicStackRed = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "publicStackRed", false);
+        publicStackRed.spritePos(PositioningConstants.CARD_PUBLICSTACK_RED.x, PositioningConstants.CARD_PUBLICSTACK_RED.y);
+        stage.addActor(publicStackRed);
 
-        Card emptyPublicStackBlue = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "emptyPublicStackBlue", -1);
-        emptyPublicStackBlue.spritePos(PositioningConstants.CARD_PUBLICSTACK_BLUE.x, PositioningConstants.CARD_PUBLICSTACK_BLUE.y);
-        stage.addActor(emptyPublicStackBlue);
+        CardDisplay publicStackBlue = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "publicStackBlue", false);
+        publicStackBlue.spritePos(PositioningConstants.CARD_PUBLICSTACK_BLUE.x, PositioningConstants.CARD_PUBLICSTACK_BLUE.y);
+        stage.addActor(publicStackBlue);
 
-        Card emptyPublicStackPurple = new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyPublicStackPurple", -1);
-        emptyPublicStackPurple.spritePos(PositioningConstants.CARD_PUBLICSTACK_PURPLE.x, PositioningConstants.CARD_PUBLICSTACK_PURPLE.y);
-        stage.addActor(emptyPublicStackPurple);
+        CardDisplay publicStackPurple = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "publicStackPurple", false);
+        publicStackPurple.spritePos(PositioningConstants.CARD_PUBLICSTACK_PURPLE.x, PositioningConstants.CARD_PUBLICSTACK_PURPLE.y);
+        stage.addActor(publicStackPurple);
 
-        Card drawStack = new Card(keltis.assetManager.get(AssetPaths.CARD_BACK), "drawStack", -1);
+        CardDisplay drawStack = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "drawStack", false);
         drawStack.spritePos(PositioningConstants.CARD_DRAWSTACK.x, PositioningConstants.CARD_DRAWSTACK.y);
         stage.addActor(drawStack);
 
@@ -301,5 +303,13 @@ public class Board extends AbstractScene {
 
     public void advanceFigure(String figure){
         playerHashMap.get(figure).moveUp();
+    }
+
+    public static void setHighlightedCardDisplay(CardDisplay cardDisplay){
+        highlightedCardDisplay = cardDisplay;
+    }
+
+    public static CardDisplay getHighlightedCardDisplay(){
+        return highlightedCardDisplay;
     }
 }

@@ -88,6 +88,10 @@ public final class AssetPaths {
     public static final String CARD_EMPTY_STACK_RED = "board/cards/cards_empty_stack_red.png";
     public static final String CARD_EMPTY_STACK_YELLOW = "board/cards/cards_empty_stack_yellow.png";
 
+    public static final String CARD_EMPTY_HANDCARD = "board/cards/cards_empty_handcard.png";
+
+    public static final String CARD_HIGHLIGHT = "board/cards/cards_highlight.png";
+
     public static final String UI_FONT = "fonts/JetBrainsMono-Regular.ttf";
     public static final String UI_SKIN = "ui/uiskin.json";
 
