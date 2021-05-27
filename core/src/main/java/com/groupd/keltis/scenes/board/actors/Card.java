@@ -11,10 +11,11 @@ public class Card{
     private int value;
     private Texture texture;
 
-    public Card(Texture texture, final String name, int value){
+    public Card(Texture texture, final String name, String color, int value){
         this.texture = texture;
         sprite = new Sprite(texture);
         this.name = name;
+        this.color = color;
         this.value = value;
     }
 

@@ -24,13 +24,14 @@ public class CardDisplay extends Actor {
     private final Texture highlightTexture;
     private final boolean isHandCard;
 
-    public CardDisplay(Keltis keltis, Texture texture, final String name, boolean isHandCard){
+    public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard){
         this.highlightTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT);
         this.isHandCard = isHandCard;
         if(isHandCard){
             this.emptyHandcardTexture = keltis.assetManager.get(AssetPaths.CARD_EMPTY_HANDCARD);
             sprite = new Sprite(emptyHandcardTexture);
         } else{
+            this.color = color;
             sprite = new Sprite(texture);
         }
         this.name = name;
@@ -41,10 +42,9 @@ public class CardDisplay extends Actor {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(Board.getHighlightedCardDisplay()!=null){
-                    if(Board.getHighlightedCardDisplay().getCard()!=null) {
-                        setCard(Board.getHighlightedCardDisplay().getCard());
-                    }
+                if(Board.getHighlightedCardDisplay()!=null && Board.getHighlightedCardDisplay().getCard()!=null &&
+                        (Board.getHighlightedCardDisplay().getCard().getCardColor().equals(color)||isHandCard)){
+                    setCard(Board.getHighlightedCardDisplay().getCard());
                     Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
                 } else{
@@ -80,8 +80,8 @@ public class CardDisplay extends Actor {
 
     public void setCard(Card card){
         this.value = card.getNumber();
-        this.color = card.getCardColor();
         this.currentCard = card;
+        this.color = card.getCardColor();
         setSprite(card.getTexture());
     }
 
