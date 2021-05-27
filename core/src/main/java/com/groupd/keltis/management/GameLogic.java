@@ -219,6 +219,9 @@ public class GameLogic {
     public void setPlayerArrayList(ArrayList<Player> playerArrayList) {
         this.playerArrayList = playerArrayList;
     }
+    public ArrayList<Player> getPlayerArrayList() {
+        return playerArrayList;
+    }
     /**
      *      Get the Score of a certain Player
      */
