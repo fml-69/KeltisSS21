@@ -34,13 +34,13 @@ public class Keltis extends Game {
 			scaleFactorX = Gdx.graphics.getHeight()/SCALE_WIDTH;
 			scaleFactorY = Gdx.graphics.getWidth()/SCALE_HEIGHT;
 		}
-
+		gameLogic = new GameLogic();
 		batch = new SpriteBatch();
 		assetManager = new AssetManager();
 		loadAssets();
 		sceneManager = new SceneManager(this);
 
-		gameLogic = new GameLogic();
+
 	}
 
 	@Override
