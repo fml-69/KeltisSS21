@@ -12,9 +12,12 @@ import com.groupd.keltis.scenes.menu.IngameMenuScreen;
 import java.util.HashMap;
 
 public class SceneManager {
+
     private final Keltis keltis;
     private HashMap<GAMESTATE, AbstractScene> sceneHashMap;
     public enum GAMESTATE{LOGIN, LOBBY, PLAYING, MENU, SETTINGS, INGAME_MENU}
+
+    private AbstractScene activeScene;
 
     public SceneManager(final Keltis keltis){
         this.keltis = keltis;
@@ -33,8 +36,12 @@ public class SceneManager {
         this.sceneHashMap.put(GAMESTATE.LOBBY, new LobbyScene(keltis));
     }
 
+
     public void setScene(GAMESTATE scene){
-        keltis.setScreen(sceneHashMap.get(scene));
+        AbstractScene newScene = sceneHashMap.get(scene);
+        keltis.setScreen(newScene);
+        activeScene = newScene;
+
     }
 
     public void dispose(){
@@ -44,4 +51,9 @@ public class SceneManager {
             }
         }
     }
+
+    public AbstractScene getActiveScene(){
+        return activeScene;
+    }
+
 }

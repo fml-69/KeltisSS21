@@ -19,5 +19,14 @@ public final class PositioningConstants {
     public static final GridPoint2 CARD_PUBLICSTACK_BLUE = new GridPoint2(50, 200);
     public static final GridPoint2 CARD_PUBLICSTACK_PURPLE = new GridPoint2(220, 200);
 
+    public static final GridPoint2 CARD_HANDCARD_1 = new GridPoint2(280, 20);
+    public static final GridPoint2 CARD_HANDCARD_2 = new GridPoint2(450, 20);
+    public static final GridPoint2 CARD_HANDCARD_3 = new GridPoint2(620, 20);
+    public static final GridPoint2 CARD_HANDCARD_4 = new GridPoint2(790, 20);
+    public static final GridPoint2 CARD_HANDCARD_5 = new GridPoint2(960, 20);
+    public static final GridPoint2 CARD_HANDCARD_6 = new GridPoint2(1130, 20);
+    public static final GridPoint2 CARD_HANDCARD_7 = new GridPoint2(1300, 20);
+    public static final GridPoint2 CARD_HANDCARD_8 = new GridPoint2(1470, 20);
+
     public static final GridPoint2 CARD_DRAWSTACK = new GridPoint2(390, 200);
 }
