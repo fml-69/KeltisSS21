@@ -9,6 +9,7 @@ public final class AssetPaths {
 
 
     public static final String BOARD_HUD_BAR = "board/hud_bar.png";
+    public static final String BOARD_MENU_BUTTON = "board/ingame_menu_button.png";
     public static final String ROADCARD_SHAMROCK = "road_cards/shamrock.png";
     public static final String ROADCARD_WISHSTONE = "road_cards/wish_stone.png";
     public static final String ROADCARD_POINTCARDONE = "road_cards/point_card_one.png";

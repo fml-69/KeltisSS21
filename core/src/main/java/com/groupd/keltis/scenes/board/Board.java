@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 
-
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
@@ -20,6 +19,7 @@ import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Figure;
 
+import com.groupd.keltis.scenes.board.actors.IngameMenuButton;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 
@@ -281,6 +281,10 @@ public class Board extends AbstractScene {
         stage.addActor(drawStack);
 
         stage.addActor(hudBar);
+
+        //Menu button on board
+        IngameMenuButton button = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
+        stage.addActor(button.getButton());
 
     }
 
