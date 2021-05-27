@@ -174,7 +174,7 @@ public class GameLogic {
                 if(roadcards instanceof Wishstone){
                     roadCardsList.remove(roadcards);
                 }
-                return false;
+                return true;
             }
         }
         return false;

@@ -10,7 +10,7 @@ public class RoadcardsList {
     private ArrayList<Roadcards> roadcardsArrayList = new ArrayList<>();
     private int pointer = 0;
 
-    private void addRoadcards(Keltis keltis, ArrayList<Position> roadcardsPositionArray){
+    public void addRoadcards(Keltis keltis, ArrayList<Position> roadcardsPositionArray){
         for(int i = 0;i<9;i++){
             Shamrock shamrock = new Shamrock(keltis.assetManager.get(AssetPaths.ROADCARD_SHAMROCK),roadcardsPositionArray.get(pointer));
             pointer++;
@@ -34,7 +34,7 @@ public class RoadcardsList {
         }
     }
 
-    private void mixPositions(ArrayList<Position> roadcardsPositionArray){
+    public void mixPositions(ArrayList<Position> roadcardsPositionArray){
         Collections.shuffle(roadcardsPositionArray);
     }
 
