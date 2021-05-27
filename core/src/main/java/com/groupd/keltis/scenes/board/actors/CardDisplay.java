@@ -14,19 +14,19 @@ import com.groupd.keltis.utils.AssetPaths;
 
 public class CardDisplay extends Actor {
 
-    private Keltis keltis;
     private Sprite sprite;
     private String name;
     private String color;
     private int value;
     private Card currentCard = null;
     private Texture emptyHandcardTexture;
-    private CardDisplay itsaMe = this;
-    private Texture highlightTexture;
+    private final CardDisplay itsaMe = this;
+    private final Texture highlightTexture;
+    private final boolean isHandCard;
 
     public CardDisplay(Keltis keltis, Texture texture, final String name, boolean isHandCard){
-        this.keltis = keltis;
         this.highlightTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT);
+        this.isHandCard = isHandCard;
         if(isHandCard){
             this.emptyHandcardTexture = keltis.assetManager.get(AssetPaths.CARD_EMPTY_HANDCARD);
             sprite = new Sprite(emptyHandcardTexture);
@@ -45,6 +45,7 @@ public class CardDisplay extends Actor {
                     if(Board.getHighlightedCardDisplay().getCard()!=null) {
                         setCard(Board.getHighlightedCardDisplay().getCard());
                     }
+                    Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
                 } else{
                     Board.setHighlightedCardDisplay(itsaMe);
@@ -81,11 +82,24 @@ public class CardDisplay extends Actor {
         this.value = card.getNumber();
         this.color = card.getCardColor();
         this.currentCard = card;
-        sprite = new Sprite(card.getTexture());
+        setSprite(card.getTexture());
+    }
+
+    public void setSprite(Texture texture){
+        float x = sprite.getX();
+        float y = sprite.getY();
+        sprite = new Sprite(texture);
+        spritePos(x, y);
     }
 
     public Card getCard(){
         return currentCard;
+    }
+
+    public void cardTaken(){
+        if(isHandCard) {
+            setSprite(emptyHandcardTexture);
+        }
     }
 
 }
