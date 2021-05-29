@@ -1,6 +1,9 @@
 package com.groupd.keltis.management;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Timer;
+import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
@@ -28,6 +31,8 @@ public class GameLogic {
     private final ArrayList<Card> purpleDiscardPile;
 
     private int turn = 0;
+
+    private Board board;
 
     public GameLogic() {
         this.drawPile = new ArrayList<>();
@@ -138,8 +143,25 @@ public class GameLogic {
         }
     }
     public void moveFigure(Player player, Figure figure){
+        board.pause();
         figure.moveUp();
-        checkIfCardIsOnField(player, figure);
+        Thread thread = new Thread(){
+            private boolean exitThread = false;
+            @Override
+            public void run() {
+                while (!exitThread){
+                    waitForMoveFigure();
+                }
+            }
+            public void waitForMoveFigure(){
+                if(!figure.getMoveUp()){
+                    checkIfCardIsOnField(player, figure);
+                    exitThread=true;
+                }
+            }
+        };
+        thread.start();
+        board.resume();
     }
 
     public boolean checkIfCardIsOnField(Player player, Figure figure) {
@@ -148,20 +170,32 @@ public class GameLogic {
             if (figure.getBranch() == roadcards.getPosition().getBranch() &&
                     figure.getCurrentFieldPosition() == roadcards.getPosition().getField()) {
 
-                checkCard(player, roadcards);
-                roadCardsList.remove(roadcards);
-                return false;
+                checkCard(player, figure, roadcards);
+                if(roadcards instanceof Wishstone){
+                    roadCardsList.remove(roadcards);
+                }
+                return true;
             }
         }
         return false;
     }
 
-    public boolean checkCard(Player player, Roadcards roadcards) {
+    public boolean checkCard(Player player, Figure figure, Roadcards roadcards) {
         if (roadcards instanceof Wishstone) {
             Gdx.app.log("Wishstone: ", "get WishStone");
             player.addWishStone();
+            roadcards.addAction(Actions.removeActor());
         } else if (roadcards instanceof Shamrock) {
             Gdx.app.log("Shamrock: ", "get Shamrock");
+            board.showDialog(board.getShamrockDialog(),board.stage,3);
+            float delay = 2; // seconds
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    board.getShamrockDialog().hide();
+                    moveFigure(player,figure);
+                }
+            }, delay);
             return true;
         } else if (roadcards instanceof Pointcard) {
             Gdx.app.log("PointCard: ", "get PointCard");
@@ -264,6 +298,10 @@ public class GameLogic {
     public ArrayList<Card> getPurpleDiscardPile() {
         return purpleDiscardPile;
     }
-
-
+    /**
+     *      Board setter
+     */
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 }

@@ -43,11 +43,17 @@ public class Board extends AbstractScene {
     private OrthographicCamera camera;
 
     private static CardDisplay highlightedCardDisplay;
+    public enum State
+        {
+        RUN,
+        PAUSE
+    }
 
     private final Image board;
     private final Image branches;
     private final Image hudBar;
 
+    private State state;
 
     private ArrayList<Player> player = new ArrayList<>();
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
@@ -63,6 +69,7 @@ public class Board extends AbstractScene {
     private Image playerPicture3;
     private Image playerPicture4;
     private RoadcardsList roadcardsList = new RoadcardsList();
+    private ShamrockDialog shamrockDialog;
 
     private boolean isCheatingDialogShowing = false;
 
@@ -77,6 +84,7 @@ public class Board extends AbstractScene {
         board = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
         branches = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BRANCHES));
         hudBar = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_HUD_BAR));
+
         playerPicture1 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
         playerPicture2 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
         playerPicture3 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
@@ -85,33 +93,50 @@ public class Board extends AbstractScene {
         //GameLogic setDrawPile
         keltis.gameLogic.setPlayerArrayList(player);
         keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
+
+        shamrockDialog = new ShamrockDialog("Herzlichen Glückwunsch!", keltis.assetManager.get(AssetPaths.DIALOG_SKIN,Skin.class));
+
+
+        //GameLogic setDrawPile
+        gameLogic.setPlayerArrayList(player);
+        gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
+        gameLogic.setBoard(this);
+
     }
 
     @Override
     public void update(float delta) {
-        stage.act(delta);
+        switch (state){
+            case RUN:
+                stage.act(delta);
 
-        if (x % 180 == 0) {
-            keltis.gameLogic.playCard(player.get(0), new Card("blue", 5), "blue");
 
-            Gdx.app.log("----------------", "-------------------------------");
+                if(x % 180 == 0){
+                    gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+
+                    Gdx.app.log("----------------", "-------------------------------");
+                }
+                if(x % 275 == 0){
+                    gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+
+                    Gdx.app.log("----------------", "-------------------------------");
+                }
+                if(x % 350 == 0){
+                    gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+
+                    Gdx.app.log("----------------", "-------------------------------");
+                }
+                if(x % 520 == 0) {
+                    gameLogic.playCard(player.get(3), new Card("purple", 6), "green");
+                }
+                x++;
+                break;
+            case PAUSE:
+
+
+                break;
         }
-        if (x % 275 == 0) {
-            keltis.gameLogic.playCard(player.get(1), new Card("blue", 6), "red");
 
-            Gdx.app.log("----------------", "-------------------------------");
-        }
-        if (x % 350 == 0) {
-            keltis.gameLogic.playCard(player.get(2), new Card("yellow", 5), "yellow");
-
-            Gdx.app.log("----------------", "-------------------------------");
-        }
-        if (x % 520 == 0) {
-            keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), "green");
-
-            Gdx.app.log("----------------", "-------------------------------");
-        }
-        x++;
     }
 
     private void checkShaking(ArrayList<Player> player) {
@@ -179,6 +204,7 @@ public class Board extends AbstractScene {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        state = State.RUN;
 
         stage.addActor(board);
         stage.addActor(branches);
@@ -345,12 +371,12 @@ public class Board extends AbstractScene {
 
     @Override
     public void pause() {
-
+        this.state = State.PAUSE;
     }
 
     @Override
     public void resume() {
-
+        this.state = State.RUN;
     }
 
     @Override
@@ -413,7 +439,15 @@ public class Board extends AbstractScene {
         playerHashMap.get(figure).moveUp();
     }
 
-    public static void setHighlightedCardDisplay(CardDisplay cardDisplay) {
+
+    
+
+    public ShamrockDialog getShamrockDialog() {
+        return shamrockDialog;
+    }
+
+    public static void setHighlightedCardDisplay(CardDisplay cardDisplay){
+
         highlightedCardDisplay = cardDisplay;
     }
 
