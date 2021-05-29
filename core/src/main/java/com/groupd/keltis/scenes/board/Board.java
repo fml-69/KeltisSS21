@@ -98,9 +98,8 @@ public class Board extends AbstractScene {
 
 
         //GameLogic setDrawPile
-        gameLogic.setPlayerArrayList(player);
-        gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
-        gameLogic.setBoard(this);
+
+        keltis.gameLogic.setBoard(this);
 
     }
 
@@ -112,22 +111,22 @@ public class Board extends AbstractScene {
 
 
                 if(x % 180 == 0){
-                    gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+                    keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 275 == 0){
-                    gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+                    keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 350 == 0){
-                    gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+                    keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 520 == 0) {
-                    gameLogic.playCard(player.get(3), new Card("purple", 6), "green");
+                    keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), "green");
                 }
                 x++;
                 break;
