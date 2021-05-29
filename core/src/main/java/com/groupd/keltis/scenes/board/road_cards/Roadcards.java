@@ -8,11 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.groupd.keltis.scenes.board.actors.Figure;
-import com.groupd.keltis.scenes.board.actors.Player;
-
-import java.util.HashMap;
 
 public class Roadcards extends Actor {
     private Sprite sprite;
@@ -51,25 +46,7 @@ public class Roadcards extends Actor {
         return position;
     }
 
-    public static void checkRoadcards(String player, HashMap<String, Figure> playerHashMap, RoadcardsList roadcardsList){
-        int fieldPlayer = playerHashMap.get(player).getCurrentFieldPosition();
-        int branchPlayer = Integer.valueOf(player.substring(player.length()-1));
-        Wishstone wishstone = null;
-        for(int i = 0; i < roadcardsList.getRoadcardsArrayList().size();i++){
-            if(fieldPlayer == roadcardsList.getRoadcardsArrayList().get(i).getPosition().getField() && branchPlayer == roadcardsList.getRoadcardsArrayList().get(i).getPosition().getBranch()){
-                if(roadcardsList.getRoadcardsArrayList().get(i).getClass() == Wishstone.class){
-                    roadcardsList.getRoadcardsArrayList().get(i).addAction(Actions.removeActor());
-                    wishstone = (Wishstone) roadcardsList.getRoadcardsArrayList().get(i);
-                    //Wish-Stone bei Player hinzufügen
-                } else if (roadcardsList.getRoadcardsArrayList().get(i).getClass() == Shamrock.class){
-
-                } else if (roadcardsList.getRoadcardsArrayList().get(i).getClass() == Pointcard.class){
-
-                }
-            }
-        }
-        if(wishstone !=null){
-            roadcardsList.getRoadcardsArrayList().remove(wishstone);
-        }
+    public Sprite getSprite() {
+        return sprite;
     }
 }

@@ -102,4 +102,8 @@ public class Figure extends Actor {
         return branch;
     }
 
+
+    public Sprite getSprite() {
+        return sprite;
+    }
 }

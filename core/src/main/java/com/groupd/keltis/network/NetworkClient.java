@@ -1,6 +1,7 @@
 package com.groupd.keltis.network;
 
 import com.badlogic.gdx.Gdx;
+import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
@@ -20,12 +21,21 @@ public class NetworkClient {
     private DataOutputStream dataOut;
     private boolean connected;
     private String message;
+    private Keltis keltis;
+
+    public static final NetworkClient INSTANCE = new NetworkClient();
 
 
+    private NetworkClient(){
 
-    public NetworkClient(String iP, int port, String nick){
+    }
+
+    public void connect(Keltis keltis, String iP, int port, String nick){
+
+        this.keltis = keltis;
+
         try {
-            client = new Socket(iP, port);
+             client = new Socket(iP, port);
 
             dataIn = new DataInputStream(client.getInputStream());
             dataOut = new DataOutputStream(client.getOutputStream());
@@ -42,6 +52,10 @@ public class NetworkClient {
         }
     }
 
+    public void disconnect() throws IOException {
+        client.close();
+    }
+
     public boolean isConnected() {
         return connected;
     }
@@ -50,16 +64,19 @@ public class NetworkClient {
         return message;
     }
 
+
+    // send event to Server through DataOutputStream
     public void sendEvent(NetworkEvent event){
         try {
             dataOut.writeInt(event.getEventID());
+            event.encode(dataOut);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        event.encode(dataOut);
+
     }
 
-
+    // handle events coming from server to client
     public void receiveEvents(){
         try {
 
@@ -68,10 +85,12 @@ public class NetworkClient {
                 if(eventID == 1){
                     JoinEvent event = new JoinEvent();
                     event.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(event);
 
                 } else if (eventID == 2){
                     StartGameEvent startEvent = new StartGameEvent();
                     startEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(startEvent);
 
                 } else {
                     Gdx.app.error("Error", "Invalid Network EventID");
