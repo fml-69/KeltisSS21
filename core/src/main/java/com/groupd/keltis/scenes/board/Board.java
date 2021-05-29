@@ -59,10 +59,12 @@ public class Board extends AbstractScene {
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
     private int x = 1;
 
+
     private Label player1;
     private Label player2;
     private Label player3;
     private Label player4;
+
 
     private Image playerPicture1;
     private Image playerPicture2;
@@ -94,12 +96,15 @@ public class Board extends AbstractScene {
         keltis.gameLogic.setPlayerArrayList(player);
         keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
 
+
+
         shamrockDialog = new ShamrockDialog("Herzlichen Glückwunsch!", keltis.assetManager.get(AssetPaths.DIALOG_SKIN,Skin.class));
 
 
         //GameLogic setDrawPile
 
         keltis.gameLogic.setBoard(this);
+
 
     }
 
@@ -122,6 +127,7 @@ public class Board extends AbstractScene {
                 }
                 if(x % 350 == 0){
                     keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }

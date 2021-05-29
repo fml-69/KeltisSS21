@@ -39,6 +39,8 @@ public class Keltis extends Game {
 		assetManager = new AssetManager();
 		loadAssets();
 		sceneManager = new SceneManager(this);
+
+
 	}
 
 	@Override
