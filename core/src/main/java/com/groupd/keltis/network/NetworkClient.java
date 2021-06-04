@@ -5,6 +5,7 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.TurnEvent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -91,6 +92,11 @@ public class NetworkClient {
                     StartGameEvent startEvent = new StartGameEvent();
                     startEvent.decode(dataIn);
                     keltis.sceneManager.getActiveScene().onNetworkEvent(startEvent);
+
+                } else if(eventID == 3) {
+                    TurnEvent turnEvent = new TurnEvent();
+                    turnEvent.decode(dataIn);
+                   keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
 
                 } else {
                     Gdx.app.error("Error", "Invalid Network EventID");
