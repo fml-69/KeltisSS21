@@ -3,6 +3,8 @@ package com.groupd.keltis.management;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Figure;
@@ -50,6 +52,14 @@ public class GameLogic {
         if (player.getTurn() || turn == 0) {
             //player.getHandCards().remove(card);
             addCardToPile(player, card, colorPile);
+            //cheat handling
+            if (player.getCheat()==true){
+                player.increaseRoundCountCheat();
+                if (player.succesfulCheat()){
+                    player.setCheat(false);
+                    player.resetRoundCountCheat();
+                }
+            }
             move(player, colorPile);
             setTurnPlayer(player);
             //drawCard(player);
@@ -90,23 +100,28 @@ public class GameLogic {
         switch (colorPile) {
             case "red":
                 redDiscardPile.add(card);
-                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case "blue":
                 blueDiscardPile.add(card);
-                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case "green":
                 greenDiscardPile.add(card);
-                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case "yellow":
                 yellowDiscardPile.add(card);
-                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case "purple":
                 purpleDiscardPile.add(card);
-                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case "discard":
                 discardPile.add(card);
@@ -295,5 +310,22 @@ public class GameLogic {
      */
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public boolean checkCheat(ArrayList<Player> player) {
+        for (Player p : player) {
+            if (p.getCheat()) {
+                if (!p.isHasAccused()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void sendCheat(Player player){
+        CheatEvent cheatEvent = new CheatEvent();
+        cheatEvent.setCheat(player.getCheat());
+        NetworkClient.INSTANCE.sendEvent(cheatEvent);
     }
 }

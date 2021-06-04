@@ -24,6 +24,7 @@ public class Player {
     private boolean cheat;
     private boolean turn;
     private boolean hasAccused = false;
+    private int roundCountCheat;
 
 
     public boolean isHasAccused() {
@@ -42,6 +43,7 @@ public class Player {
         keltis = new Keltis();
         color = "testColor";
         figures = new HashMap<>();
+        roundCountCheat = 0;
     }
 
     public Player(Keltis keltis, String name , String color) {
@@ -166,6 +168,21 @@ public class Player {
 
     public ArrayList getHandCards() {
         return handCards;
+    }
+
+    public void increaseRoundCountCheat(){
+        roundCountCheat ++;
+    }
+
+    public void resetRoundCountCheat(){
+        roundCountCheat = 0;
+    }
+
+    public boolean succesfulCheat(){
+        if (roundCountCheat > 2){
+            return true;
+        }
+        else return false;
     }
 
 
