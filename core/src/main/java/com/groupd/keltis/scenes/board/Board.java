@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
@@ -14,11 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
-import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.scenes.AbstractScene;
 
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -30,6 +27,8 @@ import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.utils.ColorFigures;
+import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.PositioningConstants;
 
 import java.util.ArrayList;
@@ -116,23 +115,23 @@ public class Board extends AbstractScene {
 
 
                 if(x % 180 == 0){
-                    keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), "blue");
+                    keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), ColorPile.BLUE);
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 275 == 0){
-                    keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), "red");
+                    keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), ColorPile.RED);
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 350 == 0){
-                    keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), "yellow");
+                    keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), ColorPile.YELLOW);
 
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 520 == 0) {
-                    keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), "green");
+                    keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), ColorPile.GREEN);
                 }
                 x++;
                 break;
@@ -171,10 +170,10 @@ public class Board extends AbstractScene {
         if (keltis.gameLogic.verifyEndingCondition()) {
             //Gdx.app.exit();
         }
-        player1.setText(keltis.gameLogic.getPlayerArrayList().get(0).getName() + ": " + keltis.gameLogic.getPlayerArrayList().get(0).getOverallScore());
-        player2.setText(keltis.gameLogic.getPlayerArrayList().get(1).getName() + ": " + keltis.gameLogic.getPlayerArrayList().get(1).getOverallScore());
-        player3.setText(keltis.gameLogic.getPlayerArrayList().get(2).getName() + ": " + keltis.gameLogic.getPlayerArrayList().get(2).getOverallScore());
-        player4.setText(keltis.gameLogic.getPlayerArrayList().get(3).getName() + ": " + keltis.gameLogic.getPlayerArrayList().get(3).getOverallScore());
+        player1.setText(keltis.gameLogic.getPlayerArrayList().get(0).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(0).getOverallScore());
+        player2.setText(keltis.gameLogic.getPlayerArrayList().get(1).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(1).getOverallScore());
+        player3.setText(keltis.gameLogic.getPlayerArrayList().get(2).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(2).getOverallScore());
+        player4.setText(keltis.gameLogic.getPlayerArrayList().get(3).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(3).getOverallScore());
 
         stage.draw();
         checkShaking(player);
@@ -219,7 +218,7 @@ public class Board extends AbstractScene {
             stage.addActor(roadcards);
         }
 
-        Player player1 = new Player(keltis, "player1", "blue");
+        Player player1 = new Player(keltis, "player1", ColorFigures.BLUE, true);
         player.add(player1);
         playerHashMap.putAll(player1.getFigures());
         playerHashMap.get("blue1").spritePos(565, 124);
@@ -235,7 +234,7 @@ public class Board extends AbstractScene {
             }
         }
 
-        Player player2 = new Player(keltis, "player2", "red");
+        Player player2 = new Player(keltis, "player2", ColorFigures.RED, false);
         player.add(player2);
         playerHashMap.putAll(player2.getFigures());
         playerHashMap.get("red1").spritePos(595, 124);
@@ -251,7 +250,7 @@ public class Board extends AbstractScene {
             }
         }
 
-        Player player3 = new Player(keltis, "player3", "green");
+        Player player3 = new Player(keltis, "player3", ColorFigures.GREEN, false);
         player.add(player3);
         playerHashMap.putAll(player3.getFigures());
         playerHashMap.get("green1").spritePos(625, 124);
@@ -267,7 +266,7 @@ public class Board extends AbstractScene {
             }
         }
 
-        Player player4 = new Player(keltis, "player4", "yellow");
+        Player player4 = new Player(keltis, "player4", ColorFigures.YELLOW, false);
         player.add(player4);
         playerHashMap.putAll(player4.getFigures());
         playerHashMap.get("yellow1").spritePos(655, 124);
@@ -417,21 +416,21 @@ public class Board extends AbstractScene {
 
 
     public Label playerLabel(Player player, int x, int y) {
-        Label label = new Label(player.getName() + ": " + keltis.gameLogic.getScoreOfPlayer(player), new Skin(Gdx.files.internal("skin_shade/uiskin.json")));
+        Label label = new Label(player.getNick() + ": " + keltis.gameLogic.getScoreOfPlayer(player), new Skin(Gdx.files.internal("skin_shade/uiskin.json")));
         label.setWidth(200);
         label.setHeight(100);
         label.setFontScale(2);
         switch (player.getColor()){
-            case "blue":
+            case BLUE:
                 label.setColor(Color.BLUE);
                 break;
-            case "red":
+            case RED:
                 label.setColor(Color.RED);
                 break;
-            case "yellow":
+            case YELLOW:
                 label.setColor(Color.YELLOW);
                 break;
-            case "green":
+            case GREEN:
                 label.setColor(Color.GREEN);
                 break;
             default:

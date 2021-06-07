@@ -11,6 +11,9 @@ import com.groupd.keltis.scenes.board.road_cards.Pointcard;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.Shamrock;
 import com.groupd.keltis.scenes.board.road_cards.Wishstone;
+import com.groupd.keltis.utils.ColorFigures;
+import com.groupd.keltis.utils.ColorPile;
+import com.groupd.keltis.utils.ObjectToJson;
 
 
 import java.util.ArrayList;
@@ -46,14 +49,26 @@ public class GameLogic {
     }
     //Main Method to play
     //Call to set everything in motion
-    public void playCard(Player player, Card card, String colorPile) {
+    public void playCard(Player player, Card card, ColorPile colorPile) {
         if (player.getTurn() || turn == 0) {
             //player.getHandCards().remove(card);
             addCardToPile(player, card, colorPile);
             move(player, colorPile);
             setTurnPlayer(player);
             //drawCard(player);
+            Gdx.app.log("JSON", ObjectToJson.convertToJson(new PlayerMove(player.getNick(), new Card("purple", 6), colorPile)));
             // TODO: 15.05.2021  send Data to other players
+
+        }
+    }
+    public void playCardOtherPlayers(Player player, Card card, ColorPile colorPile) {
+        if (player.getTurn() || turn == 0) {
+            //player.getHandCards().remove(card);
+            addCardToPile(player, card, colorPile);
+            move(player, colorPile);
+            setTurnPlayer(player);
+            //drawCard(player);
+            Gdx.app.log("JSON", ObjectToJson.convertToJson(new PlayerMove(player.getNick(), new Card("purple", 6), colorPile)));
         }
     }
 
@@ -86,61 +101,76 @@ public class GameLogic {
         player.getHandCards().add(card);
     }
 
-    public void addCardToPile(Player player, Card card, String colorPile) {
+    public void addCardToPile(Player player, Card card, ColorPile colorPile) {
         switch (colorPile) {
-            case "red":
+            case RED:
                 redDiscardPile.add(card);
                 if (checkCheatNumber(redDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
-            case "blue":
+            case BLUE:
                 blueDiscardPile.add(card);
                 if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
-            case "green":
+            case GREEN:
                 greenDiscardPile.add(card);
                 if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
-            case "yellow":
+            case YELLOW:
                 yellowDiscardPile.add(card);
                 if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
-            case "purple":
+            case PURPLE:
                 purpleDiscardPile.add(card);
                 if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.toggleCheat();
                 break;
-            case "discard":
+            case DISCARD:
                 discardPile.add(card);
             default:
                 throw new IllegalArgumentException("No Cardpile with this Color");
         }
     }
+
     /**
      *      Move and CheckRoadCards
      */
-    public void move(Player player, String colorPile) {
+    public void move(Player player, ColorPile colorPile) {
+        String color = getPlayerColor(player.getColor());
         switch (colorPile) {
-            case "red":
-                Figure figure = player.getFigures().get(player.getColor() + 3);
+            case RED:
+                Figure figure = player.getFigures().get(color + 3);
                 moveFigure(player, figure);
                 break;
-            case "blue":
-                figure = player.getFigures().get(player.getColor() + 4);
+            case BLUE:
+                figure = player.getFigures().get(color + 4);
                 moveFigure(player, figure);
                 break;
-            case "yellow":
-                figure = player.getFigures().get(player.getColor() + 2);
+            case YELLOW:
+                figure = player.getFigures().get(color + 2);
                 moveFigure(player, figure);
                 break;
-            case "purple":
-                figure = player.getFigures().get(player.getColor() + 5);
+            case PURPLE:
+                figure = player.getFigures().get(color+ 5);
                 moveFigure(player, figure);
                 break;
-            case "green":
-                figure = player.getFigures().get(player.getColor() + 1);
+            case GREEN:
+                figure = player.getFigures().get(color + 1);
                 moveFigure(player, figure);
                 break;
             default:
         }
+    }
+    public String getPlayerColor(ColorFigures colorFigures){
+        switch (colorFigures){
+            case RED:
+                return "red";
+            case BLUE:
+                return "blue";
+            case GREEN:
+                return "green";
+            case YELLOW:
+                return "yellow";
+        }
+        return "";
     }
     public void moveFigure(Player player, Figure figure){
         board.pause();
