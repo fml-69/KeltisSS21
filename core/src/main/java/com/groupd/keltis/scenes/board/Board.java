@@ -170,13 +170,25 @@ public class Board extends AbstractScene {
         if (keltis.gameLogic.verifyEndingCondition()) {
             //Gdx.app.exit();
         }
-        player1.setText(keltis.gameLogic.getPlayerArrayList().get(0).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(0).getOverallScore());
-        player2.setText(keltis.gameLogic.getPlayerArrayList().get(1).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(1).getOverallScore());
-        player3.setText(keltis.gameLogic.getPlayerArrayList().get(2).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(2).getOverallScore());
-        player4.setText(keltis.gameLogic.getPlayerArrayList().get(3).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(3).getOverallScore());
+        setTextOfScore();
 
         stage.draw();
         checkShaking(player);
+    }
+    public void setTextOfScore(){
+        Gdx.app.log("Size=", String.valueOf(keltis.gameLogic.getPlayerArrayList().size()));
+        switch (keltis.gameLogic.getPlayerArrayList().size()){
+            case 4:
+                player4.setText(keltis.gameLogic.getPlayerArrayList().get(3).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(3).getOverallScore());
+            case 3:
+                player3.setText(keltis.gameLogic.getPlayerArrayList().get(2).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(2).getOverallScore());
+            case 2:
+                player2.setText(keltis.gameLogic.getPlayerArrayList().get(1).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(1).getOverallScore());
+            case 1:
+
+                player1.setText(keltis.gameLogic.getPlayerArrayList().get(0).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(0).getOverallScore());
+            default:
+        }
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
@@ -217,10 +229,10 @@ public class Board extends AbstractScene {
         for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
             stage.addActor(roadcards);
         }
-
+/**
         Player player1 = new Player(keltis, "player1", ColorFigures.BLUE, true);
         player.add(player1);
-        playerHashMap.putAll(player1.getFigures());
+        playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(0).getFigures());
         playerHashMap.get("blue1").spritePos(565, 124);
         playerHashMap.get("blue2").spritePos(785, 124);
         playerHashMap.get("blue3").spritePos(1005, 124);
@@ -282,8 +294,9 @@ public class Board extends AbstractScene {
             }
         }
 
-
-
+**/
+        initializeFiguresOnBoard();
+        playerOverview();
         CardDisplay branchStackGreen = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "branchStackGreen", "green", false);
         branchStackGreen.spritePos(PositioningConstants.CARD_BRANCHSTACK_GREEN.x, PositioningConstants.CARD_BRANCHSTACK_GREEN.y);
         stage.addActor(branchStackGreen);
@@ -368,7 +381,7 @@ public class Board extends AbstractScene {
         //this is a test!!
         handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
 
-        playerOverview();
+
 
 
     }
@@ -388,6 +401,75 @@ public class Board extends AbstractScene {
 
     }
 
+    public void setUpGame(int playerCount){
+        // TODO: 07.06.2021 Hier Spiel aufsetzen
+    }
+
+    public void initializeFiguresOnBoard() {
+        switch (keltis.gameLogic.getPlayerArrayList().size()) {
+            case 4:
+                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(4).getFigures());
+                playerHashMap.get("yellow1").spritePos(655, 124);
+                playerHashMap.get("yellow2").spritePos(875, 124);
+                playerHashMap.get("yellow3").spritePos(1095, 124);
+                playerHashMap.get("yellow4").spritePos(1315, 124);
+                playerHashMap.get("yellow5").spritePos(1535, 124);
+                for (int i = 1; i < 6; i++) {
+                    for (Figure figure : playerHashMap.values()) {
+                        if (figure.getName().equals("yellow" + i)) {
+                            stage.addActor(figure);
+                        }
+                    }
+                }
+            case 3:
+                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(3).getFigures());
+                playerHashMap.get("green1").spritePos(625, 124);
+                playerHashMap.get("green2").spritePos(845, 124);
+                playerHashMap.get("green3").spritePos(1065, 124);
+                playerHashMap.get("green4").spritePos(1285, 124);
+                playerHashMap.get("green5").spritePos(1505, 124);
+                for (int i = 1; i < 6; i++) {
+                    for (Figure figure : playerHashMap.values()) {
+                        if (figure.getName().equals("green" + i)) {
+                            stage.addActor(figure);
+                        }
+                    }
+                }
+            case 2:
+                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(1).getFigures());
+                playerHashMap.get("red1").spritePos(595, 124);
+                playerHashMap.get("red2").spritePos(815, 124);
+                playerHashMap.get("red3").spritePos(1035, 124);
+                playerHashMap.get("red4").spritePos(1255, 124);
+                playerHashMap.get("red5").spritePos(1475, 124);
+                for (int i = 1; i < 6; i++) {
+                    for (Figure figure : playerHashMap.values()) {
+                        if (figure.getName().equals("red" + i)) {
+                            stage.addActor(figure);
+                        }
+                    }
+                }
+            case 1:
+                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(0).getFigures());
+                playerHashMap.get("blue1").spritePos(565, 124);
+                playerHashMap.get("blue2").spritePos(785, 124);
+                playerHashMap.get("blue3").spritePos(1005, 124);
+                playerHashMap.get("blue4").spritePos(1225, 124);
+                playerHashMap.get("blue5").spritePos(1445, 124);
+                for (int i = 1; i < 6; i++) {
+                    for (Figure figure : playerHashMap.values()) {
+                        if (figure.getName().equals("blue" + i)) {
+                            stage.addActor(figure);
+                        }
+                    }
+                }
+                break;
+            default:
+        }
+
+    }
+
+
     public void playerOverview() {
         switch (keltis.gameLogic.getPlayerArrayList().size()) {
             case 4:
@@ -403,10 +485,11 @@ public class Board extends AbstractScene {
             case 2:
                 playerPicture2.setPosition(300, 900);
                 stage.addActor(playerPicture2);
-                playerPicture1.setPosition(50, 900);
-                stage.addActor(playerPicture1);
                 player2 = playerLabel(keltis.gameLogic.getPlayerArrayList().get(1),300 , 825);
                 stage.addActor(player2);
+            case 1:
+                playerPicture1.setPosition(50, 900);
+                stage.addActor(playerPicture1);
                 player1 = playerLabel(keltis.gameLogic.getPlayerArrayList().get(0), 50, 825);
                 stage.addActor(player1);
                 break;

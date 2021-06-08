@@ -56,7 +56,6 @@ public class GameLogic {
             move(player, colorPile);
             setTurnPlayer(player);
             //drawCard(player);
-            Gdx.app.log("JSON", ObjectToJson.convertToJson(new PlayerMove(player.getNick(), new Card("purple", 6), colorPile)));
             // TODO: 15.05.2021  send Data to other players
 
         }
@@ -74,6 +73,8 @@ public class GameLogic {
 
     public void setTurnPlayer(Player player) {
         switch (playerArrayList.size()) {
+            case 1:
+                break;
             case 2:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);

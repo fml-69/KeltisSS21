@@ -96,7 +96,7 @@ public class EntryScene extends AbstractScene {
                     CountDownLatch serverStartLatch = new CountDownLatch(1);
 
                     // start server & provide port
-                    Thread serverThread = new Thread(new ServerRunnable(Integer.parseInt(textPort.getText()), serverStartLatch));
+                    Thread serverThread = new Thread(new ServerRunnable(Integer.parseInt(textPort.getText()), serverStartLatch, keltis));
                     serverThread.setDaemon(true);
                     serverThread.start();
 
