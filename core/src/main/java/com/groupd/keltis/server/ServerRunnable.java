@@ -4,8 +4,12 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorFigures;
+
+import com.groupd.keltis.network.events.TurnEvent;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,7 @@ public class ServerRunnable implements Runnable{
     }
 
 
+    // called when a player joins the game
     public void join(String nick){
 
         for(Player player:playerList){
@@ -65,6 +70,7 @@ public class ServerRunnable implements Runnable{
         }
         return ColorFigures.BLUE;
     }
+
 
     // only Host can start the game
     public void onStartGame(StartGameEvent event, String nick){
@@ -95,6 +101,13 @@ public class ServerRunnable implements Runnable{
         }
 
         return null;
+    }
+
+
+    // can access nick of player who made for a turn
+    public void onTurn(TurnEvent turnEvent) {
+        networkServer.broadCast(turnEvent);
+
     }
 
 }
