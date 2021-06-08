@@ -10,7 +10,7 @@ public class ObjectToJson {
         try{
             json = new ObjectMapper().writeValueAsString(playerMove);
         }catch (Exception e){
-            e.printStackTrace();
+            
         }
         return json;
     }
@@ -20,7 +20,7 @@ public class ObjectToJson {
         try {
             playermove = new ObjectMapper().readValue(json, PlayerMove.class);
         } catch (Exception ex) {
-            ex.printStackTrace();
+
         }
         return playermove;
     }
