@@ -47,15 +47,17 @@ public class ServerRunnable implements Runnable{
     public void join(String nick){
 
         for(Player player:playerList){
-           networkServer.sendEvent(nick, new JoinEvent(player.getNick()));
+           networkServer.sendEvent(nick, new JoinEvent(player.getNick(), player.getColor()));
         }
 
-        networkServer.broadCast(new JoinEvent(nick));
+
         // first player added will be automatically host by boolean value of isEmpty()
         Player player = new Player(keltis, nick, playerColor() , playerList.isEmpty());
+        networkServer.broadCast(new JoinEvent(nick, player.getColor()));
         playerList.add(player);
-        keltis.gameLogic.getPlayerArrayList().add(player);
+
     }
+
     public ColorFigures playerColor() {
         switch (playerList.size()) {
             case 0:
