@@ -1,8 +1,11 @@
 package com.groupd.keltis.network;
 
 import com.badlogic.gdx.Gdx;
+import com.groupd.keltis.network.events.CheatAccuseEvent;
+import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
@@ -104,12 +107,22 @@ public class NetworkServer {
                         TurnEvent turnEvent = new TurnEvent();
                         turnEvent.decode(channel.dataIn);
                         server.onTurn(turnEvent);
-
                     } else if(eventID == 4){
                         StopGameEvent stopGameEvent = new StopGameEvent();
                         stopGameEvent.decode(channel.dataIn);
+                    } else if(eventID == 6) {
+                        /* check if a player has cheated */
+                        CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();
+                        cheatAccuseEvent.decode(channel.dataIn);
+                        Gdx.app.log("Info","received message from " + cheatAccuseEvent.getAccuser());
+                        server.checkCheat(cheatAccuseEvent.getAccuser());
 
-                    }else {
+                    } else if(eventID == 5) {
+                        CheatEvent cheatEvent = new CheatEvent();
+                        cheatEvent.decode(channel.dataIn);
+                        server.setPlayerCheat(cheatEvent.getCheat(), cheatEvent.getNick());
+
+                    } else {
                         Gdx.app.error("Error", "Invalid Network EventID");
                     }
 
@@ -129,6 +142,7 @@ public class NetworkServer {
             try {
                 channel.dataOut.writeInt(event.getEventID());
                 event.encode(channel.dataOut);
+                Gdx.app.log("Info","Message: " + receiver );
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -148,6 +162,8 @@ public class NetworkServer {
                 try {
                     channel.dataOut.writeInt(event.getEventID());
                     event.encode(channel.dataOut);
+                    Gdx.app.log("Info","message: " + channel.toString() );
+
 
                 } catch (IOException e) {
                     e.printStackTrace();

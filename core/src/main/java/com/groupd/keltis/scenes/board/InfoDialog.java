@@ -9,27 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class InfoDialog extends Dialog {
 
-    private boolean cheated;
+    public String message;
 
-    public InfoDialog(String title, Skin skin,boolean cheated) {
+    public InfoDialog(String title, Skin skin, String message) {
         super(title, skin);
+        this.message = message;
         init();
-        this.cheated=cheated;
     }
 
     private void init() {
-        if(cheated) {
-            Label label = new Label("Ein Spieler hat geschummelt!", getSkin());
-            text(label);
-
-            button("Ok");
-        }
-        else{
-            Label label = new Label("Kein Spieler hat geschummelt!", getSkin());
-            text(label);
-
-            button("Ok");
-        }
+        Label label = new Label(message, getSkin());
+        text(label);
+        button("Ok");
     }
 
 }
