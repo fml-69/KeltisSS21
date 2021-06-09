@@ -18,6 +18,8 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
+import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -171,6 +173,7 @@ public class Board extends AbstractScene {
     @Override
     public void render(float delta) {
         super.render(delta);
+        NetworkClient.INSTANCE.receiveEvents();
         if (keltis.gameLogic.verifyEndingCondition()) {
             //Gdx.app.exit();
         }
@@ -399,6 +402,13 @@ public class Board extends AbstractScene {
         }
     }
 
+    @Override
+    public void onNetworkEvent(NetworkEvent event) {
+        if(event instanceof CheatQueryEvent){
+            showDialog(new InfoDialog("Schummelverdacht",
+                    keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
+        }
+    }
 
     public Label playerLabel(Player player, int x, int y) {
         Label label = new Label(player.getName() + ": " + keltis.gameLogic.getScoreOfPlayer(player), new Skin(Gdx.files.internal("skin_shade/uiskin.json")));

@@ -11,7 +11,7 @@ public class CheatAccuseEvent extends NetworkEvent{
 
     @Override
     public int getEventID() {
-        return 3;
+        return 6;
     }
 
     @Override

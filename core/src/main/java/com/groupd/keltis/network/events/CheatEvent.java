@@ -6,6 +6,8 @@ import java.io.IOException;
 
 public class CheatEvent extends NetworkEvent{
     public boolean cheat;
+    public String nick;
+
 
     @Override
     public int getEventID() {
@@ -16,12 +18,14 @@ public class CheatEvent extends NetworkEvent{
     public void encode(DataOutputStream dataOut) throws IOException {
         super.encode(dataOut);
         dataOut.writeBoolean(cheat);
+        dataOut.writeUTF(nick);
     }
 
     @Override
     public void decode(DataInputStream dataIn) throws IOException {
         super.decode(dataIn);
         cheat = dataIn.readBoolean();
+        nick = dataIn.readUTF();
     }
 
     public void setCheat(boolean cheat){
@@ -30,6 +34,14 @@ public class CheatEvent extends NetworkEvent{
 
     public boolean getCheat(){
         return this.cheat;
+    }
+
+    public String getNick(){
+        return this.nick;
+    }
+
+    public void setNick(String nick){
+        this.nick = nick;
     }
 
 }

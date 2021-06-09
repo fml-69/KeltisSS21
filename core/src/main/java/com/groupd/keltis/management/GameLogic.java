@@ -326,6 +326,7 @@ public class GameLogic {
     public void sendCheat(Player player){
         CheatEvent cheatEvent = new CheatEvent();
         cheatEvent.setCheat(player.getCheat());
+        cheatEvent.setNick(NetworkClient.INSTANCE.getNickName());
         NetworkClient.INSTANCE.sendEvent(cheatEvent);
     }
 }

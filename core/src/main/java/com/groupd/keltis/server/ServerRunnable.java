@@ -94,16 +94,17 @@ public class ServerRunnable implements Runnable{
         return null;
     }
 
-/*
-    public void setPlayerCheat(boolean cheat){
-        setPlayerCheat(cheat);
+
+    public void setPlayerCheat(boolean cheat, String nick){
+        getPlayerNick(nick).setCheat(cheat);
     }
-*/
+
+
 
     public void checkCheat(String nick){
         boolean cheaterFound = false;
         for(Player player:playerList){
-            if (player.getCheat() && player.getNick()!=nick){
+            if (player.getCheat() && !nick.equals(player.getNick())){
                 cheaterFound = true;
                 Gdx.app.log("Info","cheater found: " + cheaterFound);
 
@@ -111,12 +112,12 @@ public class ServerRunnable implements Runnable{
         }
         if (cheaterFound){
             for(Player player:playerList){
-                if (player.getCheat() && player.getNick()!=nick){
+                if (player.getCheat() && !nick.equals(player.getNick())){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und wirst nun bestraft.");
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                 }
-                else if (player.getNick()==nick){
+                else if (player.getNick().equals(nick)){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt.");
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
@@ -131,7 +132,7 @@ public class ServerRunnable implements Runnable{
         else{
             Gdx.app.log("Info","cheater not found: " + cheaterFound);
             for(Player player:playerList){
-                if(player.getNick()!=nick){
+                if(!nick.equals(player.getNick())){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Ein Spieler hat jemanden zu unrecht beschuldigt.");
                     Gdx.app.log("Info","cheater not found: " + player.getNick());

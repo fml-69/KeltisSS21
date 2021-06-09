@@ -101,7 +101,7 @@ public class NetworkServer {
                         server.onStartGame(startEvent, client.getKey());
 
                     }
-                    else if(eventID == 3) {
+                    else if(eventID == 6) {
                         /* check if a player has cheated */
                         CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();
                         cheatAccuseEvent.decode(channel.dataIn);
@@ -112,7 +112,7 @@ public class NetworkServer {
                     else if(eventID == 5) {
                         CheatEvent cheatEvent = new CheatEvent();
                         cheatEvent.decode(channel.dataIn);
-                        //server.setPlayerCheat(cheatEvent.getCheat());
+                        server.setPlayerCheat(cheatEvent.getCheat(), cheatEvent.getNick());
                     }
                     else {
                         Gdx.app.error("Error", "Invalid Network EventID");

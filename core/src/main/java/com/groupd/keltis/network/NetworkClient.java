@@ -108,11 +108,12 @@ public class NetworkClient {
                     cheatQueryEvent.decode(dataIn);
                     String message = cheatQueryEvent.getMessage();
                     Gdx.app.log("Info","Client2: " + cheatQueryEvent.getMessage());
-                    if(message != ""){
+                    if(!message.isEmpty()){
                         Gdx.app.log("Info","Client: " + message);
-                        InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
+                        /*InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
                                 keltis.assetManager.get(AssetPaths.DIALOG_SKIN),message);
-                        NetworkClient.INSTANCE.showDialog(infoDialog,keltis.sceneManager.getActiveScene().stage,3);
+                        NetworkClient.INSTANCE.showDialog(infoDialog,keltis.sceneManager.getActiveScene().stage,3);*/
+                        keltis.sceneManager.getActiveScene().onNetworkEvent(cheatQueryEvent);
                     }
                 }
                 else
