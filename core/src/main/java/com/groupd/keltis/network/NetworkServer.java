@@ -107,22 +107,19 @@ public class NetworkServer {
                         turnEvent.decode(channel.dataIn);
                         server.onTurn(turnEvent);
 
-                    } else {
-                    }
-                    else if(eventID == 6) {
+                    } else if(eventID == 6) {
                         /* check if a player has cheated */
                         CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();
                         cheatAccuseEvent.decode(channel.dataIn);
                         Gdx.app.log("Info","received message from " + cheatAccuseEvent.getAccuser());
                         server.checkCheat(cheatAccuseEvent.getAccuser());
 
-                    }
-                    else if(eventID == 5) {
+                    } else if(eventID == 5) {
                         CheatEvent cheatEvent = new CheatEvent();
                         cheatEvent.decode(channel.dataIn);
                         server.setPlayerCheat(cheatEvent.getCheat(), cheatEvent.getNick());
-                    }
-                    else {
+
+                    } else {
                         Gdx.app.error("Error", "Invalid Network EventID");
                     }
 

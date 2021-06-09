@@ -116,9 +116,6 @@ public class NetworkClient {
                         NetworkClient.INSTANCE.showDialog(infoDialog,keltis.sceneManager.getActiveScene().stage,3);*/
                         keltis.sceneManager.getActiveScene().onNetworkEvent(cheatQueryEvent);
                     }
-                }
-                else
-                {
                 } else if(eventID == 3) {
                     TurnEvent turnEvent = new TurnEvent();
                     turnEvent.decode(dataIn);

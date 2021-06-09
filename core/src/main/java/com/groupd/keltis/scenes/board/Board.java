@@ -430,13 +430,6 @@ public class Board extends AbstractScene {
         }
     }
 
-    @Override
-    public void onNetworkEvent(NetworkEvent event) {
-        if(event instanceof CheatQueryEvent){
-            showDialog(new InfoDialog("Schummelverdacht",
-                    keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
-        }
-    }
 
     public Label playerLabel(Player player, int x, int y) {
         Label label = new Label(player.getNick() + ": " + keltis.gameLogic.getScoreOfPlayer(player), new Skin(Gdx.files.internal("skin_shade/uiskin.json")));
@@ -492,5 +485,10 @@ public class Board extends AbstractScene {
                 }
             }
         }
+        else if(event instanceof CheatQueryEvent){
+            showDialog(new InfoDialog("Schummelverdacht",
+                    keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
+        }
+
     }
 }
