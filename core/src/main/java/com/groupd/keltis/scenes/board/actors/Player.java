@@ -38,12 +38,6 @@ public class Player {
         this.cheat = cheat;
     }
 
-    public Player() {
-        keltis = new Keltis();
-        color = "testColor";
-        figures = new HashMap<>();
-    }
-
     public Player(Keltis keltis, String name , String color) {
         this.keltis = keltis;
         this.color = color;

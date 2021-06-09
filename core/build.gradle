@@ -10,9 +10,9 @@ sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 
 eclipse.project.name = appName + "-core"
 
-/*jacoco {
+jacoco {
     toolVersion = "0.8.6"
-}*/
+}
 
 test {
     useJUnitPlatform {
@@ -29,3 +29,4 @@ test {
 
     finalizedBy(jacocoTestReport)
 }
+java.targetCompatibility = JavaVersion.VERSION_1_8
