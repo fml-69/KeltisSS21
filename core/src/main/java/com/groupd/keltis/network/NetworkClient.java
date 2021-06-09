@@ -73,7 +73,7 @@ public class NetworkClient {
                     StartGameEvent startEvent = new StartGameEvent();
                     startEvent.decode(dataIn);
 
-                } else if(eventID == 4){
+                } else if(eventID == 69){
 
                 }else {
                     Gdx.app.error("Error", "Invalid Network EventID");

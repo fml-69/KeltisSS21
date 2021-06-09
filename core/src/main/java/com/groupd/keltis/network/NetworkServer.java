@@ -89,7 +89,7 @@ public class NetworkServer {
                         StartGameEvent startEvent = new StartGameEvent();
                         startEvent.decode(channel.dataIn);
 
-                    } else if(eventID == 4){
+                    } else if(eventID == 69){
                         StopGameEvent stopGameEvent = new StopGameEvent();
                         stopGameEvent.decode(channel.dataIn);
 
