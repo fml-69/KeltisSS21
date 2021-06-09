@@ -135,12 +135,14 @@ public class ServerRunnable implements Runnable{
             for(Player player:playerList){
                 if (player.getCheat() && !nick.equals(player.getNick())){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
-                    cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und wirst nun bestraft.");
+                    cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und verlierst 4 Punkte.");
+                    cheatQueryEvent.setScore(-4);
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                 }
                 else if (player.getNick().equals(nick)){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
-                    cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt.");
+                    cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt und erhälst 1 Punkt als Belohnung.");
+                    cheatQueryEvent.setScore(1);
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                 }
                 else{
@@ -163,7 +165,8 @@ public class ServerRunnable implements Runnable{
                 }
                 else{
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
-                    cheatQueryEvent.setMessage("Du hast zu unrecht beschuldigt und wirst nun bestraft.");
+                    cheatQueryEvent.setScore(-1);
+                    cheatQueryEvent.setMessage("Du hast zu unrecht beschuldigt, dir wird 1 Punkt abgezogen." );
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                     Gdx.app.log("Info","cheater not found: " + player.getNick());
                     Gdx.app.log("Info","message: " + cheatQueryEvent.getMessage());
