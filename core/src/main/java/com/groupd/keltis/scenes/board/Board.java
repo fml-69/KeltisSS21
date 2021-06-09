@@ -16,6 +16,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.management.PlayerMove;
+import com.groupd.keltis.management.SceneManager;
+import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -29,6 +36,7 @@ import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorFigures;
 import com.groupd.keltis.utils.ColorPile;
+import com.groupd.keltis.utils.ObjectToJson;
 import com.groupd.keltis.utils.PositioningConstants;
 
 import java.util.ArrayList;
@@ -112,26 +120,24 @@ public class Board extends AbstractScene {
         switch (state){
             case RUN:
                 stage.act(delta);
-
-
                 if(x % 180 == 0){
-                    keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), ColorPile.BLUE);
-
+                    //keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), ColorPile.BLUE);
+                    keltis.gameLogic.sendTurnEvent(player.get(0),new Card("blue", 5), ColorPile.BLUE);
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 275 == 0){
-                    keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), ColorPile.RED);
+                    //keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), ColorPile.RED);
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 350 == 0){
-                    keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), ColorPile.YELLOW);
+                    //keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), ColorPile.YELLOW);
 
 
                     Gdx.app.log("----------------", "-------------------------------");
                 }
                 if(x % 520 == 0) {
-                    keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), ColorPile.GREEN);
+                    //keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), ColorPile.GREEN);
                 }
                 x++;
                 break;
@@ -166,7 +172,9 @@ public class Board extends AbstractScene {
 
     @Override
     public void render(float delta) {
+
         super.render(delta);
+        NetworkClient.INSTANCE.receiveEvents();
         if (keltis.gameLogic.verifyEndingCondition()) {
             //Gdx.app.exit();
         }
@@ -176,7 +184,6 @@ public class Board extends AbstractScene {
         checkShaking(player);
     }
     public void setTextOfScore(){
-        Gdx.app.log("Size=", String.valueOf(keltis.gameLogic.getPlayerArrayList().size()));
         switch (keltis.gameLogic.getPlayerArrayList().size()){
             case 4:
                 player4.setText(keltis.gameLogic.getPlayerArrayList().get(3).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(3).getOverallScore());
@@ -185,7 +192,6 @@ public class Board extends AbstractScene {
             case 2:
                 player2.setText(keltis.gameLogic.getPlayerArrayList().get(1).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(1).getOverallScore());
             case 1:
-
                 player1.setText(keltis.gameLogic.getPlayerArrayList().get(0).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(0).getOverallScore());
             default:
         }
@@ -229,74 +235,13 @@ public class Board extends AbstractScene {
         for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
             stage.addActor(roadcards);
         }
-/**
-        Player player1 = new Player(keltis, "player1", ColorFigures.BLUE, true);
-        player.add(player1);
-        playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(0).getFigures());
-        playerHashMap.get("blue1").spritePos(565, 124);
-        playerHashMap.get("blue2").spritePos(785, 124);
-        playerHashMap.get("blue3").spritePos(1005, 124);
-        playerHashMap.get("blue4").spritePos(1225, 124);
-        playerHashMap.get("blue5").spritePos(1445, 124);
-        for (int i = 1; i < 6; i++) {
-            for (Figure figure : playerHashMap.values()) {
-                if (figure.getName().equals("blue" + i)) {
-                    stage.addActor(figure);
-                }
-            }
-        }
 
-        Player player2 = new Player(keltis, "player2", ColorFigures.RED, false);
-        player.add(player2);
-        playerHashMap.putAll(player2.getFigures());
-        playerHashMap.get("red1").spritePos(595, 124);
-        playerHashMap.get("red2").spritePos(815, 124);
-        playerHashMap.get("red3").spritePos(1035, 124);
-        playerHashMap.get("red4").spritePos(1255, 124);
-        playerHashMap.get("red5").spritePos(1475, 124);
-        for (int i = 1; i < 6; i++) {
-            for (Figure figure : playerHashMap.values()) {
-                if (figure.getName().equals("red" + i)) {
-                    stage.addActor(figure);
-                }
-            }
-        }
-
-        Player player3 = new Player(keltis, "player3", ColorFigures.GREEN, false);
-        player.add(player3);
-        playerHashMap.putAll(player3.getFigures());
-        playerHashMap.get("green1").spritePos(625, 124);
-        playerHashMap.get("green2").spritePos(845, 124);
-        playerHashMap.get("green3").spritePos(1065, 124);
-        playerHashMap.get("green4").spritePos(1285, 124);
-        playerHashMap.get("green5").spritePos(1505, 124);
-        for (int i = 1; i < 6; i++) {
-            for (Figure figure : playerHashMap.values()) {
-                if (figure.getName().equals("green" + i)) {
-                    stage.addActor(figure);
-                }
-            }
-        }
-
-        Player player4 = new Player(keltis, "player4", ColorFigures.YELLOW, false);
-        player.add(player4);
-        playerHashMap.putAll(player4.getFigures());
-        playerHashMap.get("yellow1").spritePos(655, 124);
-        playerHashMap.get("yellow2").spritePos(875, 124);
-        playerHashMap.get("yellow3").spritePos(1095, 124);
-        playerHashMap.get("yellow4").spritePos(1315, 124);
-        playerHashMap.get("yellow5").spritePos(1535, 124);
-        for (int i = 1; i < 6; i++) {
-            for (Figure figure : playerHashMap.values()) {
-                if (figure.getName().equals("yellow" + i)) {
-                    stage.addActor(figure);
-                }
-            }
-        }
-
-**/
         initializeFiguresOnBoard();
+
+
         playerOverview();
+
+
         CardDisplay branchStackGreen = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "branchStackGreen", "green", false);
         branchStackGreen.spritePos(PositioningConstants.CARD_BRANCHSTACK_GREEN.x, PositioningConstants.CARD_BRANCHSTACK_GREEN.y);
         stage.addActor(branchStackGreen);
@@ -540,5 +485,17 @@ public class Board extends AbstractScene {
 
     public static CardDisplay getHighlightedCardDisplay() {
         return highlightedCardDisplay;
+    }
+
+    @Override
+    public void onNetworkEvent(NetworkEvent event) {
+        if(event instanceof TurnEvent){
+            PlayerMove playerMove = ObjectToJson.convertToObject(((TurnEvent) event).getTurnJson());
+            for(Player player:keltis.gameLogic.getPlayerArrayList()){
+                if(player.getNick().equals(playerMove.getNick())){
+                    keltis.gameLogic.playCard(player, playerMove.getCard(), playerMove.getColor());
+                }
+            }
+        }
     }
 }

@@ -3,6 +3,9 @@ package com.groupd.keltis.management;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.NetworkServer;
+import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Figure;
@@ -11,6 +14,7 @@ import com.groupd.keltis.scenes.board.road_cards.Pointcard;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.Shamrock;
 import com.groupd.keltis.scenes.board.road_cards.Wishstone;
+import com.groupd.keltis.server.ServerRunnable;
 import com.groupd.keltis.utils.ColorFigures;
 import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.ObjectToJson;
@@ -47,27 +51,23 @@ public class GameLogic {
         this.greenDiscardPile = new ArrayList<Card>();
         this.purpleDiscardPile = new ArrayList<Card>();
     }
+
+    public void playCard(Player player, Card card, ColorPile colorPile) {
+        //player.getHandCards().remove(card);
+        addCardToPile(player, card, colorPile);
+        move(player, colorPile);
+        setTurnPlayer(player);
+        //drawCard(player);
+    }
     //Main Method to play
     //Call to set everything in motion
-    public void playCard(Player player, Card card, ColorPile colorPile) {
+    public void sendTurnEvent(Player player, Card card, ColorPile colorPile) {
         if (player.getTurn() || turn == 0) {
-            //player.getHandCards().remove(card);
-            addCardToPile(player, card, colorPile);
-            move(player, colorPile);
-            setTurnPlayer(player);
-            //drawCard(player);
-            // TODO: 15.05.2021  send Data to other players
-
-        }
-    }
-    public void playCardOtherPlayers(Player player, Card card, ColorPile colorPile) {
-        if (player.getTurn() || turn == 0) {
-            //player.getHandCards().remove(card);
-            addCardToPile(player, card, colorPile);
-            move(player, colorPile);
-            setTurnPlayer(player);
-            //drawCard(player);
-            Gdx.app.log("JSON", ObjectToJson.convertToJson(new PlayerMove(player.getNick(), new Card("purple", 6), colorPile)));
+            NetworkClient client = NetworkClient.INSTANCE;
+            TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card,colorPile)));
+            Gdx.app.log("Size=", String.valueOf(player.toString()));
+            client.sendEvent(turnEvent);
+            playCard(player,card,colorPile);
         }
     }
 

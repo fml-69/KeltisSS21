@@ -1,5 +1,6 @@
 package com.groupd.keltis.server;
 
+import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.JoinEvent;
@@ -56,6 +57,7 @@ public class ServerRunnable implements Runnable{
         playerList.add(player);
         keltis.gameLogic.getPlayerArrayList().add(player);
     }
+
     public ColorFigures playerColor() {
         switch (playerList.size()) {
             case 0:
@@ -77,13 +79,15 @@ public class ServerRunnable implements Runnable{
         Player player = getPlayerNick(nick);
         if(player != null && player.isHost()){
             // disabled for easier development
-
             //if(playerList.size() >= 2 && playerList.size() <= 4){
                 networkServer.broadCast(event);
 
             //}
+
         }
     }
+
+
 
 
     // access list of players
@@ -107,7 +111,6 @@ public class ServerRunnable implements Runnable{
     // can access nick of player who made for a turn
     public void onTurn(TurnEvent turnEvent) {
         networkServer.broadCast(turnEvent);
-
     }
 
 }
