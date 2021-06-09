@@ -41,8 +41,8 @@ public class IngameMenuScreen  extends AbstractScene {
 
         skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        continueTB = new TextButton("Fortsetzen", skin);
-        exitToMainMenu = new TextButton("Hauptmenu", skin);
+        continueTB = new TextButton("FORTSETZEN", skin);
+        exitToMainMenu = new TextButton("HAUPTMENU", skin);
 
         table.add(continueTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row().pad(50, 0, 50, 0);
@@ -67,7 +67,7 @@ public class IngameMenuScreen  extends AbstractScene {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.4f, 0.4f, 1);
+        Gdx.gl.glClearColor(1f, 150/255f, 20/255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();

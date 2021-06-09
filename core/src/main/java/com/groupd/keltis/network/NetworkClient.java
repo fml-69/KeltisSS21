@@ -121,7 +121,9 @@ public class NetworkClient {
                     turnEvent.decode(dataIn);
                    keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
 
-                } else {
+                } else if(eventID == 69){
+
+                }else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }
 

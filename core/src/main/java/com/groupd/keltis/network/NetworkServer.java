@@ -7,6 +7,7 @@ import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.server.ServerRunnable;
 
@@ -106,7 +107,9 @@ public class NetworkServer {
                         TurnEvent turnEvent = new TurnEvent();
                         turnEvent.decode(channel.dataIn);
                         server.onTurn(turnEvent);
-
+                    } else if(eventID == 69){
+                        StopGameEvent stopGameEvent = new StopGameEvent();
+                        stopGameEvent.decode(channel.dataIn);
                     } else if(eventID == 6) {
                         /* check if a player has cheated */
                         CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();

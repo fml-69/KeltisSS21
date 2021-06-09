@@ -31,6 +31,7 @@ import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 
+import com.groupd.keltis.scenes.board.actors.IngameMenuButton;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 
@@ -277,6 +278,11 @@ public class Board extends AbstractScene {
 
         stage.addActor(hudBar);
 
+
+        //Menu button on board
+        IngameMenuButton button = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
+        stage.addActor(button.getButton());
+
         //handcards
 
         CardDisplay handCard1 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard1", "", true);
@@ -313,9 +319,6 @@ public class Board extends AbstractScene {
 
         //this is a test!!
         handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
-
-
-
 
     }
 

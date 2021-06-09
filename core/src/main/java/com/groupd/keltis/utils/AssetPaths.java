@@ -9,6 +9,7 @@ public final class AssetPaths {
     public static final String PLAYER_PICTURE = "board/player_pic.png";
 
     public static final String BOARD_HUD_BAR = "board/hud_bar.png";
+    public static final String BOARD_MENU_BUTTON = "board/ingame_menu_button.png";
     public static final String ROADCARD_SHAMROCK = "road_cards/shamrock.png";
     public static final String ROADCARD_WISHSTONE = "road_cards/wish_stone.png";
     public static final String ROADCARD_POINTCARDONE = "road_cards/point_card_one.png";
@@ -95,7 +96,7 @@ public final class AssetPaths {
     public static final String UI_FONT = "fonts/JetBrainsMono-Regular.ttf";
     public static final String UI_SKIN = "ui/uiskin.json";
 
-    public static final String MENU_ASSET = "menu/glassy-ui.json";
+    public static final String MENU_ASSET = "menu/flat-earth-ui.json";
 
     public static final String DIALOG_SKIN = "skin_shade/uiskin.json";
 

@@ -24,12 +24,16 @@ public class ServerRunnable implements Runnable{
     private Keltis keltis;
     private List<Player> playerList = new ArrayList<>();
 
+    private boolean flag;
+
+
     private final NetworkServer networkServer;
 
 
     public ServerRunnable(int port, CountDownLatch countDownLatch, Keltis keltis){
         this.keltis = keltis;
         networkServer = new NetworkServer(port, countDownLatch, this);
+        flag = true;
     }
 
     @Override
@@ -42,7 +46,11 @@ public class ServerRunnable implements Runnable{
                 Thread.currentThread().interrupt();
                 break;
             }
-        } while (true);
+        } while (flag);
+    }
+
+    public void setFlag(boolean flag){
+        this.flag = flag;
     }
 
 
