@@ -353,7 +353,7 @@ public class Board extends AbstractScene {
     public void initializeFiguresOnBoard() {
         switch (keltis.gameLogic.getPlayerArrayList().size()) {
             case 4:
-                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(4).getFigures());
+                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(3).getFigures());
                 playerHashMap.get("yellow1").spritePos(655, 124);
                 playerHashMap.get("yellow2").spritePos(875, 124);
                 playerHashMap.get("yellow3").spritePos(1095, 124);
@@ -367,7 +367,7 @@ public class Board extends AbstractScene {
                     }
                 }
             case 3:
-                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(3).getFigures());
+                playerHashMap.putAll(keltis.gameLogic.getPlayerArrayList().get(2).getFigures());
                 playerHashMap.get("green1").spritePos(625, 124);
                 playerHashMap.get("green2").spritePos(845, 124);
                 playerHashMap.get("green3").spritePos(1065, 124);
