@@ -11,6 +11,7 @@ import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.InfoDialog;
 import com.groupd.keltis.scenes.board.YesNoDialog;
 import com.groupd.keltis.utils.AssetPaths;
@@ -118,6 +119,12 @@ public class NetworkClient {
                 }
                 else
                 {
+                } else if(eventID == 3) {
+                    TurnEvent turnEvent = new TurnEvent();
+                    turnEvent.decode(dataIn);
+                   keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
+
+                } else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }
 

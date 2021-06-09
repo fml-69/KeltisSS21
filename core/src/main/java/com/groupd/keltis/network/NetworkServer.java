@@ -7,6 +7,7 @@ import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.server.ServerRunnable;
 
 import java.io.IOException;
@@ -91,6 +92,7 @@ public class NetworkServer {
                 // check eventID's and create corresponding events
                 if (channel.dataIn.available() > 0) {
                     int eventID = channel.dataIn.readInt();
+                   // might be obsolete
                     if (eventID == 1) {
                         JoinEvent event = new JoinEvent();
                         event.decode(channel.dataIn);
@@ -100,6 +102,12 @@ public class NetworkServer {
                         startEvent.decode(channel.dataIn);
                         server.onStartGame(startEvent, client.getKey());
 
+                    } else if(eventID == 3){
+                        TurnEvent turnEvent = new TurnEvent();
+                        turnEvent.decode(channel.dataIn);
+                        server.onTurn(turnEvent);
+
+                    } else {
                     }
                     else if(eventID == 6) {
                         /* check if a player has cheated */
@@ -126,7 +134,7 @@ public class NetworkServer {
     }
 
 
-
+    // send an event to specific client
     public void sendEvent(String receiver, NetworkEvent event) {
 
         NetworkClientChannel channel = clients.get(receiver);
@@ -144,6 +152,7 @@ public class NetworkServer {
     }
 
 
+    // send to all clients
     public void broadCast(NetworkEvent event) {
 
         for (Map.Entry<String, NetworkClientChannel> client : clients.entrySet()) {

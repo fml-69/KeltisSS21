@@ -1,11 +1,18 @@
 package com.groupd.keltis.server;
 
 import com.badlogic.gdx.Gdx;
+import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+
+import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.utils.ColorFigures;
+
+import com.groupd.keltis.network.events.TurnEvent;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +21,14 @@ import java.util.concurrent.CountDownLatch;
 
 public class ServerRunnable implements Runnable{
 
-
+    private Keltis keltis;
     private List<Player> playerList = new ArrayList<>();
 
     private final NetworkServer networkServer;
 
 
-    public ServerRunnable(int port, CountDownLatch countDownLatch){
-
+    public ServerRunnable(int port, CountDownLatch countDownLatch, Keltis keltis){
+        this.keltis = keltis;
         networkServer = new NetworkServer(port, countDownLatch, this);
     }
 
@@ -39,42 +46,49 @@ public class ServerRunnable implements Runnable{
     }
 
 
+    // called when a player joins the game
     public void join(String nick){
 
         for(Player player:playerList){
-           networkServer.sendEvent(nick, new JoinEvent(player.nick));
+           networkServer.sendEvent(nick, new JoinEvent(player.getNick(), player.getColor()));
         }
 
-        networkServer.broadCast(new JoinEvent(nick));
+
         // first player added will be automatically host by boolean value of isEmpty()
-        playerList.add(new Player(nick, playerList.isEmpty()));
+        Player player = new Player(keltis, nick, playerColor() , playerList.isEmpty());
+        networkServer.broadCast(new JoinEvent(nick, player.getColor()));
+        playerList.add(player);
 
     }
+
+    public ColorFigures playerColor() {
+        switch (playerList.size()) {
+            case 0:
+                return ColorFigures.BLUE;
+            case 1:
+                return ColorFigures.RED;
+            case 2:
+                return ColorFigures.GREEN;
+            case 3:
+                return ColorFigures.YELLOW;
+            default:
+        }
+        return ColorFigures.BLUE;
+    }
+
 
     // only Host can start the game
     public void onStartGame(StartGameEvent event, String nick){
         Player player = getPlayerNick(nick);
-        if(player != null && player.host){
+        if(player != null && player.isHost()){
             // disabled for easier development
+
             //if(playerList.size() >= 2 && playerList.size() <= 4){
                 networkServer.broadCast(event);
 
             //}
         }
     }
-
-/*
-    public void onCheatEVENT(CheatEvent event, String nick){
-        // überprüfen ob ein Spieler geschummelt hat
-        for (Player player : playerList) {
-            if () {
-                if () {
-
-                }
-            }
-        }
-    }
-*/
 
 
     // access list of players
@@ -86,12 +100,19 @@ public class ServerRunnable implements Runnable{
     public Player getPlayerNick(String nick){
 
         for(Player player:playerList){
-            if(player.nick.equals(nick)){
+            if(player.getNick().equals(nick)){
                 return player;
             }
         }
 
         return null;
+    }
+
+
+    // can access nick of player who made for a turn
+    public void onTurn(TurnEvent turnEvent) {
+        networkServer.broadCast(turnEvent);
+
     }
 
 

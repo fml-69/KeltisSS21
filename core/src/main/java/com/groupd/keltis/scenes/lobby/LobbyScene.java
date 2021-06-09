@@ -18,6 +18,7 @@ import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.scenes.AbstractScene;
+import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.AssetPaths;
 
 public class LobbyScene extends AbstractScene {
@@ -37,11 +38,16 @@ public class LobbyScene extends AbstractScene {
         if(event instanceof JoinEvent){
             playerList.add(((JoinEvent) event).nick);
             uIList.setItems(playerList);
+
+            // send game logic with player, with the color provided by server
+            keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, false));
+
         }
         else if(event instanceof StartGameEvent){
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
         }
     }
+
 
     @Override
     public void update(float delta) {
