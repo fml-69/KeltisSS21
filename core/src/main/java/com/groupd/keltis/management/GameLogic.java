@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.events.CheatEvent;
+import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -102,23 +104,28 @@ public class GameLogic {
         switch (colorPile) {
             case RED:
                 redDiscardPile.add(card);
-                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case BLUE:
                 blueDiscardPile.add(card);
-                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case GREEN:
                 greenDiscardPile.add(card);
-                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case YELLOW:
                 yellowDiscardPile.add(card);
-                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case PURPLE:
                 purpleDiscardPile.add(card);
-                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.toggleCheat();
+                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.setCheat(true);
+                sendCheat(player);
                 break;
             case DISCARD:
                 discardPile.add(card);
@@ -126,7 +133,6 @@ public class GameLogic {
                 throw new IllegalArgumentException("No Cardpile with this Color");
         }
     }
-
     /**
      *      Move and CheckRoadCards
      */
@@ -322,5 +328,23 @@ public class GameLogic {
      */
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public boolean checkCheat(ArrayList<Player> player) {
+        for (Player p : player) {
+            if (p.getCheat()) {
+                if (!p.isHasAccused()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void sendCheat(Player player){
+        CheatEvent cheatEvent = new CheatEvent();
+        cheatEvent.setCheat(player.getCheat());
+        cheatEvent.setNick(NetworkClient.INSTANCE.getNickName());
+        NetworkClient.INSTANCE.sendEvent(cheatEvent);
     }
 }

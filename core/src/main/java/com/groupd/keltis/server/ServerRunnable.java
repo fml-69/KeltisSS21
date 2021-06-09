@@ -1,7 +1,10 @@
 package com.groupd.keltis.server;
 
+import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkServer;
+import com.groupd.keltis.network.events.CheatEvent;
+import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 
@@ -111,6 +114,66 @@ public class ServerRunnable implements Runnable{
         networkServer.broadCast(turnEvent);
 
     }
+
+
+    public void setPlayerCheat(boolean cheat, String nick){
+        getPlayerNick(nick).setCheat(cheat);
+    }
+
+
+
+    public void checkCheat(String nick){
+        boolean cheaterFound = false;
+        for(Player player:playerList){
+            if (player.getCheat() && !nick.equals(player.getNick())){
+                cheaterFound = true;
+                Gdx.app.log("Info","cheater found: " + cheaterFound);
+
+            }
+        }
+        if (cheaterFound){
+            for(Player player:playerList){
+                if (player.getCheat() && !nick.equals(player.getNick())){
+                    CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
+                    cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und wirst nun bestraft.");
+                    networkServer.sendEvent(player.getNick(),cheatQueryEvent);
+                }
+                else if (player.getNick().equals(nick)){
+                    CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
+                    cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt.");
+                    networkServer.sendEvent(player.getNick(),cheatQueryEvent);
+                }
+                else{
+                    CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
+                    cheatQueryEvent.setMessage("Ein Spieler wurde beim Schummeln erwischt.");
+                    networkServer.sendEvent(player.getNick(),cheatQueryEvent);
+                }
+            }
+        }
+        else{
+            Gdx.app.log("Info","cheater not found: " + cheaterFound);
+            for(Player player:playerList){
+                if(!nick.equals(player.getNick())){
+                    CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
+                    cheatQueryEvent.setMessage("Ein Spieler hat jemanden zu unrecht beschuldigt.");
+                    Gdx.app.log("Info","cheater not found: " + player.getNick());
+                    Gdx.app.log("Info","message: " + cheatQueryEvent.getMessage());
+                    networkServer.sendEvent(player.getNick(),cheatQueryEvent);
+
+                }
+                else{
+                    CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
+                    cheatQueryEvent.setMessage("Du hast zu unrecht beschuldigt und wirst nun bestraft.");
+                    networkServer.sendEvent(player.getNick(),cheatQueryEvent);
+                    Gdx.app.log("Info","cheater not found: " + player.getNick());
+                    Gdx.app.log("Info","message: " + cheatQueryEvent.getMessage());
+
+                }
+            }
+        }
+    }
+
+
 
 }
 

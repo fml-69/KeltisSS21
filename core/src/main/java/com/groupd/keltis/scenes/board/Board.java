@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
@@ -13,9 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.events.CheatAccuseEvent;
+import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.management.PlayerMove;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.TurnEvent;
@@ -154,7 +160,11 @@ public class Board extends AbstractScene {
                         @Override
                         public void result(boolean result) {
                             if (result) {
-                                accuseOfCheating();
+
+                                // send cheat event to server
+                                CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();
+                                cheatAccuseEvent.setAccuser(NetworkClient.INSTANCE.getNickName());
+                                NetworkClient.INSTANCE.sendEvent(cheatAccuseEvent);
                             }
                             isCheatingDialogShowing = false;
 
@@ -169,6 +179,7 @@ public class Board extends AbstractScene {
     @Override
     public void render(float delta) {
         super.render(delta);
+        NetworkClient.INSTANCE.receiveEvents();
         if (keltis.gameLogic.verifyEndingCondition()) {
             //Gdx.app.exit();
         }
@@ -198,25 +209,6 @@ public class Board extends AbstractScene {
         dialog.setOrigin(Align.center);
     }
 
-    public void accuseOfCheating() {
-
-        InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
-                keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
-                checkCheat());
-
-        showDialog(infoDialog, stage, 3);
-    }
-
-    public boolean checkCheat() {
-        for (Player p : player) {
-            if (p.getCheat()) {
-                if (!p.isHasAccused()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     @Override
     public void show() {
@@ -493,5 +485,10 @@ public class Board extends AbstractScene {
                 }
             }
         }
+        else if(event instanceof CheatQueryEvent){
+            showDialog(new InfoDialog("Schummelverdacht",
+                    keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
+        }
+
     }
 }
