@@ -66,7 +66,7 @@ public class EntryScene extends AbstractScene {
 
         Label labelIP = new Label("Enter IP", skin);
         vg.addActor(labelIP);
-        textIP = new TextField("192.168.0.80", skin);
+        textIP = new TextField("127.0.0.1", skin);
         vg.addActor(textIP);
 
         Label labelPort = new Label("Enter port", skin);

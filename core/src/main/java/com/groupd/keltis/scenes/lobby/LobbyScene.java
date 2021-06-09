@@ -19,7 +19,6 @@ import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
-import com.groupd.keltis.utils.ObjectToJson;
 
 public class LobbyScene extends AbstractScene {
 
