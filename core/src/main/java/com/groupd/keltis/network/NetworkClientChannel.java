@@ -12,6 +12,7 @@ public class NetworkClientChannel {
     protected Socket socket;
     protected DataInputStream dataIn;
     protected DataOutputStream dataOut;
+    protected String nickName;
 
 
     public NetworkClientChannel(Socket socket) throws IOException {
@@ -26,6 +27,19 @@ public class NetworkClientChannel {
 
     }
 
+    public DataInputStream getDataIn() {
+        return dataIn;
+    }
 
+    public DataOutputStream getDataOut() {
+        return dataOut;
+    }
 
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
 }

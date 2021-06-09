@@ -5,12 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.network.events.NetworkEvent;
 
 public abstract class AbstractScene implements Screen {
     protected final Keltis keltis;
     public Stage stage;
 
-    public AbstractScene(final Keltis keltis){
+    protected AbstractScene(final Keltis keltis){
         this.keltis = keltis;
         //this.stage = new Stage();
     }
@@ -32,5 +33,9 @@ public abstract class AbstractScene implements Screen {
     @Override
     public void dispose() {
         this.stage.dispose();
+    }
+
+    public void onNetworkEvent(NetworkEvent event){
+
     }
 }
