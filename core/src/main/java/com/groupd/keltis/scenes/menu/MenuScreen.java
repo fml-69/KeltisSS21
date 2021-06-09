@@ -50,7 +50,6 @@ public class MenuScreen extends AbstractScene {
         exit = new TextButton("Beenden", skin);
 
 
-
         //before .uniform and .fill methods were used
         table.add(newGame).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row().pad(50, 0, 50, 0);
@@ -95,7 +94,7 @@ public class MenuScreen extends AbstractScene {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0.4f, 1);
+        Gdx.gl.glClearColor(1f, 150/255f, 40/255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();

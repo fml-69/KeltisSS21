@@ -67,7 +67,7 @@ public class IngameMenuScreen  extends AbstractScene {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.4f, 0.4f, 1);
+        Gdx.gl.glClearColor(1f, 150/255f, 20/255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();

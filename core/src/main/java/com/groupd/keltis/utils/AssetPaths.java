@@ -92,7 +92,7 @@ public final class AssetPaths {
     public static final String UI_FONT = "fonts/JetBrainsMono-Regular.ttf";
     public static final String UI_SKIN = "ui/uiskin.json";
 
-    public static final String MENU_ASSET = "menu/glassy-ui.json";
+    public static final String MENU_ASSET = "menu/flat-earth-ui.json";
 
     public static final String DIALOG_SKIN = "skin_shade/uiskin.json";
 

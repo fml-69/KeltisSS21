@@ -19,7 +19,7 @@ public class SceneManager {
     public SceneManager(final Keltis keltis){
         this.keltis = keltis;
         sceneMapper();
-        setScene(GAMESTATE.LOGIN);
+        setScene(GAMESTATE.MENU);
 
     }
 
