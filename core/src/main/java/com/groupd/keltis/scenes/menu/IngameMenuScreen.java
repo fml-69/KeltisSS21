@@ -41,8 +41,8 @@ public class IngameMenuScreen  extends AbstractScene {
 
         skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        continueTB = new TextButton("Fortsetzen", skin);
-        exitToMainMenu = new TextButton("Hauptmenu", skin);
+        continueTB = new TextButton("FORTSETZEN", skin);
+        exitToMainMenu = new TextButton("HAUPTMENU", skin);
 
         table.add(continueTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row().pad(50, 0, 50, 0);

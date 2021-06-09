@@ -45,10 +45,9 @@ public class MenuScreen extends AbstractScene {
 
         skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        newGame = new TextButton("Spiel starten", skin);
-        preferences = new TextButton("Optionen", skin);
-        exit = new TextButton("Beenden", skin);
-
+        newGame = new TextButton("SPIEL STARTEN", skin);
+        preferences = new TextButton("OPTIONEN", skin);
+        exit = new TextButton("BEENDEN", skin);
 
         //before .uniform and .fill methods were used
         table.add(newGame).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);

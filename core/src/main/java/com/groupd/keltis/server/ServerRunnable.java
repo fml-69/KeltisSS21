@@ -8,9 +8,11 @@ public class ServerRunnable implements Runnable{
 
     private final NetworkServer networkServer;
 
+    private boolean flag;
+
 
     public ServerRunnable(int port, CountDownLatch countDownLatch){
-
+        flag = true;
         networkServer = new NetworkServer(port, countDownLatch);
     }
 
@@ -24,7 +26,11 @@ public class ServerRunnable implements Runnable{
                 Thread.currentThread().interrupt();
                 break;
             }
-        } while (true);
+        } while (flag);
+    }
+
+    public void setFlag(boolean flag){
+        this.flag = flag;
     }
 
 }

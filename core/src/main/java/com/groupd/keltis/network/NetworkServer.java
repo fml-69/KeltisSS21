@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -88,7 +89,11 @@ public class NetworkServer {
                         StartGameEvent startEvent = new StartGameEvent();
                         startEvent.decode(channel.dataIn);
 
-                    } else {
+                    } else if(eventID == 4){
+                        StopGameEvent stopGameEvent = new StopGameEvent();
+                        stopGameEvent.decode(channel.dataIn);
+
+                    }else {
                         Gdx.app.error("Error", "Invalid Network EventID");
                     }
 
