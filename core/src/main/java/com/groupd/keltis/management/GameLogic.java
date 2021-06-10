@@ -335,6 +335,26 @@ public class GameLogic {
         this.board = board;
     }
 
+    public boolean checkCheat(ArrayList<Player> player) {
+        for (Player p : player) {
+            if (p.getCheat()) {
+                if (!p.isHasAccused()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setScoreCheatPlayer(String nick, int score){
+        for (Player p : playerArrayList) {
+            if (p.getNick().equals(nick)) {
+                p.addScoreCheat(score);
+            }
+        }
+    }
+
+
     public void setPlayerNick(String playerNick) {
         this.playerNick = playerNick;
     }

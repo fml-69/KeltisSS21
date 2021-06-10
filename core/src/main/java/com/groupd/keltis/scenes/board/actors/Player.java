@@ -25,6 +25,7 @@ public class Player {
     private boolean cheat;
     private boolean turn;
     private boolean hasAccused = false;
+    private int scoreCheat=0 ;
 
     private boolean host;
 
@@ -116,6 +117,7 @@ public class Player {
         score += getScoreFigureFieldPosition();
         score += getScoreWishingStones();
         score += getScorePointCards();
+        score += getScoreCheat();
         return score;
     }
     private int getScoreFigureFieldPosition(){
@@ -195,5 +197,13 @@ public class Player {
 
     public void setHost(boolean host) {
         this.host = host;
+    }
+
+    public int getScoreCheat(){
+        return scoreCheat;
+    }
+
+    public void addScoreCheat(int scoreCheat){
+        this.scoreCheat+=scoreCheat;
     }
 }
