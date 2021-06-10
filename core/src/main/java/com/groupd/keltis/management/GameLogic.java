@@ -21,7 +21,6 @@ import com.groupd.keltis.utils.ObjectToJson;
 import java.util.ArrayList;
 
 public class GameLogic {
-    private String playerNick;
 
     private ArrayList<Player> playerArrayList = new ArrayList<>();
     private ArrayList<Roadcards> roadCardsList;
@@ -50,15 +49,6 @@ public class GameLogic {
         this.greenDiscardPile = new ArrayList<Card>();
         this.purpleDiscardPile = new ArrayList<Card>();
     }
-    public Player getPlayer(String playerNick){
-        for(Player player:playerArrayList){
-            if(player.getNick().equals(playerNick)){
-                return player;
-            }
-        }
-        return null;
-    }
-
     public void playCard(Player player, Card card, ColorPile colorPile) {
         //player.getHandCards().remove(card);
         addCardToPile(player, card, colorPile);
@@ -66,7 +56,6 @@ public class GameLogic {
         setTurnPlayer(player);
         //drawCard(player);
     }
-
     //Main Method to play
     //Call to set everything in motion
     public void sendTurnEvent(Player player, Card card, ColorPile colorPile) {
@@ -333,12 +322,5 @@ public class GameLogic {
      */
     public void setBoard(Board board) {
         this.board = board;
-    }
-
-    public void setPlayerNick(String playerNick) {
-        this.playerNick = playerNick;
-    }
-    public String getPlayerNick() {
-        return playerNick;
     }
 }

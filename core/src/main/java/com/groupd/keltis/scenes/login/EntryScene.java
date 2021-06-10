@@ -144,7 +144,6 @@ public class EntryScene extends AbstractScene {
                 errorLabel.setText(client.getMessage());
 
             } else {
-                keltis.gameLogic.setPlayerNick(text.getText());
                 keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOBBY);
             }
 
