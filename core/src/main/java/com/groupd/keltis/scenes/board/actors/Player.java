@@ -25,7 +25,7 @@ public class Player {
     private boolean cheat;
     private boolean turn;
     private boolean hasAccused = false;
-    private int roundCountCheat;
+    private int scoreCheat=0 ;
 
     private boolean host;
 
@@ -45,7 +45,6 @@ public class Player {
         keltis = new Keltis();
         //color = "testColor";
         figures = new HashMap<>();
-        roundCountCheat = 0;
     }
 
     public Player(Keltis keltis, String nick, ColorFigures color, boolean host) {
@@ -118,6 +117,7 @@ public class Player {
         score += getScoreFigureFieldPosition();
         score += getScoreWishingStones();
         score += getScorePointCards();
+        score += getScoreCheat();
         return score;
     }
     private int getScoreFigureFieldPosition(){
@@ -173,24 +173,6 @@ public class Player {
         return handCards;
     }
 
-    public void increaseRoundCountCheat(){
-        roundCountCheat ++;
-    }
-
-    public void resetRoundCountCheat(){
-        roundCountCheat = 0;
-    }
-
-    public boolean succesfulCheat(){
-        if (roundCountCheat > 2){
-            return true;
-        }
-        else return false;
-    }
-
-
-
-
     public ArrayList<Pointcard> getPointCards(){
         return pointCards;
     }
@@ -212,5 +194,13 @@ public class Player {
 
     public void setHost(boolean host) {
         this.host = host;
+    }
+
+    public int getScoreCheat(){
+        return scoreCheat;
+    }
+
+    public void addScoreCheat(int scoreCheat){
+        this.scoreCheat+=scoreCheat;
     }
 }

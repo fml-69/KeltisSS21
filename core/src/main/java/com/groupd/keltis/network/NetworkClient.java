@@ -111,6 +111,7 @@ public class NetworkClient {
                     Gdx.app.log("Info","Client2: " + cheatQueryEvent.getMessage());
                     if(!message.isEmpty()){
                         Gdx.app.log("Info","Client: " + message);
+                        keltis.gameLogic.setScoreCheatPlayer(getNickName(),cheatQueryEvent.getScore());
                         /*InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
                                 keltis.assetManager.get(AssetPaths.DIALOG_SKIN),message);
                         NetworkClient.INSTANCE.showDialog(infoDialog,keltis.sceneManager.getActiveScene().stage,3);*/

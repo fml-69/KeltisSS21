@@ -341,6 +341,14 @@ public class GameLogic {
         return false;
     }
 
+    public void setScoreCheatPlayer(String nick, int score){
+        for (Player p : playerArrayList) {
+            if (p.getNick().equals(nick)) {
+                p.addScoreCheat(score);
+            }
+        }
+    }
+
     public void sendCheat(Player player){
         CheatEvent cheatEvent = new CheatEvent();
         cheatEvent.setCheat(player.getCheat());
