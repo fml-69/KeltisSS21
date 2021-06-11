@@ -116,10 +116,11 @@ public class Board extends AbstractScene {
         switch (state){
             case RUN:
                 stage.act(delta);
+
                 if(x % 180 == 0){
                     //keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), ColorPile.BLUE);
                     keltis.gameLogic.sendTurnEvent(player.get(0),new Card("blue", 5), ColorPile.BLUE);
-                    Gdx.app.log("----------------", "-------------------------------");
+                    Gdx.app.log("----------------", keltis.gameLogic.getPlayerNick());
                 }
                 if(x % 275 == 0){
                     //keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), ColorPile.RED);
