@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class GameLogic {
 
+    private String playerNick;
+
     private ArrayList<Player> playerArrayList = new ArrayList<>();
     private ArrayList<Roadcards> roadCardsList;
 
@@ -58,6 +60,7 @@ public class GameLogic {
         setTurnPlayer(player);
         //drawCard(player);
     }
+
     //Main Method to play
     //Call to set everything in motion
     public void sendTurnEvent(Player player, Card card, ColorPile colorPile) {
@@ -354,5 +357,19 @@ public class GameLogic {
         cheatEvent.setCheat(player.getCheat());
         cheatEvent.setNick(NetworkClient.INSTANCE.getNickName());
         NetworkClient.INSTANCE.sendEvent(cheatEvent);
+    }
+    public void setPlayerNick(String playerNick) {
+        this.playerNick = playerNick;
+    }
+    public String getPlayerNick() {
+        return playerNick;
+    }
+    public Player getPlayer(String playerNick){
+        for(Player player:playerArrayList){
+            if(player.getNick().equals(playerNick)){
+                return player;
+            }
+        }
+        return null;
     }
 }
