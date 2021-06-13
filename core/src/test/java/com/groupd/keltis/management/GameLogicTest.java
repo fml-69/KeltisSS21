@@ -1,6 +1,8 @@
 package com.groupd.keltis.management;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
@@ -11,131 +13,134 @@ import com.groupd.keltis.scenes.board.road_cards.Wishstone;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GameLogicTest {
     @Mock
-    private Texture texture;
+    private Board boardMock;
+    @Mock
+    private Pointcard pointcardMock;
+    @Mock
+    private Pointcard pointcard2Mock;
+    @Mock
+    private Player playerMock;
+    @Mock
+    private Wishstone wishstoneMock;
+    @Mock
+    private Figure figureMock;
+    @Mock
+    private Shamrock shamrockMock;
+    @Mock
+    private Position positionMock;
 
     @InjectMocks
     private GameLogic gameLogic;
 
-    private Player player;
-    private Figure figure;
-    private Roadcards roadcards;
-    private Roadcards roadcards2;
-    private Roadcards roadcards3;
-
-    private Position position;
-
     @Before
     public void setUp(){
         MockitoAnnotations.openMocks(this);
-        texture = mock(Texture.class);
+        Gdx.app = mock(Application.class);
+
         gameLogic = new GameLogic();
-        player = new Player();
-        position = new Position(120,300,3,3);
+        gameLogic.setBoard(boardMock);
     }
 
     @Test
     public void testCheckCardReturnAddPointcard(){
-        /*
-        roadcards = new Pointcard(texture,position,2);
-        roadcards2 = new Pointcard(texture,position,3);
-        roadcards3 = new Pointcard(texture,position,1);
-
         ArrayList<Pointcard> pointcardArrayList = new ArrayList<>();
-        pointcardArrayList.add((Pointcard)roadcards);
-        pointcardArrayList.add((Pointcard)roadcards2);
-        pointcardArrayList.add((Pointcard)roadcards3);
+        pointcardArrayList.add(pointcardMock);
+        pointcardArrayList.add(pointcard2Mock);
 
-        gameLogic.checkCard(player,null,roadcards);
-        gameLogic.checkCard(player,null,roadcards2);
-        gameLogic.checkCard(player,null,roadcards3);
+        when(pointcardMock.getPoints()).thenReturn(2);
+        when(pointcard2Mock.getPoints()).thenReturn(3);
+        when(playerMock.getPointCards()).thenReturn(pointcardArrayList);
 
-        assertEquals(pointcardArrayList,player.getPointCards());
-        */
+        gameLogic.checkCard(playerMock,null, pointcardMock);
+        gameLogic.checkCard(playerMock,null, pointcard2Mock);
+
+        assertEquals(pointcardArrayList,playerMock.getPointCards());
+        assertEquals(2,playerMock.getPointCards().get(0).getPoints());
+        assertEquals(3,playerMock.getPointCards().get(1).getPoints());
+
+        verify(pointcardMock,times(1)).getPoints();
+        verify(pointcard2Mock,times(1)).getPoints();
+        verify(playerMock,times(5)).getPointCards();
     }
 
     @Test
     public void testCheckCardReturnAddWishstone(){
-        /*
-        roadcards = new Wishstone(texture,position);
-        roadcards2 = new Wishstone(texture,position);
+        when(playerMock.getWishingStones()).thenReturn(1);
 
-        gameLogic.checkCard(player,null,roadcards);
-        gameLogic.checkCard(player,null,roadcards2);
+        gameLogic.checkCard(playerMock,null,wishstoneMock);
 
-        int counterWishstone = player.getWishingStones();
-        assertEquals(2,counterWishstone);
-        */
+        assertEquals(1,playerMock.getWishingStones());
+
+        verify(playerMock,times(1)).getWishingStones();
     }
 
     @Test
     public void testCheckCardReturnMoveFigureBecauseOfShamrock(){
-        /*
-        roadcards = new Shamrock(texture,position);
-        figure = new Figure(texture,"blue1",3);
-        player.getFigures().put("blue1",figure);
+        //when(figureMock.getCurrentFieldPosition()).thenReturn(1);
 
-        assertEquals(0,figure.getCurrentFieldPosition());
-
-        gameLogic.checkCard(player,figure,roadcards);
+        gameLogic.checkCard(playerMock,figureMock,shamrockMock);
 
         //wie soll getestet werden, dass die Figur ein Feld weitergezogen ist???????
-        */
+
+        //verify(figureMock,times(1)).getCurrentFieldPosition();
     }
 
     @Test
     public void testCheckIfCardIsOnFieldReturnTrue(){
-        /*
-        figure = new Figure(texture,"blue1",3);
-        figure.setCurrentFieldPosition(3);
-        player.getFigures().put("blue1",figure);
-
-        roadcards = new Wishstone(texture,position);
-        roadcards2 = new Pointcard(texture,new Position(100,300,1,2),3);
-        roadcards3 = new Pointcard(texture,new Position(790,800,4,7),1);
+        when(figureMock.getBranch()).thenReturn(2);
+        when(figureMock.getCurrentFieldPosition()).thenReturn(3);
+        when(wishstoneMock.getPosition()).thenReturn(positionMock);
+        when(positionMock.getBranch()).thenReturn(2);
+        when(positionMock.getField()).thenReturn(3);
 
         ArrayList<Roadcards> roadcardsArrayList = new ArrayList<>();
-        roadcardsArrayList.add((Wishstone)roadcards);
-        roadcardsArrayList.add((Pointcard)roadcards2);
-        roadcardsArrayList.add((Pointcard)roadcards3);
+        roadcardsArrayList.add(wishstoneMock);
 
         gameLogic.setRoadCardsList(roadcardsArrayList);
 
-        assertTrue(gameLogic.checkIfCardIsOnField(player, figure));
-        */
+        assertTrue(gameLogic.checkIfCardIsOnField(playerMock, figureMock));
+
+        verify(figureMock,times(1)).getBranch();
+        verify(figureMock,times(1)).getCurrentFieldPosition();
+        verify(wishstoneMock,times(2)).getPosition();
     }
 
     @Test
     public void testCheckIfCardIsOnFieldReturnFalse(){
-        /*
-        figure = new Figure(texture,"blue1",5);
-        figure.setCurrentFieldPosition(3);
-        player.getFigures().put("blue1",figure);
-
-        roadcards = new Shamrock(texture,position);
-        roadcards2 = new Pointcard(texture,new Position(100,300,1,2),3);
-        roadcards3 = new Pointcard(texture,new Position(790,800,4,7),1);
+        when(figureMock.getBranch()).thenReturn(2);
+        when(figureMock.getCurrentFieldPosition()).thenReturn(4);
+        when(wishstoneMock.getPosition()).thenReturn(positionMock);
+        when(positionMock.getBranch()).thenReturn(2);
+        when(positionMock.getField()).thenReturn(3);
 
         ArrayList<Roadcards> roadcardsArrayList = new ArrayList<>();
-        roadcardsArrayList.add((Shamrock)roadcards);
-        roadcardsArrayList.add((Pointcard)roadcards2);
-        roadcardsArrayList.add((Pointcard)roadcards3);
+        roadcardsArrayList.add(wishstoneMock);
 
         gameLogic.setRoadCardsList(roadcardsArrayList);
 
-        assertFalse(gameLogic.checkIfCardIsOnField(player, figure));
-        */
+        assertFalse(gameLogic.checkIfCardIsOnField(playerMock, figureMock));
+
+        verify(figureMock,times(1)).getBranch();
+        verify(figureMock,times(1)).getCurrentFieldPosition();
+        verify(wishstoneMock,times(2)).getPosition();
     }
 }
