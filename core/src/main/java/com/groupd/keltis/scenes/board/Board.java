@@ -46,6 +46,7 @@ import java.util.ArrayList;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class Board extends AbstractScene {
@@ -85,6 +86,8 @@ public class Board extends AbstractScene {
 
     private boolean isCheatingDialogShowing = false;
 
+    private ArrayList<CardDisplay> handcardsDisplay = new ArrayList<>();
+
     public Board(final Keltis keltis) {
         super(keltis);
         this.camera = new OrthographicCamera();
@@ -120,7 +123,7 @@ public class Board extends AbstractScene {
 
     @Override
     public void update(float delta) {
-        switch (state){
+        /*switch (state){
             case RUN:
                 stage.act(delta);
                 if(x % 180 == 0){
@@ -148,8 +151,16 @@ public class Board extends AbstractScene {
 
 
                 break;
-        }
+        }*/
 
+        Iterator iteratorHandcards = keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().iterator();
+        int i=0;
+        Gdx.app.log(String.valueOf(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().size()),"...");
+
+        while(iteratorHandcards.hasNext()){
+            handcardsDisplay.get(i).setCard((Card) iteratorHandcards.next());
+            i++;
+        }
     }
 
     private void checkShaking(ArrayList<Player> player) {
@@ -287,38 +298,46 @@ public class Board extends AbstractScene {
 
         CardDisplay handCard1 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard1", "", true);
         handCard1.spritePos(PositioningConstants.CARD_HANDCARD_1.x, PositioningConstants.CARD_HANDCARD_1.y);
+        handcardsDisplay.add(handCard1);
         stage.addActor(handCard1);
 
         CardDisplay handCard2 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard2", "", true);
         handCard2.spritePos(PositioningConstants.CARD_HANDCARD_2.x, PositioningConstants.CARD_HANDCARD_2.y);
+        handcardsDisplay.add(handCard2);
         stage.addActor(handCard2);
 
         CardDisplay handCard3 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard3", "", true);
         handCard3.spritePos(PositioningConstants.CARD_HANDCARD_3.x, PositioningConstants.CARD_HANDCARD_3.y);
+        handcardsDisplay.add(handCard3);
         stage.addActor(handCard3);
 
         CardDisplay handCard4 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard4", "", true);
         handCard4.spritePos(PositioningConstants.CARD_HANDCARD_4.x, PositioningConstants.CARD_HANDCARD_4.y);
+        handcardsDisplay.add(handCard4);
         stage.addActor(handCard4);
 
         CardDisplay handCard5 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard5", "", true);
         handCard5.spritePos(PositioningConstants.CARD_HANDCARD_5.x, PositioningConstants.CARD_HANDCARD_5.y);
+        handcardsDisplay.add(handCard5);
         stage.addActor(handCard5);
 
         CardDisplay handCard6 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard6", "", true);
         handCard6.spritePos(PositioningConstants.CARD_HANDCARD_6.x, PositioningConstants.CARD_HANDCARD_6.y);
+        handcardsDisplay.add(handCard6);
         stage.addActor(handCard6);
 
         CardDisplay handCard7 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard7", "", true);
         handCard7.spritePos(PositioningConstants.CARD_HANDCARD_7.x, PositioningConstants.CARD_HANDCARD_7.y);
+        handcardsDisplay.add(handCard7);
         stage.addActor(handCard7);
 
         CardDisplay handCard8 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard8", "", true);
         handCard8.spritePos(PositioningConstants.CARD_HANDCARD_8.x, PositioningConstants.CARD_HANDCARD_8.y);
+        handcardsDisplay.add(handCard8);
         stage.addActor(handCard8);
 
         //this is a test!!
-        handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
+        //handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
 
     }
 
