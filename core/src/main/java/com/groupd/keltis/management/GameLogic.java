@@ -39,8 +39,6 @@ public class GameLogic {
     private final ArrayList<Card> greenDiscardPile;
     private final ArrayList<Card> purpleDiscardPile;
 
-    private int turn = 0;
-
     private Board board;
 
     public GameLogic() {
@@ -64,7 +62,7 @@ public class GameLogic {
     //Main Method to play
     //Call to set everything in motion
     public void sendTurnEvent(Player player, Card card, ColorPile colorPile) {
-        if (player.getTurn() || turn == 0) {
+        if (player.getTurn()) {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card,colorPile)));
             client.sendEvent(turnEvent);
@@ -94,7 +92,6 @@ public class GameLogic {
             default:
                 throw new IllegalArgumentException("Number of Players isn't allowed");
         }
-        turn++;
         player.setTurn(false);
     }
 
