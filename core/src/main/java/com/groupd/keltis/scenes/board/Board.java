@@ -67,7 +67,6 @@ public class Board extends AbstractScene {
 
     private ArrayList<Player> player = new ArrayList<>();
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
-    private int x = 1;
 
 
     private Label player1;
@@ -123,33 +122,10 @@ public class Board extends AbstractScene {
         switch (state){
             case RUN:
                 stage.act(delta);
-                if(x % 180 == 0){
-                    //keltis.gameLogic.playCard(player.get(0),new Card("blue", 5), ColorPile.BLUE);
-                    keltis.gameLogic.sendTurnEvent(player.get(0),new Card("blue", 5), ColorPile.BLUE);
-                    Gdx.app.log("----------------", keltis.gameLogic.getPlayerNick());
-                }
-                if(x % 275 == 0){
-                    //keltis.gameLogic.playCard(player.get(1),new Card("blue", 6), ColorPile.RED);
-
-                    Gdx.app.log("----------------", "-------------------------------");
-                }
-                if(x % 350 == 0){
-                    //keltis.gameLogic.playCard(player.get(2),new Card("yellow", 5), ColorPile.YELLOW);
-
-
-                    Gdx.app.log("----------------", "-------------------------------");
-                }
-                if(x % 520 == 0) {
-                    //keltis.gameLogic.playCard(player.get(3), new Card("purple", 6), ColorPile.GREEN);
-                }
-                x++;
                 break;
             case PAUSE:
-
-
                 break;
         }
-
     }
 
     private void checkShaking(ArrayList<Player> player) {
@@ -250,27 +226,6 @@ public class Board extends AbstractScene {
         CardDisplay branchStackPurple = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "branchStackPurple", "purple", false);
         branchStackPurple.spritePos(PositioningConstants.CARD_BRANCHSTACK_PURPLE.x, PositioningConstants.CARD_BRANCHSTACK_PURPLE.y);
         stage.addActor(branchStackPurple);
-
-
-        CardDisplay publicStackGreen = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "publicStackGreen", "green", false);
-        publicStackGreen.spritePos(PositioningConstants.CARD_PUBLICSTACK_GREEN.x, PositioningConstants.CARD_PUBLICSTACK_GREEN.y);
-        stage.addActor(publicStackGreen);
-
-        CardDisplay publicStackYellow = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "publicStackYellow", "yellow", false);
-        publicStackYellow.spritePos(PositioningConstants.CARD_PUBLICSTACK_YELLOW.x, PositioningConstants.CARD_PUBLICSTACK_YELLOW.y);
-        stage.addActor(publicStackYellow);
-
-        CardDisplay publicStackRed = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "publicStackRed", "red", false);
-        publicStackRed.spritePos(PositioningConstants.CARD_PUBLICSTACK_RED.x, PositioningConstants.CARD_PUBLICSTACK_RED.y);
-        stage.addActor(publicStackRed);
-
-        CardDisplay publicStackBlue = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "publicStackBlue", "blue", false);
-        publicStackBlue.spritePos(PositioningConstants.CARD_PUBLICSTACK_BLUE.x, PositioningConstants.CARD_PUBLICSTACK_BLUE.y);
-        stage.addActor(publicStackBlue);
-
-        CardDisplay publicStackPurple = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "publicStackPurple", "purple", false);
-        publicStackPurple.spritePos(PositioningConstants.CARD_PUBLICSTACK_PURPLE.x, PositioningConstants.CARD_PUBLICSTACK_PURPLE.y);
-        stage.addActor(publicStackPurple);
 
         CardDisplay drawStack = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "drawStack", "", false);
         drawStack.spritePos(PositioningConstants.CARD_DRAWSTACK.x, PositioningConstants.CARD_DRAWSTACK.y);

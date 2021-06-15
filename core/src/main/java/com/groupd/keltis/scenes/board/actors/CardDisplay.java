@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.utils.AssetPaths;
+import com.groupd.keltis.utils.ColorPile;
 
 public class CardDisplay extends Actor {
 
@@ -23,6 +24,7 @@ public class CardDisplay extends Actor {
     private final CardDisplay itsaMe = this;
     private final Texture highlightTexture;
     private final boolean isHandCard;
+    private ColorPile colorPile;
 
     public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard){
         this.highlightTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT);
@@ -34,6 +36,23 @@ public class CardDisplay extends Actor {
             this.color = color;
             sprite = new Sprite(texture);
         }
+        switch (color){
+            case "green":
+                this.colorPile = ColorPile.GREEN;
+                break;
+            case "yellow":
+                this.colorPile = ColorPile.YELLOW;
+                break;
+            case "red":
+                this.colorPile = ColorPile.RED;
+                break;
+            case "blue":
+                this.colorPile = ColorPile.BLUE;
+                break;
+            case "purple":
+                this.colorPile = ColorPile.PURPLE;
+                break;
+        }
         this.name = name;
         spritePos(sprite.getX(), sprite.getY());
 
@@ -43,10 +62,11 @@ public class CardDisplay extends Actor {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(Board.getHighlightedCardDisplay()!=null && Board.getHighlightedCardDisplay().getCard()!=null &&
-                        (Board.getHighlightedCardDisplay().getCard().getCardColor().equals(color)||isHandCard)){
+                        Board.getHighlightedCardDisplay().getCard().getCardColor().equals(color) && Board.getHighlightedCardDisplay().isHandCard){
                     setCard(Board.getHighlightedCardDisplay().getCard());
                     Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
+                    keltis.gameLogic.sendTurnEvent(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()), currentCard, colorPile);
                 } else{
                     Board.setHighlightedCardDisplay(itsaMe);
                 }
