@@ -58,8 +58,10 @@ public class GameLogic {
         addCardToPile(player, card, colorPile);
         move(player, colorPile);
         setTurnPlayer(player);
-        //drawCard(player);
+        drawCard(player);
     }
+
+
 
     //Main Method to play
     //Call to set everything in motion
@@ -68,6 +70,7 @@ public class GameLogic {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card,colorPile)));
             client.sendEvent(turnEvent);
+            //der Nachziehstapel muss sync werden
             playCard(player,card,colorPile);
         }
     }

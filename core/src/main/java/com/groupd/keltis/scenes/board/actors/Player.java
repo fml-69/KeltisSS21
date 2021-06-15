@@ -41,12 +41,6 @@ public class Player {
         this.cheat = cheat;
     }
 
-    public Player() {
-        keltis = new Keltis();
-        //color = "testColor";
-        figures = new HashMap<>();
-    }
-
     public Player(Keltis keltis, String nick, ColorFigures color, boolean host) {
         this.keltis = keltis;
         this.color = color;
