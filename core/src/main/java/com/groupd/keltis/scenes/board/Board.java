@@ -457,11 +457,7 @@ public class Board extends AbstractScene {
     public void onNetworkEvent(NetworkEvent event) {
         if(event instanceof TurnEvent){
             PlayerMove playerMove = ObjectToJson.convertToObject(((TurnEvent) event).getJson());
-            for(Player player:keltis.gameLogic.getPlayerArrayList()){
-                if(player.getNick().equals(playerMove.getNick())){
-                    keltis.gameLogic.playCard(player, playerMove.getCard(), playerMove.getColor());
-                }
-            }
+            keltis.gameLogic.playCard(keltis.gameLogic.getPlayer(playerMove.getNick()), playerMove.getCard(), playerMove.getColor());
         }
         else if(event instanceof CheatQueryEvent){
             showDialog(new InfoDialog("Schummelverdacht",

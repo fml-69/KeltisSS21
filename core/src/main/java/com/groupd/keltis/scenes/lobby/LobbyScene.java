@@ -36,7 +36,6 @@ public class LobbyScene extends AbstractScene {
         fillDrawPile();
         Collections.shuffle(drawPile);
         stage = new Stage(new ScreenViewport());
-
     }
 
     @Override
@@ -47,11 +46,12 @@ public class LobbyScene extends AbstractScene {
 
             // send game logic with player, with the color provided by server
             keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, false));
-
         }
         else if(event instanceof StartGameEvent){
             fillHandcrds();
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
+            //Set allowed turn of first player to true for everyone
+            keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
         }
     }
 
