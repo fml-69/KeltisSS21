@@ -9,6 +9,7 @@ import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
+import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
@@ -52,24 +53,27 @@ public class GameLogic {
         this.purpleDiscardPile = new ArrayList<Card>();
     }
     public void playCard(Player player, Card card, ColorPile colorPile) {
-        //player.getHandCards().remove(card);
         addCardToPile(player, card, colorPile);
+        move(player, colorPile);
+        setTurnPlayer(player);
+    }
+
+    public void playCard(Player player, ColorPile colorPile) {
         move(player, colorPile);
         setTurnPlayer(player);
         drawCard(player);
     }
 
 
-
     //Main Method to play
     //Call to set everything in motion
-    public void sendTurnEvent(Player player, Card card, ColorPile colorPile) {
+    public void sendTurnEvent(Player player, Card card, ColorPile colorPile, CardDisplay cardDisplay) {
         if (player.getTurn()) {
             NetworkClient client = NetworkClient.INSTANCE;
-            TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card,colorPile)));
+            TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card.getName(),getPileColor(colorPile))));
+            cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
             client.sendEvent(turnEvent);
             //der Nachziehstapel muss sync werden
-            playCard(player,card,colorPile);
         }
     }
 
@@ -178,6 +182,38 @@ public class GameLogic {
         }
         return "";
     }
+    public String getPileColor(ColorPile colorPile){
+        switch (colorPile){
+            case RED:
+                return "red";
+            case BLUE:
+                return "blue";
+            case GREEN:
+                return "green";
+            case YELLOW:
+                return "yellow";
+            case PURPLE:
+                return "purple";
+        }
+        return "";
+    }
+    public ColorPile getPileColor(String colorPile){
+        switch (colorPile){
+            case "red":
+                return ColorPile.RED;
+            case "blue":
+                return ColorPile.BLUE;
+            case "green":
+                return ColorPile.GREEN;
+            case "yellow":
+                return ColorPile.YELLOW;
+            case "purple":
+                return ColorPile.PURPLE;
+            default:
+                return ColorPile.DISCARD;
+        }
+    }
+
     public void moveFigure(Player player, Figure figure){
         board.pause();
         figure.moveUp();
