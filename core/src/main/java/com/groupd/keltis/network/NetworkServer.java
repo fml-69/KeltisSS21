@@ -110,6 +110,8 @@ public class NetworkServer {
                     } else if(eventID == 69){
                         StopGameEvent stopGameEvent = new StopGameEvent();
                         stopGameEvent.decode(channel.dataIn);
+                        server.stopGame(stopGameEvent);
+                        server.stopGameFlag();
                     } else if(eventID == 6) {
                         /* check if a player has cheated */
                         CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();

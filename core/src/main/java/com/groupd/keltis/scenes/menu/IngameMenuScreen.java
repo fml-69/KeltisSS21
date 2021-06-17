@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.SceneManager;
+import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.utils.AssetPaths;
 
@@ -53,7 +56,7 @@ public class IngameMenuScreen  extends AbstractScene {
         exitToMainMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
+                NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
             }
         });
 
@@ -71,6 +74,7 @@ public class IngameMenuScreen  extends AbstractScene {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        NetworkClient.INSTANCE.receiveEvents();
     }
 
     @Override
@@ -96,5 +100,12 @@ public class IngameMenuScreen  extends AbstractScene {
     @Override
     public void hide() {
 
+    }
+
+    @Override
+    public void onNetworkEvent(NetworkEvent event) {
+        if(event instanceof StopGameEvent){
+            keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorFigures;
 
@@ -49,8 +50,13 @@ public class ServerRunnable implements Runnable{
         } while (flag);
     }
 
-    public void setFlag(boolean flag){
-        this.flag = flag;
+    //called when the game should stop for all users
+    public void stopGameFlag(){
+        this.flag = false;
+    }
+
+    public void stopGame(StopGameEvent stopgameevent){
+        networkServer.broadCast(stopgameevent);
     }
 
 

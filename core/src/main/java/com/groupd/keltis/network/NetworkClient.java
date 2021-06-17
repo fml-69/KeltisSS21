@@ -7,10 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.InfoDialog;
 import com.groupd.keltis.scenes.board.YesNoDialog;
@@ -122,7 +124,10 @@ public class NetworkClient {
                    keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
 
                 } else if(eventID == 69){
-
+                    StopGameEvent stopGameEvent = new StopGameEvent();
+                    stopGameEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(stopGameEvent);
+                    disconnect();
                 }else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }
