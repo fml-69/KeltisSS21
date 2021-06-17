@@ -69,9 +69,11 @@ public class GameLogic {
     //Call to set everything in motion
     public void sendTurnEvent(Player player, Card card, ColorPile colorPile, CardDisplay cardDisplay) {
         if (player.getTurn()) {
+            playCard(player,card,colorPile);
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card.getName(),getPileColor(colorPile))));
-            cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
+            player.getHandCards().remove(card);
+            player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
             client.sendEvent(turnEvent);
             //der Nachziehstapel muss sync werden
         }
