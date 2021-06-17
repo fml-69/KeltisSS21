@@ -3,6 +3,7 @@ package com.groupd.keltis;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -26,9 +27,16 @@ public class Keltis extends Game {
 
 	public static int FPS = 60;
 
+	private Music music;
+
 
 	@Override
 	public void create () {
+
+		music = Gdx.audio.newMusic(Gdx.files.internal("sounds/background_music.wav"));
+		music.setLooping(true);
+		music.play();
+
 		if(Gdx.graphics.getHeight()<Gdx.graphics.getWidth()){
 			scaleFactorX = Gdx.graphics.getWidth()/SCALE_WIDTH;
 			scaleFactorY = Gdx.graphics.getHeight()/SCALE_HEIGHT;
