@@ -162,7 +162,7 @@ public class Board extends AbstractScene {
             }
             if(keltis.gameLogic.getRedDiscardPile().size()>0) {
                 syncArray.add(keltis.gameLogic.getRedDiscardPile().get(keltis.gameLogic.getRedDiscardPile().size() - 1));
-                branchStackRed.setCard(keltis.gameLogic.getGreenDiscardPile().get(keltis.gameLogic.getRedDiscardPile().size() - 1));
+                branchStackRed.setCard(keltis.gameLogic.getRedDiscardPile().get(keltis.gameLogic.getRedDiscardPile().size() - 1));
             } else{
                 syncArray.add(null);
                 branchStackRed.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "emptyRed", "", -1));
