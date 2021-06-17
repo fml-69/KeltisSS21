@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
+import com.groupd.keltis.utils.CardHelper;
 
 public class Keltis extends Game {
 
@@ -16,6 +17,7 @@ public class Keltis extends Game {
 	public AssetManager assetManager;
 	public GameLogic gameLogic;
 	public SpriteBatch batch;
+	public CardHelper cardHelper;
 
 	public static int SCALE_WIDTH = 1920;
 	public static int SCALE_HEIGHT = 1080;
@@ -39,6 +41,7 @@ public class Keltis extends Game {
 		assetManager = new AssetManager();
 		loadAssets();
 		sceneManager = new SceneManager(this);
+		cardHelper = new CardHelper(this);
 
 
 	}

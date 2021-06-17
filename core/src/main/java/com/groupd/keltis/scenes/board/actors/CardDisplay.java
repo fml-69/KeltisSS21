@@ -61,12 +61,16 @@ public class CardDisplay extends Actor {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(Board.getHighlightedCardDisplay()!=null && Board.getHighlightedCardDisplay().getCard()!=null &&
-                        Board.getHighlightedCardDisplay().getCard().getCardColor().equals(color) && Board.getHighlightedCardDisplay().isHandCard){
+                if(Board.getHighlightedCardDisplay()!=null
+                        && Board.getHighlightedCardDisplay().getCard()!=null
+                        && Board.getHighlightedCardDisplay().getCard().getCardColor().equals(color)
+                        && Board.getHighlightedCardDisplay().isHandCard
+                        && keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                ){
                     setCard(Board.getHighlightedCardDisplay().getCard());
                     Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
-                    keltis.gameLogic.sendTurnEvent(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()), currentCard, colorPile, itsaMe);
+                    keltis.gameLogic.sendTurnEvent(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()), currentCard, colorPile);
                 } else{
                     Board.setHighlightedCardDisplay(itsaMe);
                 }
