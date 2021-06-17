@@ -7,14 +7,14 @@ import java.awt.Color;
 
 public class PlayerMove {
     private String nick;
-    private Card card;
-    private ColorPile color;
+    private String cardName;
+    private String color;
 
     public PlayerMove(){
     }
-    public PlayerMove(String nick, Card card, ColorPile color) {
+    public PlayerMove(String nick, String cardName, String color) {
         this.nick = nick;
-        this.card = card;
+        this.cardName = cardName;
         this.color = color;
     }
 
@@ -26,19 +26,19 @@ public class PlayerMove {
         this.nick = nick;
     }
 
-    public Card getCard() {
-        return card;
+    public String getCardName() {
+        return cardName;
     }
 
-    public void setCard(Card card) {
-        this.card = card;
+    public void setCardName(String card) {
+        this.cardName = card;
     }
 
-    public ColorPile getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(ColorPile color) {
+    public void setColor(String color) {
         this.color = color;
     }
 }
