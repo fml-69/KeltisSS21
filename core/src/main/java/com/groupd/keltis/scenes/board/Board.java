@@ -130,14 +130,7 @@ public class Board extends AbstractScene {
                 break;
         }
       
-        Iterator iteratorHandcards = keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().iterator();
-        int i=0;
-        Gdx.app.log(String.valueOf(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().size()),"...");
 
-        while(iteratorHandcards.hasNext()){
-            handcardsDisplay.get(i).setCard((Card) iteratorHandcards.next());
-            i++;
-        }
     }
 
     private void checkShaking(ArrayList<Player> player) {
@@ -207,7 +200,7 @@ public class Board extends AbstractScene {
         stage.addActor(board);
         stage.addActor(branches);
 
-        roadcardsList.assignRoadcards(keltis);
+        //roadcardsList.assignRoadcards(keltis);
         for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
             stage.addActor(roadcards);
         }
@@ -295,6 +288,15 @@ public class Board extends AbstractScene {
         //this is a test!!
         //handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
 
+        Iterator iteratorHandcards = keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().iterator();
+        int i=0;
+        Gdx.app.log(String.valueOf(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().size()),"...");
+
+        while(iteratorHandcards.hasNext()){
+            handcardsDisplay.get(i).setCard((Card) iteratorHandcards.next());
+            i++;
+        }
+        i=0;
     }
 
     @Override
@@ -464,5 +466,9 @@ public class Board extends AbstractScene {
                     keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
         }
 
+    }
+
+    public void setRoadcardsList(RoadcardsList roadcardsList) {
+        this.roadcardsList = roadcardsList;
     }
 }

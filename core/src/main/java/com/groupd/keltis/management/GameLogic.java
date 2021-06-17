@@ -333,6 +333,13 @@ public class GameLogic {
         this.board = board;
     }
 
+    /**
+     *      Board getter
+     */
+    public Board getBoard() {
+        return board;
+    }
+
     public boolean checkCheat(ArrayList<Player> player) {
         for (Player p : player) {
             if (p.getCheat()) {

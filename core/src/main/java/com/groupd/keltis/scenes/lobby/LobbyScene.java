@@ -20,6 +20,7 @@ import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class LobbyScene extends AbstractScene {
         }
         else if(event instanceof StartGameEvent){
             fillHandcrds();
+            RoadcardsList roadcardsList = new RoadcardsList();
+            roadcardsList.assignRoadcards(keltis);
+            keltis.gameLogic.getBoard().setRoadcardsList(roadcardsList);
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
