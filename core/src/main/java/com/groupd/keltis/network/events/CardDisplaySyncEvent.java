@@ -30,7 +30,7 @@ public class CardDisplaySyncEvent extends NetworkEvent{
 
     @Override
     public int getEventID() {
-        return 5;
+        return 42;
     }
 
     public String getJson(){

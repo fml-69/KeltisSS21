@@ -84,9 +84,10 @@ public class Board extends AbstractScene {
     public CardDisplay branchStackBlue;
     public CardDisplay branchStackPurple;
 
-    private ArrayList<Card> branchCards;
+    private ArrayList<Card> branchCards = new ArrayList<>();
 
     private boolean sent = false;
+    private boolean set = true;
 
     private boolean isCheatingDialogShowing = false;
 
@@ -195,9 +196,9 @@ public class Board extends AbstractScene {
             Gdx.app.log("NETWORK", "SENT CARD STATUS");
 
             sent = true;
-        }else if(!keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()){
+        }else if(!keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()&&!set){
             sent = false;
-            if(branchCards!=null) {
+            if(branchCards.size()>0) {
                 if(branchCards.get(0).getNumber()!=-1) {
                     branchStackGreen.setCard(branchCards.get(0));
                 } else{
@@ -224,6 +225,7 @@ public class Board extends AbstractScene {
                     branchStackPurple.setSprite(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE));
                 }
             }
+            set = true;
         }
 
     }
@@ -553,6 +555,7 @@ public class Board extends AbstractScene {
         }
         else if(event instanceof CardDisplaySyncEvent){
             Gdx.app.log("NETWORK", "RECEIVED CARD STATUS");
+            set = false;
             BranchStackStatus branchStackStatus = BranchStackToJson.convertToObject(((CardDisplaySyncEvent) event).getJson());
             branchCards.add((Card) keltis.cardHelper.getCardHashmap().get(branchStackStatus.getGreen()));
             branchCards.add((Card) keltis.cardHelper.getCardHashmap().get(branchStackStatus.getYellow()));

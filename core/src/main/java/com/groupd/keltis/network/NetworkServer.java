@@ -1,6 +1,7 @@
 package com.groupd.keltis.network;
 
 import com.badlogic.gdx.Gdx;
+import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
@@ -121,6 +122,11 @@ public class NetworkServer {
                         CheatEvent cheatEvent = new CheatEvent();
                         cheatEvent.decode(channel.dataIn);
                         server.setPlayerCheat(cheatEvent.getCheat(), cheatEvent.getNick());
+
+                    } else if(eventID == 42) {
+                        CardDisplaySyncEvent cardDisplaySyncEvent = new CardDisplaySyncEvent();
+                        cardDisplaySyncEvent.decode(channel.dataIn);
+                        server.branchStackSync(cardDisplaySyncEvent);
 
                     } else {
                         Gdx.app.error("Error", "Invalid Network EventID");

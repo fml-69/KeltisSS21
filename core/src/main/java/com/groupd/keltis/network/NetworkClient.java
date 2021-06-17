@@ -124,8 +124,10 @@ public class NetworkClient {
                     turnEvent.decode(dataIn);
                    keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
 
+                } else if(eventID == 69){
+
                 }
-                else if(eventID == 5) {
+                else if(eventID == 42) {
                     Gdx.app.log("NETWORK", "EVENT ID: 5 - CARD SYNC");
                     CardDisplaySyncEvent cardEvent = new CardDisplaySyncEvent();
                     cardEvent.decode(dataIn);
