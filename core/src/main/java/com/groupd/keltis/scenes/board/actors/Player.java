@@ -163,7 +163,7 @@ public class Player {
         return cheat;
     }
 
-    public ArrayList getHandCards() {
+    public ArrayList<Card> getHandCards() {
         return handCards;
     }
 

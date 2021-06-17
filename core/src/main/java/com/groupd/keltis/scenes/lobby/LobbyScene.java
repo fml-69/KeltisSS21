@@ -126,66 +126,72 @@ public class LobbyScene extends AbstractScene {
     }
 
     public void fillDrawPile(){
+        String s;
         for(int i=1;i<=2;i++){
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_ZERO), "blueZero", "blue", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_ONE), "blueOne", "blue", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_TWO), "blueTwo", "blue", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_THREE), "blueThree", "blue", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FOUR), "blueFour", "blue", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_SIX), "blueSix", "blue", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_SEVEN), "blueSeven", "blue", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_EIGHT), "blueEight", "blue", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_NINE), "blueNine", "blue", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_TEN), "blueTen", "blue", 10));
+            if(i==1){
+                s="ONE";
+            } else{
+                s="TWO";
+            }
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_ZERO), "blueZero"+s, "blue", 0));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_ONE), "blueOne"+s, "blue", 1));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_TWO), "blueTwo"+s, "blue", 2));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_THREE), "blueThree"+s, "blue", 3));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FOUR), "blueFour"+s, "blue", 4));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive"+s, "blue", 5));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_SIX), "blueSix"+s, "blue", 6));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_SEVEN), "blueSeven"+s, "blue", 7));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_EIGHT), "blueEight"+s, "blue", 8));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_NINE), "blueNine"+s, "blue", 9));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_TEN), "blueTen"+s, "blue", 10));
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_ZERO), "greenZero", "green", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_ONE), "greenOne", "green", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_TWO), "greenTwo", "green", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_THREE), "greenThree", "green", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_FOUR), "greenFour", "green", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_FIVE), "greenFive", "green", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_SIX), "greenSix", "green", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_SEVEN), "greenSeven", "green", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_EIGHT), "greenEight", "green", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_NINE), "greenNine", "green", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_TEN), "greenTen", "green", 10));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_ZERO), "greenZero"+s, "green", 0));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_ONE), "greenOne"+s, "green", 1));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_TWO), "greenTwo"+s, "green", 2));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_THREE), "greenThree"+s, "green", 3));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_FOUR), "greenFour"+s, "green", 4));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_FIVE), "greenFive"+s, "green", 5));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_SIX), "greenSix"+s, "green", 6));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_SEVEN), "greenSeven"+s, "green", 7));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_EIGHT), "greenEight"+s, "green", 8));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_NINE), "greenNine"+s, "green", 9));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_TEN), "greenTen"+s, "green", 10));
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_ZERO), "purpleZero", "purple", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_ONE), "purpleOne", "purple", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_TWO), "purpleTwo", "purple", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_THREE), "purpleThree", "purple", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_FOUR), "purpleFour", "purple", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_FIVE), "purpleFive", "purple", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_SIX), "purpleSix", "purple", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_SEVEN), "purpleSeven", "purple", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_EIGHT), "purpleEight", "purple", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_NINE), "purpleNine", "purple", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_TEN), "purpleTen", "purple", 10));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_ZERO), "purpleZero"+s, "purple", 0));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_ONE), "purpleOne"+s, "purple", 1));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_TWO), "purpleTwo"+s, "purple", 2));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_THREE), "purpleThree"+s, "purple", 3));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_FOUR), "purpleFour"+s, "purple", 4));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_FIVE), "purpleFive"+s, "purple", 5));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_SIX), "purpleSix"+s, "purple", 6));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_SEVEN), "purpleSeven"+s, "purple", 7));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_EIGHT), "purpleEight"+s, "purple", 8));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_NINE), "purpleNine"+s, "purple", 9));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_TEN), "purpleTen"+s, "purple", 10));
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_ZERO), "redZero", "red", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_ONE), "redOne", "red", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_TWO), "redTwo", "red", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_THREE), "redThree", "red", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_FOUR), "redFour", "red", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_FIVE), "redFive", "red", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_SIX), "redSix", "red", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_SEVEN), "redSeven", "red", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_EIGHT), "redEight", "red", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_NINE), "redNine", "red", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_TEN), "redTen", "red", 10));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_ZERO), "redZero"+s, "red", 0));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_ONE), "redOne"+s, "red", 1));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_TWO), "redTwo"+s, "red", 2));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_THREE), "redThree"+s, "red", 3));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_FOUR), "redFour"+s, "red", 4));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_FIVE), "redFive"+s, "red", 5));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_SIX), "redSix"+s, "red", 6));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_SEVEN), "redSeven"+s, "red", 7));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_EIGHT), "redEight"+s, "red", 8));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_NINE), "redNine"+s, "red", 9));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_TEN), "redTen"+s, "red", 10));
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_ZERO), "yellowZero", "yellow", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_ONE), "yellowOne", "yellow", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_TWO), "yellowTwo", "yellow", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_THREE), "yellowThree", "yellow", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_FOUR), "yellowFour", "yellow", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_FIVE), "yellowFive", "yellow", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_SIX), "yellowSix", "yellow", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_SEVEN), "yellowSeven", "yellow", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_EIGHT), "yellowEight", "yellow", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_NINE), "yellowNine", "yellow", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_TEN), "yellowTen", "yellow", 10));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_ZERO), "yellowZero"+s, "yellow", 0));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_ONE), "yellowOne"+s, "yellow", 1));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_TWO), "yellowTwo"+s, "yellow", 2));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_THREE), "yellowThree"+s, "yellow", 3));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_FOUR), "yellowFour"+s, "yellow", 4));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_FIVE), "yellowFive"+s, "yellow", 5));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_SIX), "yellowSix"+s, "yellow", 6));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_SEVEN), "yellowSeven"+s, "yellow", 7));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_EIGHT), "yellowEight"+s, "yellow", 8));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_NINE), "yellowNine"+s, "yellow", 9));
+            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_TEN), "yellowTen"+s, "yellow", 10));
         }
 
     }

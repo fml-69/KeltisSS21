@@ -130,14 +130,7 @@ public class Board extends AbstractScene {
                 break;
         }
       
-        Iterator iteratorHandcards = keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().iterator();
-        int i=0;
-        Gdx.app.log(String.valueOf(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().size()),"...");
 
-        while(iteratorHandcards.hasNext()){
-            handcardsDisplay.get(i).setCard((Card) iteratorHandcards.next());
-            i++;
-        }
     }
 
     private void checkShaking(ArrayList<Player> player) {
@@ -294,7 +287,15 @@ public class Board extends AbstractScene {
 
         //this is a test!!
         //handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
+        Iterator iteratorHandcards = keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().iterator();
+        int i=0;
+        //Gdx.app.log(String.valueOf(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().size()),"...");
 
+        while(iteratorHandcards.hasNext()){
+            handcardsDisplay.get(i).setCard((Card) iteratorHandcards.next());
+            i++;
+        }
+        i=0;
     }
 
     @Override
