@@ -48,7 +48,7 @@ public class LobbyScene extends AbstractScene {
             keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, false));
         }
         else if(event instanceof StartGameEvent){
-            fillHandcrds();
+            fillHandcards();
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
@@ -115,7 +115,7 @@ public class LobbyScene extends AbstractScene {
         NetworkClient.INSTANCE.receiveEvents();
     }
 
-    public void fillHandcrds(){
+    public void fillHandcards(){
         for(Player player:keltis.gameLogic.getPlayerArrayList()){
             for(int i=1;i<=8;i++) {
                 player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
