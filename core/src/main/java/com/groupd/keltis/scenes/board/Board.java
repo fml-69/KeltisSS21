@@ -105,7 +105,6 @@ public class Board extends AbstractScene {
         playerPicture4 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
 
         //GameLogic setDrawPile
-        keltis.gameLogic.setPlayerArrayList(player);
         keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
 
 
@@ -178,7 +177,6 @@ public class Board extends AbstractScene {
         checkShaking(player);
     }
     public void setTextOfScore(){
-        Gdx.app.log("Size=", String.valueOf(keltis.gameLogic.getPlayerArrayList().size()));
         switch (keltis.gameLogic.getPlayerArrayList().size()){
             case 4:
                 player4.setText(keltis.gameLogic.getPlayerArrayList().get(3).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(3).getOverallScore());
@@ -454,7 +452,14 @@ public class Board extends AbstractScene {
     public void onNetworkEvent(NetworkEvent event) {
         if(event instanceof TurnEvent){
             PlayerMove playerMove = ObjectToJson.convertToObject(((TurnEvent) event).getJson());
-            keltis.gameLogic.playCard(keltis.gameLogic.getPlayer(playerMove.getNick()), playerMove.getCard(), playerMove.getColor());
+            for(CardDisplay cardDisplay:handcardsDisplay){
+                if(playerMove.getCardName().equals(cardDisplay.getCard().getName())){
+                    keltis.gameLogic.playCard(keltis.gameLogic.getPlayer(playerMove.getNick()), cardDisplay.getCard(), keltis.gameLogic.getPileColor(playerMove.getColor()));
+                }
+            }
+            if(!playerMove.getNick().equals(keltis.gameLogic.getPlayerNick())){
+                keltis.gameLogic.playCard(keltis.gameLogic.getPlayer(playerMove.getNick()), keltis.gameLogic.getPileColor(playerMove.getColor()));
+            }
         }
         else if(event instanceof CheatQueryEvent){
             showDialog(new InfoDialog("Schummelverdacht",
