@@ -2,6 +2,7 @@ package com.groupd.keltis.server;
 
 import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.network.NetworkClientChannel;
 import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
@@ -119,6 +120,11 @@ public class ServerRunnable implements Runnable{
 
     // can access nick of player who made for a turn
     public void onTurn(TurnEvent turnEvent) {
+        for(Player player:playerList){
+            if(player.equals(turnEvent.getJson())){
+                player.setCheat(false);
+            }
+        }
         networkServer.broadCast(turnEvent);
 
     }
