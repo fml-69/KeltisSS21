@@ -8,6 +8,7 @@ import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
+import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
@@ -50,11 +51,16 @@ public class GameLogic {
         this.redDiscardPile = new ArrayList<Card>();
         this.greenDiscardPile = new ArrayList<Card>();
         this.purpleDiscardPile = new ArrayList<Card>();
+
+
     }
     public void playCard(Player player, Card card, ColorPile colorPile) {
         addCardToPile(player, card, colorPile);
         addCardToPlayer(player, card);
         move(player, colorPile);
+        if(player != getPlayer(playerNick)){
+            drawPile.remove(drawPile.size() - 1);
+        }
         //setTurnPlayer(player);
     }
 
@@ -127,7 +133,12 @@ public class GameLogic {
 
     public void drawCard(Player player) {
         if(allowDraw) {
-            player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
+            //player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
+            for(CardDisplay cardDisplay: Board.getHandCardDisplayList()){
+                if(cardDisplay.isEmpty()){
+                    cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
+                }
+            }
             allowDraw = false;
         }
     }
@@ -449,4 +460,5 @@ public class GameLogic {
         }
         return player;
     }
+
 }
