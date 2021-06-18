@@ -9,8 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.management.BranchStackStatus;
+import com.groupd.keltis.network.NetworkClient;
+import com.groupd.keltis.network.events.CardDisplaySyncEvent;
+import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.utils.AssetPaths;
+import com.groupd.keltis.utils.BranchStackToJson;
 import com.groupd.keltis.utils.ColorPile;
 
 public class CardDisplay extends Actor {
@@ -24,11 +29,13 @@ public class CardDisplay extends Actor {
     private final CardDisplay itsaMe = this;
     private final Texture highlightTexture;
     private final boolean isHandCard;
+    private final boolean isDrawPile;
     private ColorPile colorPile;
 
-    public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard){
+    public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard, boolean isDrawPile){
         this.highlightTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT);
         this.isHandCard = isHandCard;
+        this.isDrawPile = isDrawPile;
         if(isHandCard){
             this.emptyHandcardTexture = keltis.assetManager.get(AssetPaths.CARD_EMPTY_HANDCARD);
             sprite = new Sprite(emptyHandcardTexture);
@@ -66,11 +73,18 @@ public class CardDisplay extends Actor {
                         && Board.getHighlightedCardDisplay().getCard().getCardColor().equals(color)
                         && Board.getHighlightedCardDisplay().isHandCard
                         && keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                        && !Board.getHighlightedCardDisplay().isDrawPile
                 ){
                     setCard(Board.getHighlightedCardDisplay().getCard());
                     Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
                     keltis.gameLogic.sendTurnEvent(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()), currentCard, colorPile);
+                } else if(isDrawPile&&keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()){
+                    Board.setHighlightedCardDisplay(null);
+                    keltis.gameLogic.drawCard(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()));
+                    NetworkClient client = NetworkClient.INSTANCE;
+                    NextPlayerEvent nextPlayerEvent = new NextPlayerEvent();
+                    client.sendEvent(nextPlayerEvent);
                 } else{
                     Board.setHighlightedCardDisplay(itsaMe);
                 }

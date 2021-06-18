@@ -7,6 +7,7 @@ import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 
 import com.groupd.keltis.scenes.board.actors.Player;
@@ -126,6 +127,10 @@ public class ServerRunnable implements Runnable{
 
     public void branchStackSync(CardDisplaySyncEvent cardDisplaySyncEvent) {
         networkServer.broadCast(cardDisplaySyncEvent);
+    }
+
+    public void nextPlayer(NextPlayerEvent nextPlayerEvent){
+        networkServer.broadCast(nextPlayerEvent);
     }
 
 
