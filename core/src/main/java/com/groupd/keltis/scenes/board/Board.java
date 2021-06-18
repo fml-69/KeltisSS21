@@ -94,7 +94,7 @@ public class Board extends AbstractScene {
 
     private boolean isCheatingDialogShowing = false;
 
-    private ArrayList<CardDisplay> handcardsDisplay = new ArrayList<>();
+    private static ArrayList<CardDisplay> handCardDisplayList = new ArrayList<>();
 
     public Board(final Keltis keltis) {
         super(keltis);
@@ -137,51 +137,6 @@ public class Board extends AbstractScene {
             case PAUSE:
                 break;
         }
-
-        Iterator iteratorHandcards = keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().iterator();
-        int i=0;
-        //Gdx.app.log(String.valueOf(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().size()),"...");
-
-        while(iteratorHandcards.hasNext()){
-            handcardsDisplay.get(i).setCard((Card) iteratorHandcards.next());
-            i++;
-        }
-/*
-        if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()&&!sent){
-            sendPileSync();
-            sent = true;
-        }else if(!keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()&&!set){
-            sent = false;
-            if(branchCards.size()>0) {
-                if(branchCards.get(0).getNumber()!=-1) {
-                    branchStackGreen.setCard(branchCards.get(0));
-                } else{
-                    branchStackGreen.setSprite(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN));
-                }
-                if(branchCards.get(1).getNumber()!=-1) {
-                    branchStackYellow.setCard(branchCards.get(1));
-                } else{
-                    branchStackYellow.setSprite(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW));
-                }
-                if(branchCards.get(2).getNumber()!=-1) {
-                    branchStackRed.setCard(branchCards.get(2));
-                } else{
-                    branchStackRed.setSprite(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED));
-                }
-                if(branchCards.get(3).getNumber()!=-1) {
-                    branchStackBlue.setCard(branchCards.get(3));
-                } else{
-                    branchStackBlue.setSprite(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE));
-                }
-                if(branchCards.get(4).getNumber()!=-1) {
-                    branchStackPurple.setCard(branchCards.get(4));
-                } else{
-                    branchStackPurple.setSprite(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE));
-                }
-            }
-            set = true;
-        }*/
-
     }
 
     private void checkShaking(ArrayList<Player> player) {
@@ -297,47 +252,49 @@ public class Board extends AbstractScene {
 
         CardDisplay handCard1 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard1", "", true, false);
         handCard1.spritePos(PositioningConstants.CARD_HANDCARD_1.x, PositioningConstants.CARD_HANDCARD_1.y);
-        handcardsDisplay.add(handCard1);
+        handCardDisplayList.add(handCard1);
         stage.addActor(handCard1);
 
         CardDisplay handCard2 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard2", "", true, false);
         handCard2.spritePos(PositioningConstants.CARD_HANDCARD_2.x, PositioningConstants.CARD_HANDCARD_2.y);
-        handcardsDisplay.add(handCard2);
+        handCardDisplayList.add(handCard2);
         stage.addActor(handCard2);
 
         CardDisplay handCard3 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard3", "", true, false);
         handCard3.spritePos(PositioningConstants.CARD_HANDCARD_3.x, PositioningConstants.CARD_HANDCARD_3.y);
-        handcardsDisplay.add(handCard3);
+        handCardDisplayList.add(handCard3);
         stage.addActor(handCard3);
 
         CardDisplay handCard4 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard4", "", true, false);
         handCard4.spritePos(PositioningConstants.CARD_HANDCARD_4.x, PositioningConstants.CARD_HANDCARD_4.y);
-        handcardsDisplay.add(handCard4);
+        handCardDisplayList.add(handCard4);
         stage.addActor(handCard4);
 
         CardDisplay handCard5 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard5", "", true, false);
         handCard5.spritePos(PositioningConstants.CARD_HANDCARD_5.x, PositioningConstants.CARD_HANDCARD_5.y);
-        handcardsDisplay.add(handCard5);
+        handCardDisplayList.add(handCard5);
         stage.addActor(handCard5);
 
         CardDisplay handCard6 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard6", "", true, false);
         handCard6.spritePos(PositioningConstants.CARD_HANDCARD_6.x, PositioningConstants.CARD_HANDCARD_6.y);
-        handcardsDisplay.add(handCard6);
+        handCardDisplayList.add(handCard6);
         stage.addActor(handCard6);
 
         CardDisplay handCard7 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard7", "", true, false);
         handCard7.spritePos(PositioningConstants.CARD_HANDCARD_7.x, PositioningConstants.CARD_HANDCARD_7.y);
-        handcardsDisplay.add(handCard7);
+        handCardDisplayList.add(handCard7);
         stage.addActor(handCard7);
 
         CardDisplay handCard8 = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_BACK), "handCard8", "", true, false);
         handCard8.spritePos(PositioningConstants.CARD_HANDCARD_8.x, PositioningConstants.CARD_HANDCARD_8.y);
-        handcardsDisplay.add(handCard8);
+        handCardDisplayList.add(handCard8);
         stage.addActor(handCard8);
 
-        //this is a test!!
-        //handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
-
+        for(CardDisplay cardDisplay: handCardDisplayList){
+            if(cardDisplay.isEmpty()){
+                cardDisplay.setCard(keltis.gameLogic.getDrawPile().remove(keltis.gameLogic.getDrawPile().size() - 1));
+            }
+        }
     }
 
     @Override
@@ -480,9 +437,6 @@ public class Board extends AbstractScene {
         playerHashMap.get(figure).moveUp();
     }
 
-
-    
-
     public ShamrockDialog getShamrockDialog() {
         return shamrockDialog;
     }
@@ -496,56 +450,8 @@ public class Board extends AbstractScene {
         return highlightedCardDisplay;
     }
 
-    public void sendPileSync(){
-        ArrayList<Card> syncArray = new ArrayList<>();
-        if(keltis.gameLogic.getGreenDiscardPile().size()>0) {
-            syncArray.add(keltis.gameLogic.getGreenDiscardPile().get(keltis.gameLogic.getGreenDiscardPile().size() - 1));
-            branchStackGreen.setCard(keltis.gameLogic.getGreenDiscardPile().get(keltis.gameLogic.getGreenDiscardPile().size() - 1));
-        } else{
-            syncArray.add(null);
-            branchStackGreen.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "emptyGreen", "", -1));
-        }
-        if(keltis.gameLogic.getYellowDiscardPile().size()>0) {
-            syncArray.add(keltis.gameLogic.getYellowDiscardPile().get(keltis.gameLogic.getYellowDiscardPile().size() - 1));
-            branchStackYellow.setCard(keltis.gameLogic.getYellowDiscardPile().get(keltis.gameLogic.getYellowDiscardPile().size() - 1));
-        } else{
-            syncArray.add(null);
-            branchStackYellow.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_YELLOW), "emptyYellow", "", -1));
-        }
-        if(keltis.gameLogic.getRedDiscardPile().size()>0) {
-            syncArray.add(keltis.gameLogic.getRedDiscardPile().get(keltis.gameLogic.getRedDiscardPile().size() - 1));
-            branchStackRed.setCard(keltis.gameLogic.getRedDiscardPile().get(keltis.gameLogic.getRedDiscardPile().size() - 1));
-        } else{
-            syncArray.add(null);
-            branchStackRed.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_RED), "emptyRed", "", -1));
-        }
-        if(keltis.gameLogic.getBlueDiscardPile().size()>0) {
-            syncArray.add(keltis.gameLogic.getBlueDiscardPile().get(keltis.gameLogic.getBlueDiscardPile().size() - 1));
-            branchStackBlue.setCard(keltis.gameLogic.getBlueDiscardPile().get(keltis.gameLogic.getBlueDiscardPile().size() - 1));
-        } else{
-            syncArray.add(null);
-            branchStackBlue.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_BLUE), "emptyBlue", "", -1));
-        }
-        if(keltis.gameLogic.getPurpleDiscardPile().size()>0) {
-            syncArray.add(keltis.gameLogic.getPurpleDiscardPile().get(keltis.gameLogic.getPurpleDiscardPile().size() - 1));
-            branchStackPurple.setCard(keltis.gameLogic.getPurpleDiscardPile().get(keltis.gameLogic.getPurpleDiscardPile().size() - 1));
-        } else{
-            syncArray.add(null);
-            branchStackPurple.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyPurple", "", -1));
-        }
-
-        if(syncArray.get(0)!=null) greenStackTop = syncArray.get(0).getName();
-        if(syncArray.get(1)!=null) yellowStackTop = syncArray.get(1).getName();
-        if(syncArray.get(2)!=null) redStackTop = syncArray.get(2).getName();
-        if(syncArray.get(3)!=null) blueStackTop = syncArray.get(3).getName();
-        if(syncArray.get(4)!=null) purpleStackTop = syncArray.get(4).getName();
-
-        NetworkClient client = NetworkClient.INSTANCE;
-        CardDisplaySyncEvent syncEvent = new CardDisplaySyncEvent(
-                BranchStackToJson.convertToJson(
-                        new BranchStackStatus(greenStackTop, yellowStackTop, redStackTop, blueStackTop, purpleStackTop)));
-        client.sendEvent(syncEvent);
-        Gdx.app.log("NETWORK", "SENT CARD STATUS");
+    public static ArrayList<CardDisplay> getHandCardDisplayList() {
+        return handCardDisplayList;
     }
 
     @Override

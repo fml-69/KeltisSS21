@@ -30,6 +30,7 @@ public class CardDisplay extends Actor {
     private final Texture highlightTexture;
     private final boolean isHandCard;
     private final boolean isDrawPile;
+    private boolean isEmpty = true;
     private ColorPile colorPile;
 
     public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard, boolean isDrawPile){
@@ -121,6 +122,7 @@ public class CardDisplay extends Actor {
         this.currentCard = card;
         this.color = card.getCardColor();
         setSprite(card.getTexture());
+        isEmpty = false;
     }
 
     public void setSprite(Texture texture){
@@ -138,6 +140,11 @@ public class CardDisplay extends Actor {
         if(isHandCard) {
             setSprite(emptyHandcardTexture);
         }
+        isEmpty = true;
+    }
+
+    public boolean isEmpty(){
+        return isEmpty;
     }
 
 }
