@@ -21,6 +21,11 @@ public class Player {
 
     private HashMap<String, Figure> figures;
 
+    private ArrayList<Card> yellowDiscardPile = new ArrayList<>();
+    private ArrayList<Card> blueDiscardPile = new ArrayList<>();
+    private ArrayList<Card> redDiscardPile = new ArrayList<>();
+    private ArrayList<Card> greenDiscardPile = new ArrayList<>();
+    private ArrayList<Card> purpleDiscardPile = new ArrayList<>();
 
     private boolean cheat;
     private boolean turn;
@@ -197,4 +202,66 @@ public class Player {
     public void addScoreCheat(int scoreCheat){
         this.scoreCheat+=scoreCheat;
     }
+
+    public void addCardGreen(Card card){
+        greenDiscardPile.add(card);
+    }
+    public Card getLastGreen(){
+        return greenDiscardPile.get(greenDiscardPile.size()-1);
+    }
+    public boolean greenEmpty(){
+        if(greenDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardYellow(Card card){
+        yellowDiscardPile.add(card);
+    }
+    public Card getLastYellow(){
+        return yellowDiscardPile.get(yellowDiscardPile.size()-1);
+    }
+    public boolean yellowEmpty(){
+        if(yellowDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardRed(Card card){
+        redDiscardPile.add(card);
+    }
+    public Card getLastRed(){
+        return redDiscardPile.get(redDiscardPile.size()-1);
+    }
+    public boolean redEmpty(){
+        if(redDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardBlue(Card card){
+        blueDiscardPile.add(card);
+    }
+    public Card getLastBlue(){
+        return blueDiscardPile.get(blueDiscardPile.size()-1);
+    }
+    public boolean blueEmpty(){
+        if(blueDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardPurple(Card card){
+        purpleDiscardPile.add(card);
+    }
+    public Card getLastPurple(){
+        return purpleDiscardPile.get(purpleDiscardPile.size()-1);
+    }
+    public boolean purpleEmpty(){
+        if(purpleDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+
 }

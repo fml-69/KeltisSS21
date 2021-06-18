@@ -37,6 +37,7 @@ public class GameLogic {
     private final ArrayList<Card> redDiscardPile;
     private final ArrayList<Card> greenDiscardPile;
     private final ArrayList<Card> purpleDiscardPile;
+    private boolean allowDraw = false;
 
     private Board board;
 
@@ -52,8 +53,9 @@ public class GameLogic {
     }
     public void playCard(Player player, Card card, ColorPile colorPile) {
         addCardToPile(player, card, colorPile);
+        addCardToPlayer(player, card);
         move(player, colorPile);
-        setTurnPlayer(player);
+        //setTurnPlayer(player);
     }
 
     public void playCard(Player player, ColorPile colorPile) {
@@ -70,10 +72,31 @@ public class GameLogic {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card.getName(),getPileColor(colorPile))));
             player.getHandCards().remove(card);
-            player.getHandCards().add(drawPile.remove(drawPile.size()-1));
+            //player.getHandCards().add(drawPile.remove(drawPile.size()-1));
             client.sendEvent(turnEvent);
+            allowDraw = true;
             Gdx.app.log("NETWORK", "TURN SENT");
             //der Nachziehstapel muss sync werden
+        }
+    }
+
+    public void addCardToPlayer(Player player, Card card){
+        switch (card.getCardColor()){
+            case "green":
+                player.addCardGreen(card);
+                break;
+            case "yellow":
+                player.addCardYellow(card);
+                break;
+            case "red":
+                player.addCardRed(card);
+                break;
+            case "blue":
+                player.addCardBlue(card);
+                break;
+            case "purple":
+                player.addCardPurple(card);
+                break;
         }
     }
 
@@ -103,8 +126,10 @@ public class GameLogic {
     }
 
     public void drawCard(Player player) {
-        Card card = drawPile.remove(drawPile.size() - 1);
-        player.getHandCards().add(card);
+        if(allowDraw) {
+            player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
+            allowDraw = false;
+        }
     }
 
     public void addCardToPile(Player player, Card card, ColorPile colorPile) {
