@@ -5,11 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatEvent;
-import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
-import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
@@ -39,6 +37,7 @@ public class GameLogic {
     private final ArrayList<Card> redDiscardPile;
     private final ArrayList<Card> greenDiscardPile;
     private final ArrayList<Card> purpleDiscardPile;
+    private boolean allowDraw = false;
 
     private Board board;
 
@@ -54,26 +53,50 @@ public class GameLogic {
     }
     public void playCard(Player player, Card card, ColorPile colorPile) {
         addCardToPile(player, card, colorPile);
+        addCardToPlayer(player, card);
         move(player, colorPile);
-        setTurnPlayer(player);
+        //setTurnPlayer(player);
     }
 
     public void playCard(Player player, ColorPile colorPile) {
         move(player, colorPile);
         setTurnPlayer(player);
-        drawCard(player);
+        //drawCard(player);
     }
 
 
     //Main Method to play
     //Call to set everything in motion
-    public void sendTurnEvent(Player player, Card card, ColorPile colorPile, CardDisplay cardDisplay) {
+    public void sendTurnEvent(Player player, Card card, ColorPile colorPile) {
         if (player.getTurn()) {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(ObjectToJson.convertToJson(new PlayerMove(player.getNick(),card.getName(),getPileColor(colorPile))));
-            cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
+            player.getHandCards().remove(card);
+            //player.getHandCards().add(drawPile.remove(drawPile.size()-1));
             client.sendEvent(turnEvent);
+            allowDraw = true;
+            Gdx.app.log("NETWORK", "TURN SENT");
             //der Nachziehstapel muss sync werden
+        }
+    }
+
+    public void addCardToPlayer(Player player, Card card){
+        switch (card.getCardColor()){
+            case "green":
+                player.addCardGreen(card);
+                break;
+            case "yellow":
+                player.addCardYellow(card);
+                break;
+            case "red":
+                player.addCardRed(card);
+                break;
+            case "blue":
+                player.addCardBlue(card);
+                break;
+            case "purple":
+                player.addCardPurple(card);
+                break;
         }
     }
 
@@ -103,8 +126,10 @@ public class GameLogic {
     }
 
     public void drawCard(Player player) {
-        Card card = drawPile.remove(drawPile.size() - 1);
-        player.getHandCards().add(card);
+        if(allowDraw) {
+            player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
+            allowDraw = false;
+        }
     }
 
     public void addCardToPile(Player player, Card card, ColorPile colorPile) {
@@ -414,5 +439,14 @@ public class GameLogic {
             }
         }
         return null;
+    }
+    public Player getCurrentPlayer(){
+        Player player = null;
+        for (Player x: playerArrayList) {
+            if(x.getTurn()){
+                player = x;
+            }
+        }
+        return player;
     }
 }

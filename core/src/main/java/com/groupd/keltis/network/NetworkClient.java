@@ -7,9 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.InfoDialog;
@@ -118,11 +120,26 @@ public class NetworkClient {
                         keltis.sceneManager.getActiveScene().onNetworkEvent(cheatQueryEvent);
                     }
                 } else if(eventID == 3) {
+                    Gdx.app.log("NETWORK", "EVENT ID: 3 - TURN EVENT");
                     TurnEvent turnEvent = new TurnEvent();
                     turnEvent.decode(dataIn);
                    keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
 
                 } else if(eventID == 69){
+
+                }
+                else if(eventID == 42) {
+                    Gdx.app.log("NETWORK", "EVENT ID: 42 - CARD SYNC");
+                    CardDisplaySyncEvent cardEvent = new CardDisplaySyncEvent();
+                    cardEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(cardEvent);
+
+                }
+                else if(eventID == 33) {
+                    Gdx.app.log("NETWORK", "EVENT ID: 33 - NEXT PLAYER");
+                    NextPlayerEvent nextPlayerEvent = new NextPlayerEvent();
+                    nextPlayerEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(nextPlayerEvent);
 
                 }else {
                     Gdx.app.error("Error", "Invalid Network EventID");
