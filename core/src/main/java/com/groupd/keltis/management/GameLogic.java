@@ -3,8 +3,11 @@ package com.groupd.keltis.management;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -13,11 +16,14 @@ import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
+import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.scenes.board.road_cards.Shamrock;
 import com.groupd.keltis.scenes.board.road_cards.Wishstone;
 import com.groupd.keltis.utils.ColorFigures;
 import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.ObjectToJson;
+import com.groupd.keltis.utils.RoadcardsToJson;
+import com.groupd.keltis.utils.StringToJson;
 
 
 import java.util.ArrayList;
@@ -289,10 +295,13 @@ public class GameLogic {
     }
 
     public boolean checkCard(Player player, Figure figure, Roadcards roadcards) {
+        NetworkClient client = NetworkClient.INSTANCE;
         if (roadcards instanceof Wishstone) {
             Gdx.app.log("Wishstone: ", "get WishStone");
             player.addWishStone();
             roadcards.addAction(Actions.removeActor());
+            RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent(StringToJson.convertToJson(roadcards.getName()));
+            client.sendEvent(roadcardsRemoveSyncEvent);
         } else if (roadcards instanceof Shamrock) {
             Gdx.app.log("Shamrock: ", "get Shamrock");
             board.showDialog(board.getShamrockDialog(),board.stage,3);
@@ -329,6 +338,25 @@ public class GameLogic {
             }
         }
         return false;
+    }
+
+    public void createRoadcards(Keltis keltis){
+        NetworkClient client = NetworkClient.INSTANCE;
+        for(Player player:playerArrayList){
+            if(player.getNick().equals(playerNick)&&player.isHost()){
+                RoadcardsList roadcardsList = new RoadcardsList();
+                roadcardsList.assignRoadcards(keltis);
+                board.setRoadcardsList(roadcardsList);
+                roadCardsList = roadcardsList.getRoadcardsArrayList();
+
+                ArrayList<RoadcardsStatus> roadcardsStatusArrayList = new ArrayList<>();
+                for(Roadcards roadcards:roadCardsList){
+                    roadcardsStatusArrayList.add(new RoadcardsStatus(roadcards.getName(),roadcards.getPosition().getName()));
+                }
+                RoadcardsSyncEvent roadcardsSyncEvent = new RoadcardsSyncEvent(RoadcardsToJson.convertToJson(roadcardsStatusArrayList));
+                client.sendEvent(roadcardsSyncEvent);
+            }
+        }
     }
     /**
      *      Check Cheat Condition

@@ -46,13 +46,13 @@ public class LobbyScene extends AbstractScene {
             uIList.setItems(playerList);
 
             // send game logic with player, with the color provided by server
-            keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, false));
+            keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, ((JoinEvent) event).host));
         }
         else if(event instanceof StartGameEvent){
             fillHandcrds();
-            RoadcardsList roadcardsList = new RoadcardsList();
-            roadcardsList.assignRoadcards(keltis);
-            keltis.gameLogic.getBoard().setRoadcardsList(roadcardsList);
+
+            keltis.gameLogic.createRoadcards(keltis);
+
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);

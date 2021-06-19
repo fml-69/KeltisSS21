@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RoadcardsTest {
-    @Mock
+    /*@Mock
     private Texture textureMock;
     @Mock
     private Position positionMock;
@@ -81,6 +81,7 @@ public class RoadcardsTest {
         assertEquals(200, (int) roadcard.getSprite().getX());
         assertEquals(400, (int) roadcard.getSprite().getY());
     }
+    */
 }
 
 

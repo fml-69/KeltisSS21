@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.management.BranchStackStatus;
+import com.groupd.keltis.management.RoadcardsStatus;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
@@ -21,12 +23,15 @@ import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.management.PlayerMove;
 import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.IngameMenuButton;
+import com.groupd.keltis.scenes.board.road_cards.Position;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
@@ -34,9 +39,11 @@ import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.BranchStackToJson;
 import com.groupd.keltis.utils.ObjectToJson;
 import com.groupd.keltis.utils.PositioningConstants;
+import com.groupd.keltis.utils.RoadcardsToJson;
+import com.groupd.keltis.utils.StringToJson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 public class Board extends AbstractScene {
@@ -205,7 +212,6 @@ public class Board extends AbstractScene {
         stage.addActor(board);
         stage.addActor(branches);
 
-        //roadcardsList.assignRoadcards(keltis);
         for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
             stage.addActor(roadcards);
         }
@@ -516,6 +522,28 @@ public class Board extends AbstractScene {
                 branchStackPurple.setCard(keltis.gameLogic.getCurrentPlayer().getLastPurple());
             } else{
                 branchStackPurple.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyPurple", "", -1));
+            }
+        } else if(event instanceof RoadcardsSyncEvent){
+            ArrayList<RoadcardsStatus> roadcardsStatusArrayList = RoadcardsToJson.convertToObject(((RoadcardsSyncEvent) event).getJson());
+            ArrayList<Position> positionArrayList = new ArrayList<>();
+
+            int i = 0;
+            for(RoadcardsStatus roadcardsStatus:roadcardsStatusArrayList){
+                positionArrayList.add(keltis.positionHelper.getPositionHashMap().get(roadcardsStatus.getPosition()));
+                i++;
+            }
+            roadcardsList.addRoadcards(keltis,positionArrayList);
+            for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
+                stage.addActor(roadcards);
+            }
+        } else if(event instanceof RoadcardsRemoveSyncEvent){
+            String roadcardName = StringToJson.convertToObject(((RoadcardsRemoveSyncEvent) event).getJson());
+            Gdx.app.log(roadcardName,"warum");
+            for(Roadcards roadcards:roadcardsList.getRoadcardsArrayList()){
+                if(roadcards.getName().equals(roadcardName)){
+                    Gdx.app.log("ttttttt","dedfewf");
+                    roadcards.addAction(Actions.removeActor());
+                }
             }
         }
 

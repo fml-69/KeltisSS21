@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 public class Roadcards extends Actor {
     private Sprite sprite;
     private Position position;
-    public Roadcards(Texture texture, Position position){
+    private String name;
+    public Roadcards(String name, Texture texture, Position position){
+        this.name = name;
         this.sprite = new Sprite(texture);
         this.position = position;
         spritePos(position.getX(), position.getY());
@@ -46,7 +48,16 @@ public class Roadcards extends Actor {
         return position;
     }
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public Sprite getSprite() {
         return sprite;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

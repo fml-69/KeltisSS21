@@ -1,12 +1,14 @@
 package com.groupd.keltis.scenes.board.road_cards;
 
 public class Position {
+    private String name;
     private int x;
     private int y;
     private int branch;
     private int field;
 
-    public Position(int x, int y, int branch, int field) {
+    public Position(String name, int x, int y, int branch, int field) {
+        this.name = name;
         this.x = x;
         this.y = y;
         this.branch = branch;
@@ -35,5 +37,9 @@ public class Position {
 
     public int getField() {
         return field;
+    }
+
+    public String getName() {
+        return name;
     }
 }
