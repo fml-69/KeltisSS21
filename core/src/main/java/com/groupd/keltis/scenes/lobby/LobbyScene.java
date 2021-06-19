@@ -12,18 +12,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.management.RoadcardsStatus;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Player;
+import com.groupd.keltis.scenes.board.road_cards.Position;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.utils.CardHelper;
 import com.groupd.keltis.utils.JsonConverter;
+import com.groupd.keltis.utils.RoadcardsToJson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,18 +53,29 @@ public class LobbyScene extends AbstractScene {
             uIList.setItems(playerList);
 
             // send game logic with player, with the color provided by server
-            keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, false));
+            keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, ((JoinEvent) event).host));
         }else if(event instanceof StartGameEvent){
             drawPileNames = JsonConverter.convertToArrayList(((StartGameEvent) event).getJson());
             convertStringsToCards();
             fillHandcards();
 
-            keltis.gameLogic.createRoadcards(keltis);
-
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
 
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
+        } else if(event instanceof RoadcardsSyncEvent){
+            ArrayList<RoadcardsStatus> roadcardsStatusArrayList = RoadcardsToJson.convertToObject(((RoadcardsSyncEvent) event).getJson());
+            ArrayList<Position> positionArrayList = new ArrayList<>();
+
+            int i = 0;
+            for(RoadcardsStatus roadcardsStatus:roadcardsStatusArrayList){
+                positionArrayList.add(keltis.positionHelper.getPositionHashMap().get(roadcardsStatus.getPosition()));
+                i++;
+            }
+            RoadcardsList roadcardsList = new RoadcardsList();
+            roadcardsList.addRoadcards(keltis,positionArrayList);
+            keltis.gameLogic.getBoard().setRoadcardsList(roadcardsList);
+            keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
         }
     }
 
@@ -94,6 +109,7 @@ public class LobbyScene extends AbstractScene {
         readyButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                keltis.gameLogic.createRoadcards(keltis);
                 fillStringPile();
                 Collections.shuffle(drawPileNames);
                 String json = JsonConverter.convertToJson(drawPileNames);

@@ -22,9 +22,7 @@ import com.groupd.keltis.scenes.board.road_cards.Wishstone;
 import com.groupd.keltis.utils.ColorEnumsToString;
 import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.JsonConverter;
-import com.groupd.keltis.utils.ObjectToJson;
 import com.groupd.keltis.utils.RoadcardsToJson;
-import com.groupd.keltis.utils.StringToJson;
 
 
 import java.util.ArrayList;
@@ -249,7 +247,7 @@ public class GameLogic {
         board.resume();
     }
 
-    /**-------------------------------Check Cards on Field----------------------------------------*/
+    /**-------------------------Check Cards on Field & sync roadcards-----------------------------*/
 
     public boolean checkIfCardIsOnField(Player player, Figure figure) {
         for (Roadcards roadcards : roadCardsList) {
@@ -273,10 +271,12 @@ public class GameLogic {
             Gdx.app.log("Wishstone: ", "get WishStone");
             player.addWishStone();
             roadcards.addAction(Actions.removeActor());
-            RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent(StringToJson.convertToJson(roadcards.getName()));
+            RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent(JsonConverter.convertToJson(roadcards.getName()));
             client.sendEvent(roadcardsRemoveSyncEvent);
         } else if (roadcards instanceof Shamrock) {
             Gdx.app.log("Shamrock: ", "get Shamrock");
+            board.getShamrockDialog().getLabel().setText("");
+            board.getShamrockDialog().setText(getCurrentPlayer().getNick());
             board.showDialog(board.getShamrockDialog(),board.stage,3);
             float delay = 2; // seconds
             Timer.schedule(new Timer.Task(){
@@ -314,17 +314,7 @@ public class GameLogic {
         }
         return false;
     }
-
-    /**-------------------------Get the Score of a certain Player--------------------------------**/
-
-    public int getScoreOfPlayer(Player player) {
-        return player.getOverallScore();
-    }
-
-    public void setRoadCardsList(ArrayList<Roadcards> roadCardsList) {
-        this.roadCardsList = roadCardsList;
-    }
-
+    /**-----------------------Create unique roadcards for all Player-----------------------------**/
     public void createRoadcards(Keltis keltis){
         NetworkClient client = NetworkClient.INSTANCE;
         for(Player player:playerArrayList){
@@ -343,6 +333,12 @@ public class GameLogic {
             }
         }
     }
+    /**-------------------------Get the Score of a certain Player--------------------------------**/
+
+    public int getScoreOfPlayer(Player player) {
+        return player.getOverallScore();
+    }
+
     /**
      *      Check Cheat Condition
      */
@@ -361,13 +357,6 @@ public class GameLogic {
         if (greater && numberCard > pile.get(pile.size() - 1).getNumber()) {
             return true;
         } else return !greater && numberCard < pile.get(pile.size() - 1).getNumber();
-    }
-
-    /**
-     *      Board getter
-     */
-    public Board getBoard() {
-        return board;
     }
 
     public boolean checkCheat(ArrayList<Player> player) {
@@ -453,10 +442,20 @@ public class GameLogic {
         return purpleDiscardPile;
     }
 
-    /**---------------------------------Board setter---------------------------------------------**/
+    /**------------------------------roadCardsList Setter-----------------------------------**/
+
+    public void setRoadCardsList(ArrayList<Roadcards> roadCardsList) {
+        this.roadCardsList = roadCardsList;
+    }
+
+    /**---------------------------------Board Getter & Setter---------------------------------------------**/
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     /**------------------------------PlayerNick Getter & Setter----------------------------------**/

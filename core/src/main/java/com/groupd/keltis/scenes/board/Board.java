@@ -41,7 +41,6 @@ import com.groupd.keltis.utils.JsonConverter;
 import com.groupd.keltis.utils.LabelHelper;
 import com.groupd.keltis.utils.PositioningConstants;
 import com.groupd.keltis.utils.RoadcardsToJson;
-import com.groupd.keltis.utils.StringToJson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -484,25 +483,9 @@ public class Board extends AbstractScene {
             } else{
                 branchStackPurple.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyPurple", "", -1));
             }
-        } else if(event instanceof RoadcardsSyncEvent){
-            ArrayList<RoadcardsStatus> roadcardsStatusArrayList = RoadcardsToJson.convertToObject(((RoadcardsSyncEvent) event).getJson());
-            ArrayList<Position> positionArrayList = new ArrayList<>();
-
-            int i = 0;
-            for(RoadcardsStatus roadcardsStatus:roadcardsStatusArrayList){
-                positionArrayList.add(keltis.positionHelper.getPositionHashMap().get(roadcardsStatus.getPosition()));
-                i++;
-            }
-            roadcardsList.addRoadcards(keltis,positionArrayList);
-            for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
-                stage.addActor(roadcards);
-            }
         } else if(event instanceof RoadcardsRemoveSyncEvent){
-            String roadcardName = StringToJson.convertToObject(((RoadcardsRemoveSyncEvent) event).getJson());
-            Gdx.app.log(roadcardName,"warum");
             for(Roadcards roadcards:roadcardsList.getRoadcardsArrayList()){
-                if(roadcards.getName().equals(roadcardName)){
-                    Gdx.app.log("ttttttt","dedfewf");
+                if(roadcards.getName().equals(((RoadcardsRemoveSyncEvent) event).getJson().substring(1,((RoadcardsRemoveSyncEvent) event).getJson().length()-1))){
                     roadcards.addAction(Actions.removeActor());
                 }
             }
