@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -28,6 +29,8 @@ public class Keltis extends Game {
 	public static int FPS = 60;
 
 	private Music music;
+	private Sound selectCard;
+	private Sound playCard;
 
 
 	@Override
@@ -36,6 +39,9 @@ public class Keltis extends Game {
 		music = Gdx.audio.newMusic(Gdx.files.internal("sounds/background_music.wav"));
 		music.setLooping(true);
 		music.play();
+
+		selectCard = Gdx.audio.newSound(Gdx.files.internal("sounds/select_card.wav"));
+		playCard = Gdx.audio.newSound(Gdx.files.internal("sounds/play_card.wav"));
 
 		if(Gdx.graphics.getHeight()<Gdx.graphics.getWidth()){
 			scaleFactorX = Gdx.graphics.getWidth()/SCALE_WIDTH;
@@ -154,11 +160,20 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.CARD_EMPTY_HANDCARD, Texture.class);
 
 		assetManager.load(AssetPaths.CARD_HIGHLIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_HIGHLIGHT_PLAYABLE, Texture.class);
 		
 		assetManager.load(AssetPaths.MENU_ASSET, Skin.class);
 		assetManager.load(AssetPaths.DIALOG_SKIN, Skin.class);
 
 
 		assetManager.finishLoading();
+	}
+
+	public Sound getSelectCard() {
+		return selectCard;
+	}
+
+	public Sound getPlayCard() {
+		return playCard;
 	}
 }

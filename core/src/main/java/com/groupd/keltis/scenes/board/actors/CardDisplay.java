@@ -1,6 +1,7 @@
 package com.groupd.keltis.scenes.board.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,6 +18,7 @@ import com.groupd.keltis.utils.ColorPile;
 
 public class CardDisplay extends Actor {
 
+    private final Keltis keltis;
     private Sprite sprite;
     private String name;
     private String color;
@@ -25,13 +27,18 @@ public class CardDisplay extends Actor {
     private Texture emptyHandcardTexture;
     private final CardDisplay itsaMe = this;
     private final Texture highlightTexture;
+    private final Texture highlightPlayableTexture;
     private final boolean isHandCard;
     private final boolean isDrawPile;
     private boolean isEmpty = true;
+    private boolean countUp = true;
+    private float counter;
     private ColorPile colorPile;
 
     public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard, boolean isDrawPile){
+        this.keltis = keltis;
         this.highlightTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT);
+        this.highlightPlayableTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT_PLAYABLE);
         this.isHandCard = isHandCard;
         this.isDrawPile = isDrawPile;
         if(isHandCard){
@@ -74,18 +81,26 @@ public class CardDisplay extends Actor {
                         && !Board.getHighlightedCardDisplay().isDrawPile
                         && keltis.gameLogic.isAllowPlay()
                 ){
+                    keltis.getPlayCard().play();
+                    Gdx.input.vibrate(50);
                     setCard(Board.getHighlightedCardDisplay().getCard());
                     Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
                     keltis.gameLogic.setAllowPlay(false);
                     keltis.gameLogic.sendTurnEvent(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()), currentCard, colorPile);
-                } else if(isDrawPile&&keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()){
+                } else if(isDrawPile
+                        && keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                        && keltis.gameLogic.isAllowDraw()){
+                    keltis.getPlayCard().play();
+                    Gdx.input.vibrate(50);
                     Board.setHighlightedCardDisplay(null);
                     keltis.gameLogic.drawCard(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()));
                     NetworkClient client = NetworkClient.INSTANCE;
                     NextPlayerEvent nextPlayerEvent = new NextPlayerEvent();
                     client.sendEvent(nextPlayerEvent);
                 } else{
+                    Gdx.input.vibrate(50);
+                    keltis.getSelectCard().play();
                     Board.setHighlightedCardDisplay(itsaMe);
                 }
                 Gdx.app.log("CARDTOUCH: Touch down asset with name ", name);
@@ -106,6 +121,89 @@ public class CardDisplay extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                &&!isDrawPile
+                &&!isHandCard
+                &&Board.getHighlightedCardDisplay()!=null){
+            if(Board.getHighlightedCardDisplay().isHandCard) {
+                Color c = batch.getColor();
+                batch.setColor(c.r, c.g, c.b, counter / 100);
+                batch.draw(highlightPlayableTexture, sprite.getX() - 15, sprite.getY() - 15);
+                batch.setColor(c);
+                if (countUp) {
+                    counter++;
+                } else {
+                    counter--;
+                }
+                if (counter == 100) {
+                    countUp = false;
+                }
+                if (counter == 40) {
+                    countUp = true;
+                }
+            }
+        }
+        if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                &&isDrawPile
+                &&keltis.gameLogic.isAllowDraw()){
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, counter/100);
+            batch.draw(highlightPlayableTexture, sprite.getX()-15, sprite.getY()-15);
+            batch.setColor(c);
+            if(countUp){
+                counter++;
+            } else{
+                counter--;
+            }
+            if(counter == 100){
+                countUp = false;
+            }
+            if(counter==40){
+                countUp = true;
+            }
+        }
+        if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                &&isHandCard
+                &&Board.getHighlightedCardDisplay()!=null
+                &&keltis.gameLogic.isAllowPlay()){
+            if(!Board.getHighlightedCardDisplay().isHandCard) {
+                Color c = batch.getColor();
+                batch.setColor(c.r, c.g, c.b, counter / 100);
+                batch.draw(highlightPlayableTexture, sprite.getX() - 15, sprite.getY() - 15);
+                batch.setColor(c);
+                if (countUp) {
+                    counter++;
+                } else {
+                    counter--;
+                }
+                if (counter == 100) {
+                    countUp = false;
+                }
+                if (counter == 40) {
+                    countUp = true;
+                }
+            }
+        }
+        if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
+                &&isHandCard
+                &&Board.getHighlightedCardDisplay()==null
+                &&keltis.gameLogic.isAllowPlay()){
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, counter / 100);
+            batch.draw(highlightPlayableTexture, sprite.getX() - 15, sprite.getY() - 15);
+            batch.setColor(c);
+            if (countUp) {
+                counter++;
+            } else {
+                counter--;
+            }
+            if (counter == 100) {
+                countUp = false;
+            }
+            if (counter == 40) {
+                countUp = true;
+            }
+        }
         if(Board.getHighlightedCardDisplay()==this){
             batch.draw(highlightTexture, sprite.getX(), sprite.getY());
         }
