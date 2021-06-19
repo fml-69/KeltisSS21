@@ -72,10 +72,12 @@ public class CardDisplay extends Actor {
                         && Board.getHighlightedCardDisplay().isHandCard
                         && keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
                         && !Board.getHighlightedCardDisplay().isDrawPile
+                        && keltis.gameLogic.isAllowPlay()
                 ){
                     setCard(Board.getHighlightedCardDisplay().getCard());
                     Board.getHighlightedCardDisplay().cardTaken();
                     Board.setHighlightedCardDisplay(null);
+                    keltis.gameLogic.setAllowPlay(false);
                     keltis.gameLogic.sendTurnEvent(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()), currentCard, colorPile);
                 } else if(isDrawPile&&keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()){
                     Board.setHighlightedCardDisplay(null);
