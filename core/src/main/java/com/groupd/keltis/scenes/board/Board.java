@@ -36,8 +36,9 @@ import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
-import com.groupd.keltis.utils.BranchStackToJson;
-import com.groupd.keltis.utils.ObjectToJson;
+import com.groupd.keltis.utils.ColorEnumsToString;
+import com.groupd.keltis.utils.JsonConverter;
+import com.groupd.keltis.utils.LabelHelper;
 import com.groupd.keltis.utils.PositioningConstants;
 import com.groupd.keltis.utils.RoadcardsToJson;
 import com.groupd.keltis.utils.StringToJson;
@@ -66,17 +67,13 @@ public class Board extends AbstractScene {
     private ArrayList<Player> player = new ArrayList<>();
     private HashMap<String, Figure> playerHashMap = new HashMap<>();
 
-
+    private Label scoreTitle;
     private Label player1;
     private Label player2;
     private Label player3;
     private Label player4;
+    private Label drawPileCount;
 
-
-    private Image playerPicture1;
-    private Image playerPicture2;
-    private Image playerPicture3;
-    private Image playerPicture4;
     private RoadcardsList roadcardsList = new RoadcardsList();
     private ShamrockDialog shamrockDialog;
 
@@ -103,6 +100,7 @@ public class Board extends AbstractScene {
 
     private static ArrayList<CardDisplay> handCardDisplayList = new ArrayList<>();
 
+
     public Board(final Keltis keltis) {
         super(keltis);
         this.camera = new OrthographicCamera();
@@ -115,24 +113,13 @@ public class Board extends AbstractScene {
         branches = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BRANCHES));
         hudBar = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_HUD_BAR));
 
-        playerPicture1 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
-        playerPicture2 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
-        playerPicture3 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
-        playerPicture4 = new Image((Texture) keltis.assetManager.get(AssetPaths.PLAYER_PICTURE));
-
         //GameLogic setDrawPile
         keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
-
-
 
         shamrockDialog = new ShamrockDialog("Herzlichen Glückwunsch!", keltis.assetManager.get(AssetPaths.DIALOG_SKIN,Skin.class));
 
 
-        //GameLogic setDrawPile
-
         keltis.gameLogic.setBoard(this);
-
-
     }
 
     @Override
@@ -179,10 +166,11 @@ public class Board extends AbstractScene {
             //Gdx.app.exit();
         }
         setTextOfScore();
-
+        setTextOfDrawPile();
         stage.draw();
         checkShaking(player);
     }
+
     public void setTextOfScore(){
         switch (keltis.gameLogic.getPlayerArrayList().size()){
             case 4:
@@ -195,6 +183,9 @@ public class Board extends AbstractScene {
                 player1.setText(keltis.gameLogic.getPlayerArrayList().get(0).getNick() + ": " + keltis.gameLogic.getPlayerArrayList().get(0).getOverallScore());
             default:
         }
+    }
+    public void setTextOfDrawPile(){
+        drawPileCount.setText("Verbleibende Karten: " + keltis.gameLogic.getDrawPile().size());
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
@@ -219,9 +210,9 @@ public class Board extends AbstractScene {
 
         initializeFiguresOnBoard();
 
-
         playerOverview();
 
+        remainingCardsOverview();
 
         branchStackGreen = new CardDisplay(keltis, keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_GREEN), "branchStackGreen", "green", false, false);
         branchStackGreen.spritePos(PositioningConstants.CARD_BRANCHSTACK_GREEN.x, PositioningConstants.CARD_BRANCHSTACK_GREEN.y);
@@ -296,11 +287,12 @@ public class Board extends AbstractScene {
         handCardDisplayList.add(handCard8);
         stage.addActor(handCard8);
 
-        for(CardDisplay cardDisplay: handCardDisplayList){
-            if(cardDisplay.isEmpty()){
-                cardDisplay.setCard(keltis.gameLogic.getDrawPile().remove(keltis.gameLogic.getDrawPile().size() - 1));
+        for(int i = 0; i < handCardDisplayList.size(); i++){
+            if(handCardDisplayList.get(i).isEmpty()){
+                handCardDisplayList.get(i).setCard((Card) keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getHandCards().get(i));
             }
         }
+
     }
 
     @Override
@@ -316,10 +308,6 @@ public class Board extends AbstractScene {
     @Override
     public void hide() {
 
-    }
-
-    public void setUpGame(int playerCount){
-        // TODO: 07.06.2021 Hier Spiel aufsetzen
     }
 
     public void initializeFiguresOnBoard() {
@@ -386,69 +374,41 @@ public class Board extends AbstractScene {
 
     }
 
-
     public void playerOverview() {
+        scoreTitle = LabelHelper.label(30,975);
+        scoreTitle.setText("Score:");
+        stage.addActor(scoreTitle);
         switch (keltis.gameLogic.getPlayerArrayList().size()) {
             case 4:
-                playerPicture4.setPosition(300, 675);
-                stage.addActor(playerPicture4);
-                player4 = playerLabel(keltis.gameLogic.getPlayerArrayList().get(3), 300, 600);
+                player4 = LabelHelper.labelWithColor(keltis.gameLogic.getPlayerArrayList().get(3).getColor(), 30, 775);
                 stage.addActor(player4);
             case 3:
-                playerPicture3.setPosition(50, 675);
-                stage.addActor(playerPicture3);
-                player3 = playerLabel(keltis.gameLogic.getPlayerArrayList().get(2), 50, 600);
+                player3 = LabelHelper.labelWithColor(keltis.gameLogic.getPlayerArrayList().get(2).getColor(), 30, 825);
                 stage.addActor(player3);
             case 2:
-                playerPicture2.setPosition(300, 900);
-                stage.addActor(playerPicture2);
-                player2 = playerLabel(keltis.gameLogic.getPlayerArrayList().get(1),300 , 825);
+                player2 = LabelHelper.labelWithColor(keltis.gameLogic.getPlayerArrayList().get(1).getColor(),30 , 875);
                 stage.addActor(player2);
             case 1:
-                playerPicture1.setPosition(50, 900);
-                stage.addActor(playerPicture1);
-                player1 = playerLabel(keltis.gameLogic.getPlayerArrayList().get(0), 50, 825);
+                player1 = LabelHelper.labelWithColor(keltis.gameLogic.getPlayerArrayList().get(0).getColor(), 30, 925);
                 stage.addActor(player1);
                 break;
             default:
         }
     }
 
-
-    public Label playerLabel(Player player, int x, int y) {
-        Label label = new Label(player.getNick() + ": " + keltis.gameLogic.getScoreOfPlayer(player), new Skin(Gdx.files.internal("skin_shade/uiskin.json")));
-        label.setWidth(200);
-        label.setHeight(100);
-        label.setFontScale(2);
-        switch (player.getColor()){
-            case BLUE:
-                label.setColor(Color.BLUE);
-                break;
-            case RED:
-                label.setColor(Color.RED);
-                break;
-            case YELLOW:
-                label.setColor(Color.YELLOW);
-                break;
-            case GREEN:
-                label.setColor(Color.GREEN);
-                break;
-            default:
-        }
-        label.setPosition(x, y);
-        return label;
+    public void remainingCardsOverview(){
+        drawPileCount = LabelHelper.label(30,225);
+        stage.addActor(drawPileCount);
     }
 
-    public void advanceFigure(String figure) {
-        playerHashMap.get(figure).moveUp();
-    }
+
+
 
     public ShamrockDialog getShamrockDialog() {
         return shamrockDialog;
     }
 
     public static void setHighlightedCardDisplay(CardDisplay cardDisplay){
-
         highlightedCardDisplay = cardDisplay;
     }
 
@@ -460,13 +420,14 @@ public class Board extends AbstractScene {
         return handCardDisplayList;
     }
 
+
     @Override
     public void onNetworkEvent(NetworkEvent event) {
         if(event instanceof TurnEvent){
             Gdx.app.log("NETWORK", "TURN RECEIVED");
-            PlayerMove playerMove = ObjectToJson.convertToObject(((TurnEvent) event).getJson());
+            PlayerMove playerMove = JsonConverter.convertToPlayerMove(((TurnEvent) event).getJson());
             lastPlayerNick = playerMove.getNick();
-            keltis.gameLogic.playCard(keltis.gameLogic.getPlayer(playerMove.getNick()), (Card) keltis.cardHelper.getCardHashmap().get(playerMove.getCardName()), keltis.gameLogic.getPileColor(playerMove.getColor()));
+            keltis.gameLogic.playCard(keltis.gameLogic.getPlayer(playerMove.getNick()), (Card) keltis.cardHelper.getCardHashmap().get(playerMove.getCardName()), ColorEnumsToString.getPileColor(playerMove.getColor()));
             if(!keltis.gameLogic.getPlayer(playerMove.getNick()).greenEmpty()){
                 branchStackGreen.setCard(keltis.gameLogic.getPlayer(playerMove.getNick()).getLastGreen());
             }
@@ -490,7 +451,7 @@ public class Board extends AbstractScene {
         else if(event instanceof CardDisplaySyncEvent){
             Gdx.app.log("NETWORK", "RECEIVED CARD STATUS");
             set = false;
-            BranchStackStatus branchStackStatus = BranchStackToJson.convertToObject(((CardDisplaySyncEvent) event).getJson());
+            BranchStackStatus branchStackStatus = JsonConverter.convertToBranchStackStatus(((CardDisplaySyncEvent) event).getJson());
             branchCards.add((Card) keltis.cardHelper.getCardHashmap().get(branchStackStatus.getGreen()));
             branchCards.add((Card) keltis.cardHelper.getCardHashmap().get(branchStackStatus.getYellow()));
             branchCards.add((Card) keltis.cardHelper.getCardHashmap().get(branchStackStatus.getRed()));
