@@ -21,6 +21,8 @@ import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.AssetPaths;
+import com.groupd.keltis.utils.CardHelper;
+import com.groupd.keltis.utils.JsonConverter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,12 +31,13 @@ public class LobbyScene extends AbstractScene {
 
     List<String> uIList;
     Array <String> playerList = new Array<>();
-    private ArrayList<Card> drawPile = new ArrayList<>();
+
+    private ArrayList drawPileNames = new ArrayList<>();
+    private CardHelper cardHelper = new CardHelper(keltis);
 
     public LobbyScene(Keltis keltis) {
         super(keltis);
-        fillDrawPile();
-        Collections.shuffle(drawPile);
+
         stage = new Stage(new ScreenViewport());
     }
 
@@ -46,10 +49,12 @@ public class LobbyScene extends AbstractScene {
 
             // send game logic with player, with the color provided by server
             keltis.gameLogic.getPlayerArrayList().add(new Player(keltis, ((JoinEvent) event).nick, ((JoinEvent) event).playerColor, false));
-        }
-        else if(event instanceof StartGameEvent){
-            fillHandcrds();
+        }else if(event instanceof StartGameEvent){
+            drawPileNames = JsonConverter.convertToArrayList(((StartGameEvent) event).getJson());
+            convertStringsToCards();
+            fillHandcards();
             keltis.sceneManager.setScene(SceneManager.GAMESTATE.PLAYING);
+
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
         }
@@ -85,11 +90,13 @@ public class LobbyScene extends AbstractScene {
         readyButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                NetworkClient.INSTANCE.sendEvent(new StartGameEvent());
+                fillStringPile();
+                Collections.shuffle(drawPileNames);
+                String json = JsonConverter.convertToJson(drawPileNames);
+                NetworkClient.INSTANCE.sendEvent(new StartGameEvent(json));
                 return true;
             }
         });
-
     }
 
     @Override
@@ -115,79 +122,85 @@ public class LobbyScene extends AbstractScene {
         NetworkClient.INSTANCE.receiveEvents();
     }
 
-    public void fillHandcrds(){
-        for(Player player:keltis.gameLogic.getPlayerArrayList()){
+    public void fillHandcards(){
+        Gdx.app.log(String.valueOf(keltis.gameLogic.getNumberInArrayList()), "SWAT");
+        for(int j = 0; j < keltis.gameLogic.getPlayerArrayList().size();j++){
             for(int i=1;i<=8;i++) {
-                player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
+                keltis.gameLogic.getPlayerArrayList().get(j).getHandCards().add(keltis.gameLogic.getDrawPile().remove(keltis.gameLogic.getDrawPile().size() - 1));
             }
         }
 
-        keltis.gameLogic.setDrawPile(drawPile);
+        //keltis.gameLogic.setDrawPile(drawPile);
+    }
+    public void convertStringsToCards(){
+        for(Object string:drawPileNames){
+            keltis.gameLogic.getDrawPile().add((Card) cardHelper.getCardHashmap().get(string));
+        }
     }
 
-    public void fillDrawPile(){
+
+    public void fillStringPile(){
         for(int i=1;i<=2;i++){
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_ZERO), "blueZero", "blue", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_ONE), "blueOne", "blue", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_TWO), "blueTwo", "blue", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_THREE), "blueThree", "blue", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FOUR), "blueFour", "blue", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_SIX), "blueSix", "blue", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_SEVEN), "blueSeven", "blue", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_EIGHT), "blueEight", "blue", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_NINE), "blueNine", "blue", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_TEN), "blueTen", "blue", 10));
+            drawPileNames.add("blueZero");
+            drawPileNames.add("blueOne");
+            drawPileNames.add("blueTwo");
+            drawPileNames.add("blueThree");
+            drawPileNames.add("blueFour");
+            drawPileNames.add("blueFive");
+            drawPileNames.add("blueSix");
+            drawPileNames.add("blueSeven");
+            drawPileNames.add("blueEight");
+            drawPileNames.add( "blueNine");
+            drawPileNames.add( "blueTen");
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_ZERO), "greenZero", "green", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_ONE), "greenOne", "green", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_TWO), "greenTwo", "green", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_THREE), "greenThree", "green", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_FOUR), "greenFour", "green", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_FIVE), "greenFive", "green", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_SIX), "greenSix", "green", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_SEVEN), "greenSeven", "green", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_EIGHT), "greenEight", "green", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_NINE), "greenNine", "green", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_GREEN_TEN), "greenTen", "green", 10));
+            drawPileNames.add( "greenZero");
+            drawPileNames.add( "greenOne");
+            drawPileNames.add( "greenTwo");
+            drawPileNames.add("greenThree");
+            drawPileNames.add( "greenFour");
+            drawPileNames.add("greenFive");
+            drawPileNames.add("greenSix");
+            drawPileNames.add( "greenSeven");
+            drawPileNames.add("greenEight");
+            drawPileNames.add("greenNine");
+            drawPileNames.add( "greenTen");
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_ZERO), "purpleZero", "purple", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_ONE), "purpleOne", "purple", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_TWO), "purpleTwo", "purple", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_THREE), "purpleThree", "purple", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_FOUR), "purpleFour", "purple", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_FIVE), "purpleFive", "purple", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_SIX), "purpleSix", "purple", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_SEVEN), "purpleSeven", "purple", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_EIGHT), "purpleEight", "purple", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_NINE), "purpleNine", "purple", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_PURPLE_TEN), "purpleTen", "purple", 10));
+            drawPileNames.add("purpleZero");
+            drawPileNames.add("purpleOne");
+            drawPileNames.add("purpleTwo");
+            drawPileNames.add( "purpleThree");
+            drawPileNames.add("purpleFour");
+            drawPileNames.add("purpleFive");
+            drawPileNames.add( "purpleSix");
+            drawPileNames.add("purpleSeven");
+            drawPileNames.add( "purpleEight");
+            drawPileNames.add( "purpleNine");
+            drawPileNames.add("purpleTen");
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_ZERO), "redZero", "red", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_ONE), "redOne", "red", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_TWO), "redTwo", "red", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_THREE), "redThree", "red", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_FOUR), "redFour", "red", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_FIVE), "redFive", "red", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_SIX), "redSix", "red", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_SEVEN), "redSeven", "red", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_EIGHT), "redEight", "red", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_NINE), "redNine", "red", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_RED_TEN), "redTen", "red", 10));
+            drawPileNames.add( "redZero");
+            drawPileNames.add( "redOne");
+            drawPileNames.add("redTwo");
+            drawPileNames.add("redThree");
+            drawPileNames.add( "redFour");
+            drawPileNames.add( "redFive");
+            drawPileNames.add( "redSix");
+            drawPileNames.add("redSeven");
+            drawPileNames.add("redEight");
+            drawPileNames.add( "redNine");
+            drawPileNames.add("redTen");
 
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_ZERO), "yellowZero", "yellow", 0));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_ONE), "yellowOne", "yellow", 1));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_TWO), "yellowTwo", "yellow", 2));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_THREE), "yellowThree", "yellow", 3));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_FOUR), "yellowFour", "yellow", 4));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_FIVE), "yellowFive", "yellow", 5));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_SIX), "yellowSix", "yellow", 6));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_SEVEN), "yellowSeven", "yellow", 7));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_EIGHT), "yellowEight", "yellow", 8));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_NINE), "yellowNine", "yellow", 9));
-            drawPile.add(new Card(keltis.assetManager.get(AssetPaths.CARD_YELLOW_TEN), "yellowTen", "yellow", 10));
+            drawPileNames.add("yellowZero");
+            drawPileNames.add("yellowOne");
+            drawPileNames.add("yellowTwo");
+            drawPileNames.add("yellowThree");
+            drawPileNames.add( "yellowFour");
+            drawPileNames.add( "yellowFive");
+            drawPileNames.add("yellowSix");
+            drawPileNames.add( "yellowSeven");
+            drawPileNames.add("yellowEight");
+            drawPileNames.add( "yellowNine");
+            drawPileNames.add( "yellowTen");
         }
-
     }
 }
 

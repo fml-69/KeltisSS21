@@ -9,13 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.groupd.keltis.Keltis;
-import com.groupd.keltis.management.BranchStackStatus;
 import com.groupd.keltis.network.NetworkClient;
-import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.scenes.board.Board;
 import com.groupd.keltis.utils.AssetPaths;
-import com.groupd.keltis.utils.BranchStackToJson;
 import com.groupd.keltis.utils.ColorPile;
 
 public class CardDisplay extends Actor {
