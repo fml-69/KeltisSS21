@@ -487,4 +487,14 @@ public class GameLogic {
     public void setAllowPlay(boolean allowPlay) {
         this.allowPlay = allowPlay;
     }
+
+    /**------------------------------allowDraw Getter & Setter-----------------------------------**/
+
+    public boolean isAllowDraw() {
+        return allowDraw;
+    }
+
+    public void setAllowDraw(boolean allowPlay) {
+        this.allowDraw = allowDraw;
+    }
 }

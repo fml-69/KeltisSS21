@@ -92,6 +92,7 @@ public final class AssetPaths {
     public static final String CARD_EMPTY_HANDCARD = "board/cards/cards_empty_handcard.png";
 
     public static final String CARD_HIGHLIGHT = "board/cards/cards_highlight.png";
+    public static final String CARD_HIGHLIGHT_PLAYABLE = "board/cards/cards_highlight_playable.png";
 
     public static final String UI_FONT = "fonts/JetBrainsMono-Regular.ttf";
     public static final String UI_SKIN = "ui/uiskin.json";
