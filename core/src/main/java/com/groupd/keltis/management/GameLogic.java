@@ -39,6 +39,7 @@ public class GameLogic {
     private final ArrayList<Card> greenDiscardPile;
     private final ArrayList<Card> purpleDiscardPile;
     private boolean allowDraw = false;
+    private boolean allowPlay = true;
 
     public GameLogic() {
         this.drawPile = new ArrayList<>();
@@ -95,6 +96,7 @@ public class GameLogic {
     /**-------------------------------Set Turn of Next Player------------------------------------**/
 
     public void setTurnPlayer(Player player) {
+        allowPlay = true;
         switch (playerArrayList.size()) {
             case 1:
                 break;
@@ -438,5 +440,13 @@ public class GameLogic {
         return playerArrayList;
     }
 
-    /**------------------------------------------------------------------------------------------**/
+    /**------------------------------allowPlay Getter & Setter-----------------------------------**/
+
+    public boolean isAllowPlay() {
+        return allowPlay;
+    }
+
+    public void setAllowPlay(boolean allowPlay) {
+        this.allowPlay = allowPlay;
+    }
 }
