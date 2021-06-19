@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
-import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
@@ -137,6 +136,7 @@ public class ServerRunnable implements Runnable{
     public void setPlayerCheat(boolean cheat, String nick){
         getPlayerNick(nick).setCheat(cheat);
     }
+
 
 
 
