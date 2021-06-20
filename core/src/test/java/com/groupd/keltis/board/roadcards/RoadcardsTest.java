@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RoadcardsTest {
-    /*@Mock
+    @Mock
     private Texture textureMock;
     @Mock
     private Position positionMock;
@@ -39,7 +39,7 @@ public class RoadcardsTest {
     public void testRoadcardsConstructorWishstone(){
         when(positionMock.getX()).thenReturn(120);
 
-        roadcard = new Wishstone(textureMock, positionMock);
+        roadcard = new Wishstone("wishstoneOne",textureMock, positionMock);
         Roadcards roadcards1 = roadcard;
 
         assertEquals(roadcards1, roadcard);
@@ -52,7 +52,7 @@ public class RoadcardsTest {
     public void testRoadcardsConstructorShamrock(){
         when(positionMock.getX()).thenReturn(100);
 
-        roadcard = new Shamrock(textureMock, positionMock);
+        roadcard = new Shamrock("shamrockOne",textureMock, positionMock);
         Roadcards roadcards1 = roadcard;
 
         assertEquals(roadcards1, roadcard);
@@ -64,7 +64,7 @@ public class RoadcardsTest {
     public void testRoadCardsConstructorPointcards(){
         when(positionMock.getX()).thenReturn(140);
 
-        roadcard = new Pointcard(textureMock, positionMock,3);
+        roadcard = new Pointcard("positionOne",textureMock, positionMock,3);
         Pointcard pointcard = (Pointcard) roadcard;
 
         assertEquals(pointcard,roadcard);
@@ -76,12 +76,12 @@ public class RoadcardsTest {
 
     @Test
     public void testRoadcardsSpritePosReturn200And400(){
-        roadcard = new Roadcards(textureMock, positionMock);
+        roadcard = new Roadcards("roadcardOne",textureMock, positionMock);
         roadcard.spritePos(200,400);
         assertEquals(200, (int) roadcard.getSprite().getX());
         assertEquals(400, (int) roadcard.getSprite().getY());
     }
-    */
+
 }
 
 
