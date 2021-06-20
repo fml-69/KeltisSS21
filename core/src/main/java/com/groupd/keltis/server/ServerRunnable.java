@@ -161,6 +161,7 @@ public class ServerRunnable implements Runnable{
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und verlierst 4 Punkte.");
                     cheatQueryEvent.setScore(-4);
+                    player.setCheat(false);
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                 }
                 else if (player.getNick().equals(nick)){

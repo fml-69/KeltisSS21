@@ -141,28 +141,38 @@ public class GameLogic {
         switch (colorPile) {
             case RED:
                 redDiscardPile.add(card);
-                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(redDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case BLUE:
                 blueDiscardPile.add(card);
-                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(blueDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case GREEN:
                 greenDiscardPile.add(card);
-                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(greenDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case YELLOW:
                 yellowDiscardPile.add(card);
-                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case PURPLE:
                 purpleDiscardPile.add(card);
-                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case DISCARD:
                 discardPile.add(card);
@@ -324,11 +334,13 @@ public class GameLogic {
             return false;
         }
         for (int i = 0; i < pile.size() - 1; i++) {
-            greater = pile.get(i).getNumber() < pile.get(i + 1).getNumber();
+            // greater = pile.get(i).getNumber() < pile.get(i + 1).getNumber();
+            greater |= pile.get(i).getNumber() > pile.get(i + 1).getNumber();
         }
-        if (greater && numberCard > pile.get(pile.size() - 1).getNumber()) {
-            return true;
-        } else return !greater && numberCard < pile.get(pile.size() - 1).getNumber();
+        // if (greater && numberCard > pile.get(pile.size() - 1).getNumber()) {
+        //     return true;
+        //} else return !greater && numberCard < pile.get(pile.size() - 1).getNumber();
+        return greater;
     }
 
     public boolean checkCheat(ArrayList<Player> player) {
