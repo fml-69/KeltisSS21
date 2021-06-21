@@ -70,6 +70,7 @@ public class Board extends AbstractScene {
     private Label player3;
     private Label player4;
     private Label drawPileCount;
+    private Label turnText;
 
     private RoadcardsList roadcardsList = new RoadcardsList();
     private BranchDialog branchDialog;
@@ -163,6 +164,8 @@ public class Board extends AbstractScene {
         setTextOfDrawPile();
         stage.draw();
         checkShaking(player);
+
+        setTurnText();
     }
 
     public void setTextOfScore(){
@@ -178,6 +181,34 @@ public class Board extends AbstractScene {
             default:
         }
     }
+
+
+    public void setTurnText() {
+        Player player = keltis.gameLogic.getCurrentPlayer();
+        if(player == null){
+            turnText.setText("Spieler anzeigen funktioniert nicht.");
+        }
+        else {
+            turnText.setText(player.getNick() + " ist am Zug ");
+
+            switch (player.getColor()){
+                case BLUE:
+                    turnText.setColor(Color.BLUE);
+                    break;
+                case RED:
+                    turnText.setColor(Color.RED);
+                    break;
+                case YELLOW:
+                    turnText.setColor(Color.YELLOW);
+                    break;
+                case GREEN:
+                    turnText.setColor(Color.GREEN);
+                    break;
+                default:
+            }
+        }
+    }
+
     public void setTextOfDrawPile(){
         drawPileCount.setText("Verbleibende Karten: " + keltis.gameLogic.getDrawPile().size());
     }
@@ -200,6 +231,11 @@ public class Board extends AbstractScene {
         for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
             stage.addActor(roadcards);
         }
+
+        // label to display current player
+        turnText = LabelHelper.label(30,270);
+        stage.addActor(turnText);
+        setTurnText();
 
 
         initializeFiguresOnBoard();
@@ -450,6 +486,10 @@ public class Board extends AbstractScene {
             branchCards.add((Card) keltis.cardHelper.getCardHashmap().get(branchStackStatus.getPurple()));
         } else if(event instanceof NextPlayerEvent){
             keltis.gameLogic.setTurnPlayer(keltis.gameLogic.getPlayer(lastPlayerNick));
+
+            // display current player's name
+            setTurnText();
+
             if(!keltis.gameLogic.getCurrentPlayer().greenEmpty()){
                 branchStackGreen.setCard(keltis.gameLogic.getCurrentPlayer().getLastGreen());
             } else{

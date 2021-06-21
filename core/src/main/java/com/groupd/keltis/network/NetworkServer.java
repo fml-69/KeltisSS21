@@ -191,7 +191,6 @@ public class NetworkServer {
                     event.encode(channel.dataOut);
                     Gdx.app.log("Info","message: " + channel.toString() );
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
