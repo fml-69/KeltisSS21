@@ -50,7 +50,7 @@ public class Roadcards extends Actor {
         sprite.draw(batch);
 
         if(startFlare) {
-            flare.setRotation(360*angle/60);
+            flare.setRotation(360*angle/100);
             angle++;
             flare.draw(batch,counter/60);
 
