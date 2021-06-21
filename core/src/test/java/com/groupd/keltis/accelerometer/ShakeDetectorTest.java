@@ -39,4 +39,22 @@ public class ShakeDetectorTest {
         verify(Gdx.input,times(1)).getAccelerometerZ();
         verify(Gdx.input,times(1)).isPeripheralAvailable(Input.Peripheral.Accelerometer);
     }
+
+    @Test
+    public void testPhoneNotShaken() {
+        Mockito.when(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)).thenReturn(true);
+        Mockito.when(Gdx.input.getAccelerometerX()).thenReturn(0f);
+        Mockito.when(Gdx.input.getAccelerometerY()).thenReturn(0f);
+        Mockito.when(Gdx.input.getAccelerometerZ()).thenReturn(0f);
+
+        //check if the phone is shaken or not
+        assertFalse(ShakeDetector.phoneIsShaking());
+
+        //small check if the methods are only called once
+        verify(Gdx.input,times(1)).getAccelerometerX();
+        verify(Gdx.input,times(1)).getAccelerometerY();
+        verify(Gdx.input,times(1)).getAccelerometerZ();
+        verify(Gdx.input,times(1)).isPeripheralAvailable(Input.Peripheral.Accelerometer);
+    }
+
 }
