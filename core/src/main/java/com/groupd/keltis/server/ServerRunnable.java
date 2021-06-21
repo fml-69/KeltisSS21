@@ -91,10 +91,8 @@ public class ServerRunnable implements Runnable{
         Player player = getPlayerNick(nick);
         if(player != null && player.isHost()){
             // disabled for easier development
-
             //if(playerList.size() >= 2 && playerList.size() <= 4){
                 networkServer.broadCast(event);
-
             //}
         }
     }
