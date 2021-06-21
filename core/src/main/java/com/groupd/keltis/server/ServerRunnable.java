@@ -6,6 +6,7 @@ import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.RoadcardsSyncEvent;
@@ -140,6 +141,9 @@ public class ServerRunnable implements Runnable{
 
     public void roadcardsRemoveSync(RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent){
         networkServer.broadCast(roadcardsRemoveSyncEvent);
+    }
+    public void moveBecauseOfShamrock(MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent){
+        networkServer.broadCast(moveBecauseOfShamrockEvent);
     }
 
     public void setPlayerCheat(boolean cheat, String nick){

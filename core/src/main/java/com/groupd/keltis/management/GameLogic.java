@@ -10,6 +10,7 @@ import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
+import com.groupd.keltis.scenes.board.BranchDialog;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
@@ -78,7 +79,6 @@ public class GameLogic {
             client.sendEvent(turnEvent);
             allowDraw = true;
             Gdx.app.log("NETWORK", "TURN SENT");
-            //der Nachziehstapel muss sync werden
         }
     }
 
@@ -255,7 +255,7 @@ public class GameLogic {
             if (figure.getBranch() == roadcards.getPosition().getBranch() &&
                     figure.getCurrentFieldPosition() == roadcards.getPosition().getField()) {
 
-                checkCard(player, figure, roadcards);
+                checkCard(player, roadcards);
                 if(roadcards instanceof Wishstone){
                     roadCardsList.remove(roadcards);
                 }
@@ -265,7 +265,7 @@ public class GameLogic {
         return false;
     }
 
-    public boolean checkCard(Player player, Figure figure, Roadcards roadcards) {
+    public boolean checkCard(Player player,Roadcards roadcards) {
         NetworkClient client = NetworkClient.INSTANCE;
         if (roadcards instanceof Wishstone) {
             Gdx.app.log("Wishstone: ", "get WishStone");
@@ -275,17 +275,9 @@ public class GameLogic {
             client.sendEvent(roadcardsRemoveSyncEvent);
         } else if (roadcards instanceof Shamrock) {
             Gdx.app.log("Shamrock: ", "get Shamrock");
-            board.getShamrockDialog().getLabel().setText("");
-            board.getShamrockDialog().setText(getCurrentPlayer().getNick());
-            board.showDialog(board.getShamrockDialog(),board.stage,3);
-            float delay = 2; // seconds
-            Timer.schedule(new Timer.Task(){
-                @Override
-                public void run() {
-                    board.getShamrockDialog().hide();
-                    moveFigure(player,figure);
-                }
-            }, delay);
+            if(getCurrentPlayer().getNick().equals(playerNick)){
+                board.createBranchDialog(player);
+            }
             return true;
         } else if (roadcards instanceof Pointcard) {
             Gdx.app.log("PointCard: ", "get PointCard");

@@ -50,10 +50,6 @@ public class GameLogicTest {
     private Shamrock shamrockMock;
     @Mock
     private Position positionMock;
-    @Mock
-    private ShamrockDialog shamrockDialogMock;
-    @Mock
-    private Label labelMock;
 
     @InjectMocks
     private GameLogic gameLogic;
@@ -77,8 +73,8 @@ public class GameLogicTest {
         when(pointcard2Mock.getPoints()).thenReturn(3);
         when(playerMock.getPointCards()).thenReturn(pointcardArrayList);
 
-        gameLogic.checkCard(playerMock,null, pointcardMock);
-        gameLogic.checkCard(playerMock,null, pointcard2Mock);
+        gameLogic.checkCard(playerMock, pointcardMock);
+        gameLogic.checkCard(playerMock, pointcard2Mock);
 
         assertEquals(pointcardArrayList,playerMock.getPointCards());
         assertEquals(2,playerMock.getPointCards().get(0).getPoints());
@@ -93,7 +89,7 @@ public class GameLogicTest {
     public void testCheckCardReturnAddWishstone() throws IOException {
         when(playerMock.getWishingStones()).thenReturn(1);
         try {
-            gameLogic.checkCard(playerMock,null,wishstoneMock);
+            gameLogic.checkCard(playerMock,wishstoneMock);
         } catch (Exception e){
             assertEquals(e.getClass(),NullPointerException.class);
         }
@@ -108,17 +104,13 @@ public class GameLogicTest {
         playerArrayList.add(playerMock);
         gameLogic.setPlayerArrayList(playerArrayList);
 
-        when(boardMock.getShamrockDialog()).thenReturn(shamrockDialogMock);
-        when(shamrockDialogMock.getLabel()).thenReturn(labelMock);
         when(playerMock.getTurn()).thenReturn(true);
         when(playerMock.getNick()).thenReturn("");
         when(figureMock.getCurrentFieldPosition()).thenReturn(1);
 
-        assertEquals(true,gameLogic.checkCard(playerMock,figureMock,shamrockMock));
+        assertEquals(true,gameLogic.checkCard(playerMock,shamrockMock));
         assertEquals(figureMock.getCurrentFieldPosition(),1);
 
-        verify(boardMock,times(3)).getShamrockDialog();
-        verify(shamrockDialogMock,times(1)).getLabel();
         verify(playerMock,times(1)).getTurn();
         verify(playerMock,times(1)).getNick();
         verify(figureMock,times(1)).getCurrentFieldPosition();

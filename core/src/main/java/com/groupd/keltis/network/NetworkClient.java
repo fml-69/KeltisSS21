@@ -10,6 +10,7 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
@@ -153,6 +154,10 @@ public class NetworkClient {
                     RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent();
                     roadcardsRemoveSyncEvent.decode(dataIn);
                     keltis.sceneManager.getActiveScene().onNetworkEvent(roadcardsRemoveSyncEvent);
+                }else if(eventID == 70){
+                    MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent = new MoveBecauseOfShamrockEvent();
+                    moveBecauseOfShamrockEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(moveBecauseOfShamrockEvent);
                 } else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }

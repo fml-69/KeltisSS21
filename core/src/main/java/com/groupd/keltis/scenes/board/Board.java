@@ -15,32 +15,30 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
 import com.groupd.keltis.management.BranchStackStatus;
-import com.groupd.keltis.management.RoadcardsStatus;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.management.PlayerMove;
 import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
-import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.IngameMenuButton;
-import com.groupd.keltis.scenes.board.road_cards.Position;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
 import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorEnumsToString;
+import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.JsonConverter;
 import com.groupd.keltis.utils.LabelHelper;
 import com.groupd.keltis.utils.PositioningConstants;
-import com.groupd.keltis.utils.RoadcardsToJson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +72,7 @@ public class Board extends AbstractScene {
     private Label drawPileCount;
 
     private RoadcardsList roadcardsList = new RoadcardsList();
-    private ShamrockDialog shamrockDialog;
+    private BranchDialog branchDialog;
 
     private String greenStackTop = "";
     private String yellowStackTop = "";
@@ -114,9 +112,6 @@ public class Board extends AbstractScene {
 
         //GameLogic setDrawPile
         keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
-
-        shamrockDialog = new ShamrockDialog("Herzlichen Glückwunsch!", keltis.assetManager.get(AssetPaths.DIALOG_SKIN,Skin.class));
-
 
         keltis.gameLogic.setBoard(this);
     }
@@ -403,9 +398,6 @@ public class Board extends AbstractScene {
 
 
 
-    public ShamrockDialog getShamrockDialog() {
-        return shamrockDialog;
-    }
 
     public static void setHighlightedCardDisplay(CardDisplay cardDisplay){
         highlightedCardDisplay = cardDisplay;
@@ -489,11 +481,61 @@ public class Board extends AbstractScene {
                     roadcards.addAction(Actions.removeActor());
                 }
             }
+        } else if(event instanceof MoveBecauseOfShamrockEvent){
+            PlayerMove playerMove = JsonConverter.convertToPlayerMove(((MoveBecauseOfShamrockEvent) event).getJson());
+            if(!keltis.gameLogic.getPlayerNick().equals(playerMove.getNick())) {
+                keltis.gameLogic.move(keltis.gameLogic.getPlayer(playerMove.getNick()), ColorEnumsToString.getPileColor(playerMove.getColor()));
+            }
         }
 
     }
+    public void createBranchDialog(Player player){
+        branchDialog = new BranchDialog("Herzlichen Glueckwunsch", keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                new BranchDialog.Callback() {
+                    @Override
+                    public void result(int result) {
+                        switch (result) {
+                            case 1:
+                                keltis.gameLogic.move(player, ColorPile.GREEN);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent1 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.GREEN))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent1);
+                                break;
+                            case 2:
+                                keltis.gameLogic.move(player, ColorPile.YELLOW);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent2 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.YELLOW))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent2);
+                                break;
+                            case 3:
+                                keltis.gameLogic.move(player, ColorPile.RED);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent3 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.RED))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent3);
+                                break;
+                            case 4:
+                                keltis.gameLogic.move(player, ColorPile.BLUE);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent4 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.BLUE))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent4);
+                                break;
+                            case 5:
+                                keltis.gameLogic.move(player, ColorPile.PURPLE);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent5 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.PURPLE))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent5);
+                                break;
+                            default:
+                        }
+                    }
+                });
+        showDialog(branchDialog, stage, 3);
+        }
 
     public void setRoadcardsList(RoadcardsList roadcardsList) {
         this.roadcardsList = roadcardsList;
+    }
+
+    public BranchDialog getBranchDialog() {
+        return branchDialog;
+    }
+
+    public void setBranchDialog(BranchDialog branchDialog) {
+        this.branchDialog = branchDialog;
     }
 }

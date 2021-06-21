@@ -5,6 +5,7 @@ import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.CheatEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
@@ -144,6 +145,10 @@ public class NetworkServer {
                         RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent();
                         roadcardsRemoveSyncEvent.decode(channel.dataIn);
                         server.roadcardsRemoveSync(roadcardsRemoveSyncEvent);
+                    } else if(eventID == 70){
+                        MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent = new MoveBecauseOfShamrockEvent();
+                        moveBecauseOfShamrockEvent.decode(channel.dataIn);
+                        server.moveBecauseOfShamrock(moveBecauseOfShamrockEvent);
                     } else {
                         Gdx.app.error("Error", "Invalid Network EventID");
                     }
