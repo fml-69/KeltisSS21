@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
@@ -39,13 +40,13 @@ public class RoadcardsListTest {
     private RoadcardsList roadcardsList;
 
     private ArrayList<Position> roadcardsPositionArray;
+    HashMap<String, Position> positionHashMap = new HashMap<>();
 
     @Before
     public void setUp(){
         MockitoAnnotations.openMocks(this);
         roadcardsList = new RoadcardsList();
-        roadcardsPositionArray = new ArrayList<>();
-        roadcardsList.generateArray(roadcardsPositionArray);
+        roadcardsPositionArray = roadcardsList.generateArray();
         keltisMock.assetManager = assetManagerMock;
     }
 
@@ -85,43 +86,42 @@ public class RoadcardsListTest {
     }
     @Test
     public void testgenerateArrayEqual(){
-        ArrayList<Position> positionArrayList = new ArrayList<>();
-        positionArrayList.add(new Position(610,308,1,2));
-        positionArrayList.add(new Position(610,400,1,3));
-        positionArrayList.add(new Position(610,584,1,5));
-        positionArrayList.add(new Position(610,676,1,6));
-        positionArrayList.add(new Position(610,768,1,7));
+        positionHashMap.put("positionOne",new Position("positionOne",610,308,1,2));
+        positionHashMap.put("positionTwo",new Position("positionTwo",610,400,1,3));
+        positionHashMap.put("positionThree",new Position("positionThree",610,584,1,5));
+        positionHashMap.put("positionFour",new Position("positionFour",610,676,1,6));
+        positionHashMap.put("positionFive",new Position("positionFive",610,768,1,7));
 
-        positionArrayList.add(new Position(830,308,2,2));
-        positionArrayList.add(new Position(830,492,2,4));
-        positionArrayList.add(new Position(830,676,2,6));
-        positionArrayList.add(new Position(830,768,2,7));
-        positionArrayList.add(new Position(830,860,2,8));
+        positionHashMap.put("positionSix",new Position("positionSix",830,308,2,2));
+        positionHashMap.put("positionSeven",new Position("positionSeven",830,492,2,4));
+        positionHashMap.put("positionEight",new Position("positionEight",830,676,2,6));
+        positionHashMap.put("positionNine",new Position("positionNine",830,768,2,7));
+        positionHashMap.put("positionTen",new Position("positionTen",830,860,2,8));
 
-        positionArrayList.add(new Position(1050,308,3,2));
-        positionArrayList.add(new Position(1050,400,3,3));
-        positionArrayList.add(new Position(1050,584,3,5));
-        positionArrayList.add(new Position(1050,768,3,7));
-        positionArrayList.add(new Position(1050,860,3,8));
+        positionHashMap.put("positionEleven",new Position("positionEleven",1050,308,3,2));
+        positionHashMap.put("positionTwelve",new Position("positionOneTwelve",1050,400,3,3));
+        positionHashMap.put("positionThirteen",new Position("positionThirteen",1050,584,3,5));
+        positionHashMap.put("positionFourteen",new Position("positionFourteen",1050,768,3,7));
+        positionHashMap.put("positionFifteen",new Position("positionFifteen",1050,860,3,8));
 
-        positionArrayList.add(new Position(1275,308,4,2));
-        positionArrayList.add(new Position(1275,492,4,4));
-        positionArrayList.add(new Position(1275,584,4,5));
-        positionArrayList.add(new Position(1275,768,4,7));
-        positionArrayList.add(new Position(1275,860,4,8));
+        positionHashMap.put("positionSixteen",new Position("positionSixteen",1275,308,4,2));
+        positionHashMap.put("positionSeventeen",new Position("positionSeventeen",1275,492,4,4));
+        positionHashMap.put("positionEighteen",new Position("positionEighteen",1275,584,4,5));
+        positionHashMap.put("positionNineteen",new Position("positionNineteen",1275,768,4,7));
+        positionHashMap.put("positionTwenty",new Position("positionTwenty",1275,860,4,8));
 
-        positionArrayList.add(new Position(1495,308,5,2));
-        positionArrayList.add(new Position(1495,400,5,3));
-        positionArrayList.add(new Position(1495,492,5,4));
-        positionArrayList.add(new Position(1495,676,5,6));
-        positionArrayList.add(new Position(1495,768,5,7));
+        positionHashMap.put("positionTwentyOne",new Position("positionTwentyOne",1495,308,5,2));
+        positionHashMap.put("positionTwentyTwo",new Position("positionTwentyTwo",1495,400,5,3));
+        positionHashMap.put("positionTwentyThree",new Position("positionTwentyThree",1495,492,5,4));
+        positionHashMap.put("positionTwentyFour",new Position("positionTwentyFour",1495,676,5,6));
+        positionHashMap.put("positionTwentyFive",new Position("positionTwentyFive",1495,768,5,7));
 
-
-        for(int i = 0; i<positionArrayList.size();i++){
-            assertEquals(positionArrayList.get(i).getBranch(),roadcardsPositionArray.get(i).getBranch());
-            assertEquals(positionArrayList.get(i).getField(),roadcardsPositionArray.get(i).getField());
-            assertEquals(positionArrayList.get(i).getX(),roadcardsPositionArray.get(i).getX());
-            assertEquals(positionArrayList.get(i).getY(),roadcardsPositionArray.get(i).getY());
+        for(int i = 0; i<roadcardsPositionArray.size();i++){
+            assertEquals(positionHashMap.get(roadcardsPositionArray.get(i).getName()).getBranch(),roadcardsPositionArray.get(i).getBranch());
+            assertEquals(positionHashMap.get(roadcardsPositionArray.get(i).getName()).getField(),roadcardsPositionArray.get(i).getField());
+            assertEquals(positionHashMap.get(roadcardsPositionArray.get(i).getName()).getX(),roadcardsPositionArray.get(i).getX());
+            assertEquals(positionHashMap.get(roadcardsPositionArray.get(i).getName()).getY(),roadcardsPositionArray.get(i).getY());
         }
+        assertEquals(roadcardsPositionArray.size(),25);
     }
 }

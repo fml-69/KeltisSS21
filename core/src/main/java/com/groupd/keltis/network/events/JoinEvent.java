@@ -11,14 +11,16 @@ public class JoinEvent extends NetworkEvent{
 
     public String nick;
     public ColorFigures playerColor;
+    public boolean host;
 
     public JoinEvent(){
 
     }
 
-    public JoinEvent(String nick, ColorFigures playerColor){
+    public JoinEvent(String nick, ColorFigures playerColor, boolean host){
         this.nick = nick;
         this.playerColor = playerColor;
+        this.host = host;
     }
 
     @Override
@@ -27,6 +29,7 @@ public class JoinEvent extends NetworkEvent{
         dataOut.writeUTF(nick);
         // send color as number
         dataOut.writeInt(playerColor.ordinal());
+        dataOut.writeBoolean(host);
     }
 
     @Override
@@ -34,6 +37,7 @@ public class JoinEvent extends NetworkEvent{
         super.decode(dataIn);
         nick = dataIn.readUTF();
         this.playerColor = ColorFigures.values()[dataIn.readInt()];
+        this.host = dataIn.readBoolean();
     }
 
     @Override

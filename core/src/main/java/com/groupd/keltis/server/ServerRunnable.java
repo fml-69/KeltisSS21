@@ -6,7 +6,10 @@ import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 
 import com.groupd.keltis.scenes.board.actors.Player;
@@ -59,13 +62,13 @@ public class ServerRunnable implements Runnable{
     public void join(String nick){
 
         for(Player player:playerList){
-           networkServer.sendEvent(nick, new JoinEvent(player.getNick(), player.getColor()));
+           networkServer.sendEvent(nick, new JoinEvent(player.getNick(), player.getColor(),player.isHost()));
         }
 
 
         // first player added will be automatically host by boolean value of isEmpty()
         Player player = new Player(keltis, nick, playerColor() , playerList.isEmpty());
-        networkServer.broadCast(new JoinEvent(nick, player.getColor()));
+        networkServer.broadCast(new JoinEvent(nick, player.getColor(),player.isHost()));
         playerList.add(player);
 
     }
@@ -130,6 +133,16 @@ public class ServerRunnable implements Runnable{
         networkServer.broadCast(nextPlayerEvent);
     }
 
+    public void roadcardsSync(RoadcardsSyncEvent roadcardsSyncEvent){
+        networkServer.broadCast(roadcardsSyncEvent);
+    }
+
+    public void roadcardsRemoveSync(RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent){
+        networkServer.broadCast(roadcardsRemoveSyncEvent);
+    }
+    public void moveBecauseOfShamrock(MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent){
+        networkServer.broadCast(moveBecauseOfShamrockEvent);
+    }
 
     public void setPlayerCheat(boolean cheat, String nick){
         getPlayerNick(nick).setCheat(cheat);

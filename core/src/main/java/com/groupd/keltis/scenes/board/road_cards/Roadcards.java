@@ -14,6 +14,7 @@ import com.groupd.keltis.scenes.board.Board;
 public class Roadcards extends Actor {
     private Sprite sprite;
     private Position position;
+    private String name;
     private int frameDelay = (int) Math.floor(Math.random()*(600));
     private float counter = 1;
     private float angle;
@@ -21,7 +22,8 @@ public class Roadcards extends Actor {
     private boolean startFlare = false;
     private Sprite flare = new Sprite(new Texture("road_cards/flare.png"));
 
-    public Roadcards(Texture texture, Position position){
+    public Roadcards(String name, Texture texture, Position position){
+        this.name = name;
         this.sprite = new Sprite(texture);
         this.position = position;
         spritePos(position.getX(), position.getY());
@@ -81,7 +83,16 @@ public class Roadcards extends Actor {
         return position;
     }
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public Sprite getSprite() {
         return sprite;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

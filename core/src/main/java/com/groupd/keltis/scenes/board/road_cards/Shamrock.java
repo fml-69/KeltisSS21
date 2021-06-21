@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Shamrock extends Roadcards {
 
-    public Shamrock(Texture texture, Position position) {
-        super(texture,position);
+    public Shamrock(String name, Texture texture, Position position) {
+        super(name,texture,position);
     }
 }
