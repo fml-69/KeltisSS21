@@ -25,6 +25,8 @@ public class NetworkServer {
     private CountDownLatch countDownLatch;
     private ServerRunnable server;
 
+    private Thread acceptorThread;
+
     // to store clients
     private final Map<String, NetworkClientChannel> clients = new HashMap<>();
 
@@ -35,10 +37,9 @@ public class NetworkServer {
             this.countDownLatch = countDownLatch;
             this.server = server;
             socket = new ServerSocket(port);
-            Thread acceptorThread = new Thread(new AcceptorRunnable());
+            acceptorThread = new Thread(new AcceptorRunnable());
             acceptorThread.setDaemon(true);
             acceptorThread.start();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,6 +113,8 @@ public class NetworkServer {
                         stopGameEvent.decode(channel.dataIn);
                         server.stopGame(stopGameEvent);
                         server.stopGameFlag();
+                        acceptorThread.interrupt();
+                        socket.close();
                     } else if(eventID == 6) {
                         /* check if a player has cheated */
                         CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();
