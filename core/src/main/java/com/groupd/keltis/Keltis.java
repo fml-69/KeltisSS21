@@ -12,6 +12,8 @@ import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.utils.CardHelper;
+import com.groupd.keltis.utils.PositionHelper;
+import com.groupd.keltis.utils.RoadcardsHelper;
 
 public class Keltis extends Game {
 
@@ -20,6 +22,8 @@ public class Keltis extends Game {
 	public GameLogic gameLogic;
 	public SpriteBatch batch;
 	public CardHelper cardHelper;
+	public PositionHelper positionHelper;
+	public RoadcardsHelper roadcardsHelper;
 
 	public static int SCALE_WIDTH = 1920;
 	public static int SCALE_HEIGHT = 1080;
@@ -56,7 +60,8 @@ public class Keltis extends Game {
 		loadAssets();
 		sceneManager = new SceneManager(this);
 		cardHelper = new CardHelper(this);
-
+		positionHelper = new PositionHelper();
+		roadcardsHelper = new RoadcardsHelper(this);
 
 	}
 

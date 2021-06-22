@@ -10,8 +10,11 @@ import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.InfoDialog;
@@ -141,7 +144,21 @@ public class NetworkClient {
                     nextPlayerEvent.decode(dataIn);
                     keltis.sceneManager.getActiveScene().onNetworkEvent(nextPlayerEvent);
 
-                }else {
+                } else if(eventID == 99){
+                    Gdx.app.log("NETWORK", "EVENT ID: 99 - ROADCARD SYNC");
+                    RoadcardsSyncEvent roadcardsSyncEvent = new RoadcardsSyncEvent();
+                    roadcardsSyncEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(roadcardsSyncEvent);
+                }else if(eventID == 55){
+                    Gdx.app.log("NETWORK", "EVENT ID: 55 - ROADCARDREMOVE SYNC");
+                    RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent();
+                    roadcardsRemoveSyncEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(roadcardsRemoveSyncEvent);
+                }else if(eventID == 70){
+                    MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent = new MoveBecauseOfShamrockEvent();
+                    moveBecauseOfShamrockEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(moveBecauseOfShamrockEvent);
+                } else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }
 
