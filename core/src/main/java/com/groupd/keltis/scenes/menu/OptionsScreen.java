@@ -19,6 +19,7 @@ public class OptionsScreen extends AbstractScene {
     private Table table;
 
     private TextButton mainMenuTB;
+    private TextButton instructionsTB;
 
     private Skin skin;
 
@@ -45,8 +46,11 @@ public class OptionsScreen extends AbstractScene {
 
         skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        mainMenuTB = new TextButton("Hauptmenu", skin);
+        mainMenuTB = new TextButton("HAUPTMENU", skin);
+        instructionsTB = new TextButton("SPIELANLEITUNG", skin);
 
+        table.add(instructionsTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.row().pad(50, 0, 50, 0);
         table.add(mainMenuTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row();
     }
@@ -56,6 +60,12 @@ public class OptionsScreen extends AbstractScene {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
+            }
+        });
+        instructionsTB.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                keltis.sceneManager.setScene(SceneManager.GAMESTATE.TEXT_INSTRUCTIONS);
             }
         });
     }

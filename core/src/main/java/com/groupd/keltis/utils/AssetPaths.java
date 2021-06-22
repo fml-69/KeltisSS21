@@ -100,5 +100,16 @@ public final class AssetPaths {
 
     public static final String DIALOG_SKIN = "skin_shade/uiskin.json";
 
+    public static final String INSTRUCTION_ASSET_1 = "instructions/instruction_1.png";
+    public static final String INSTRUCTION_ASSET_2 = "instructions/instruction_2.png";
+    public static final String INSTRUCTION_ASSET_3 = "instructions/instruction_3.png";
+    public static final String INSTRUCTION_ASSET_4 = "instructions/instruction_4.png";
+    public static final String INSTRUCTION_ASSET_5 = "instructions/instruction_5.png";
+    public static final String INSTRUCTION_ASSET_6 = "instructions/instruction_6.png";
+    public static final String INSTRUCTION_ASSET_7 = "instructions/instruction_7.png";
+    public static final String INSTRUCTION_ASSET_8 = "instructions/instruction_8.png";
+    public static final String INSTRUCTION_ASSET_9 = "instructions/instruction_9.png";
+
+
 }
 
