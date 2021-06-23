@@ -20,14 +20,6 @@ public class IngameMenuButton extends Actor {
         button = new Button((Drawable) new TextureRegionDrawable(new TextureRegion(texture)));
 
         button.setPosition(50, 50);
-
-        button.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                keltis.sceneManager.setScene(SceneManager.GAMESTATE.INGAME_MENU);
-                return true;
-            }
-        });
     }
 
     public Button getButton(){

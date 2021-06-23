@@ -7,23 +7,27 @@ import com.badlogic.gdx.graphics.Texture;
 
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.management.PlayerMove;
 import com.groupd.keltis.network.events.NetworkEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 
@@ -84,6 +88,8 @@ public class Board extends AbstractScene {
     private ShamrockDialog shamrockDialog;
 
     private boolean isCheatingDialogShowing = false;
+
+    private IngameMenuButton ingameMenuButton;
 
     public Board(final Keltis keltis) {
         super(keltis);
@@ -280,8 +286,9 @@ public class Board extends AbstractScene {
 
 
         //Menu button on board
-        IngameMenuButton button = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
-        stage.addActor(button.getButton());
+        ingameMenuButton = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
+        stage.addActor(ingameMenuButton.getButton());
+        initIngameMenuButton();
 
         //handcards
 
@@ -320,6 +327,25 @@ public class Board extends AbstractScene {
         //this is a test!!
         handCard1.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_BLUE_FIVE), "blueFive", "blue", 5));
 
+    }
+
+    private void initIngameMenuButton() {
+        ingameMenuButton.getButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                IngameMenuDialog dialog = new IngameMenuDialog("Keltis-Hauptmenu",
+                        keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                        new IngameMenuDialog.Callback() {
+                            @Override
+                            public void result(boolean result) {
+                                if (result) {
+                                    NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
+                                }
+                            }
+                        });
+                showDialog(dialog, stage, 3);
+            }
+        });
     }
 
     @Override
@@ -491,6 +517,8 @@ public class Board extends AbstractScene {
         else if(event instanceof CheatQueryEvent){
             showDialog(new InfoDialog("Schummelverdacht",
                     keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
+        }else if(event instanceof StopGameEvent){
+            keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
         }
 
     }
