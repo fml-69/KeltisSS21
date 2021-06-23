@@ -30,7 +30,7 @@ public class Player {
     private boolean cheat;
     private boolean turn;
     private boolean hasAccused = false;
-    private int scoreCheat=0 ;
+    private int scoreCheat;
 
     private boolean host;
 

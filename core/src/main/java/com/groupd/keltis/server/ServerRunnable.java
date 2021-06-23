@@ -122,13 +122,7 @@ public class ServerRunnable implements Runnable{
 
     // can access nick of player who made for a turn
     public void onTurn(TurnEvent turnEvent) {
-        for(Player player:playerList){
-            if(player.equals(turnEvent.getJson())){
-                player.setCheat(false);
-            }
-        }
         networkServer.broadCast(turnEvent);
-
     }
 
     public void branchStackSync(CardDisplaySyncEvent cardDisplaySyncEvent) {

@@ -108,17 +108,27 @@ public class GameLogic {
             case 2:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);
+                for (Player player1:playerArrayList) {
+                    player1.setCheat(false);
+                }
                 break;
             case 3:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else if (playerArrayList.indexOf(player) == 1) playerArrayList.get(2).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);
+                for (Player player1:playerArrayList) {
+                    player1.setCheat(false);
+                }
+
                 break;
             case 4:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else if (playerArrayList.indexOf(player) == 1) playerArrayList.get(2).setTurn(true);
                 else if (playerArrayList.indexOf(player) == 2) playerArrayList.get(3).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);
+                for (Player player1:playerArrayList) {
+                    player1.setCheat(false);
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Number of Players isn't allowed");
