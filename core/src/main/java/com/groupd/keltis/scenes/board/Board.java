@@ -188,13 +188,35 @@ public class Board extends AbstractScene {
         super.render(delta);
         NetworkClient.INSTANCE.receiveEvents();
         if (keltis.gameLogic.verifyEndingCondition()) {
-            //Gdx.app.exit();
+            showWinnerDialog();
         }
         setTextOfScore();
 
         stage.draw();
         checkShaking(player);
     }
+
+    private void showWinnerDialog() {
+        for (Player player : keltis.gameLogic.getPlayerArrayList()) {
+            if (player.verifyEndCondition()) {
+                WinningDialog dialog = new WinningDialog("Spieler "+player.getNick()+" hat gewonnen!",
+                        keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                        new WinningDialog.Callback() {
+                            @Override
+                            public void result(boolean result) {
+                                if(result){
+                                    //NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
+                                    keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
+                                }else{
+                                    Gdx.app.exit();
+                                }
+                            }
+                        });
+                showDialog(dialog, stage, 5);
+            }
+        }
+    }
+
     public void setTextOfScore(){
         Gdx.app.log("Size=", String.valueOf(keltis.gameLogic.getPlayerArrayList().size()));
         switch (keltis.gameLogic.getPlayerArrayList().size()){
