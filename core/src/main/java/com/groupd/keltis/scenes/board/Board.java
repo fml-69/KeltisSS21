@@ -210,7 +210,7 @@ public class Board extends AbstractScene {
     }
 
     public void setTextOfDrawPile(){
-        drawPileCount.setText("Verbleibende Karten: " + keltis.gameLogic.getDrawPile().size());
+        drawPileCount.setText("Verbleibend: " + keltis.gameLogic.getDrawPile().size());
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
@@ -406,7 +406,7 @@ public class Board extends AbstractScene {
 
     public void playerOverview() {
         scoreTitle = LabelHelper.label(30,975);
-        scoreTitle.setText("Score:");
+        scoreTitle.setText("Punkte:");
         stage.addActor(scoreTitle);
         switch (keltis.gameLogic.getPlayerArrayList().size()) {
             case 4:

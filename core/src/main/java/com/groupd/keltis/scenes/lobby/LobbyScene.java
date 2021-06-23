@@ -143,7 +143,6 @@ public class LobbyScene extends AbstractScene {
     }
 
     public void fillHandcards(){
-        Gdx.app.log(String.valueOf(keltis.gameLogic.getNumberInArrayList()), "SWAT");
         for(int j = 0; j < keltis.gameLogic.getPlayerArrayList().size();j++){
             for(int i=1;i<=8;i++) {
                 keltis.gameLogic.getPlayerArrayList().get(j).getHandCards().add(keltis.gameLogic.getDrawPile().remove(keltis.gameLogic.getDrawPile().size() - 1));
