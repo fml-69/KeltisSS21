@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.CheatScoreEvent;
 import com.groupd.keltis.network.events.JoinEvent;
 import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
@@ -116,7 +117,6 @@ public class NetworkClient {
                     Gdx.app.log("Info","Client2: " + cheatQueryEvent.getMessage());
                     if(!message.isEmpty()){
                         Gdx.app.log("Info","Client: " + message);
-                        keltis.gameLogic.setScoreCheatPlayer(getNickName(),cheatQueryEvent.getScore());
                         /*InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
                                 keltis.assetManager.get(AssetPaths.DIALOG_SKIN),message);
                         NetworkClient.INSTANCE.showDialog(infoDialog,keltis.sceneManager.getActiveScene().stage,3);*/
@@ -158,6 +158,10 @@ public class NetworkClient {
                     MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent = new MoveBecauseOfShamrockEvent();
                     moveBecauseOfShamrockEvent.decode(dataIn);
                     keltis.sceneManager.getActiveScene().onNetworkEvent(moveBecauseOfShamrockEvent);
+                }else if(eventID == 9){
+                    CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
+                    cheatScoreEvent.decode(dataIn);
+                    keltis.gameLogic.cheatScoreUpdate(cheatScoreEvent.getNick(),cheatScoreEvent.getScore());
                 } else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }
