@@ -1,11 +1,16 @@
 package com.groupd.keltis.network;
 
 import com.badlogic.gdx.Gdx;
+import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.CheatEvent;
+import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
@@ -133,6 +138,28 @@ public class NetworkServer {
                         cheatEvent.decode(channel.dataIn);
                         server.setPlayerCheat(cheatEvent.getCheat(), cheatEvent.getNick());
 
+                    } else if(eventID == 42) {
+                        CardDisplaySyncEvent cardDisplaySyncEvent = new CardDisplaySyncEvent();
+                        cardDisplaySyncEvent.decode(channel.dataIn);
+                        server.branchStackSync(cardDisplaySyncEvent);
+
+                    } else if(eventID == 33) {
+                        NextPlayerEvent nextPlayerEvent = new NextPlayerEvent();
+                        nextPlayerEvent.decode(channel.dataIn);
+                        server.nextPlayer(nextPlayerEvent);
+
+                    } else if(eventID == 99){
+                        RoadcardsSyncEvent roadcardsSyncEvent = new RoadcardsSyncEvent();
+                        roadcardsSyncEvent.decode(channel.dataIn);
+                        server.roadcardsSync(roadcardsSyncEvent);
+                    } else if(eventID == 55){
+                        RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent();
+                        roadcardsRemoveSyncEvent.decode(channel.dataIn);
+                        server.roadcardsRemoveSync(roadcardsRemoveSyncEvent);
+                    } else if(eventID == 70){
+                        MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent = new MoveBecauseOfShamrockEvent();
+                        moveBecauseOfShamrockEvent.decode(channel.dataIn);
+                        server.moveBecauseOfShamrock(moveBecauseOfShamrockEvent);
                     } else {
                         Gdx.app.error("Error", "Invalid Network EventID");
                     }
@@ -174,7 +201,6 @@ public class NetworkServer {
                     channel.dataOut.writeInt(event.getEventID());
                     event.encode(channel.dataOut);
                     Gdx.app.log("Info","message: " + channel.toString() );
-
 
                 } catch (IOException e) {
                     e.printStackTrace();

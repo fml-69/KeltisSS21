@@ -6,5 +6,6 @@ public enum ColorPile {
     BLUE,
     YELLOW,
     PURPLE,
-    DISCARD
+    DISCARD,
+    UNKNOWN
 }

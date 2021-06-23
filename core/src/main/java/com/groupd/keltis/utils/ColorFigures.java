@@ -5,4 +5,5 @@ public enum ColorFigures {
     GREEN,
     BLUE,
     YELLOW,
+    UNKNOWN
 }

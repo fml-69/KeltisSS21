@@ -21,11 +21,16 @@ public class Player {
 
     private HashMap<String, Figure> figures;
 
+    private ArrayList<Card> yellowDiscardPile = new ArrayList<>();
+    private ArrayList<Card> blueDiscardPile = new ArrayList<>();
+    private ArrayList<Card> redDiscardPile = new ArrayList<>();
+    private ArrayList<Card> greenDiscardPile = new ArrayList<>();
+    private ArrayList<Card> purpleDiscardPile = new ArrayList<>();
 
     private boolean cheat;
     private boolean turn;
     private boolean hasAccused = false;
-    private int roundCountCheat;
+    private int scoreCheat = 0;
 
     private boolean host;
 
@@ -39,13 +44,6 @@ public class Player {
 
     public void setCheat(boolean cheat) {
         this.cheat = cheat;
-    }
-
-    public Player() {
-        keltis = new Keltis();
-        //color = "testColor";
-        figures = new HashMap<>();
-        roundCountCheat = 0;
     }
 
     public Player(Keltis keltis, String nick, ColorFigures color, boolean host) {
@@ -118,6 +116,7 @@ public class Player {
         score += getScoreFigureFieldPosition();
         score += getScoreWishingStones();
         score += getScorePointCards();
+        score += getScoreCheat();
         return score;
     }
     private int getScoreFigureFieldPosition(){
@@ -173,24 +172,6 @@ public class Player {
         return handCards;
     }
 
-    public void increaseRoundCountCheat(){
-        roundCountCheat ++;
-    }
-
-    public void resetRoundCountCheat(){
-        roundCountCheat = 0;
-    }
-
-    public boolean succesfulCheat(){
-        if (roundCountCheat > 2){
-            return true;
-        }
-        else return false;
-    }
-
-
-
-
     public ArrayList<Pointcard> getPointCards(){
         return pointCards;
     }
@@ -213,4 +194,74 @@ public class Player {
     public void setHost(boolean host) {
         this.host = host;
     }
+
+    public int getScoreCheat(){
+        return scoreCheat;
+    }
+
+    public void addScoreCheat(int scoreCheat){
+        this.scoreCheat+=scoreCheat;
+    }
+
+    public void addCardGreen(Card card){
+        greenDiscardPile.add(card);
+    }
+    public Card getLastGreen(){
+        return greenDiscardPile.get(greenDiscardPile.size()-1);
+    }
+    public boolean greenEmpty(){
+        if(greenDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardYellow(Card card){
+        yellowDiscardPile.add(card);
+    }
+    public Card getLastYellow(){
+        return yellowDiscardPile.get(yellowDiscardPile.size()-1);
+    }
+    public boolean yellowEmpty(){
+        if(yellowDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardRed(Card card){
+        redDiscardPile.add(card);
+    }
+    public Card getLastRed(){
+        return redDiscardPile.get(redDiscardPile.size()-1);
+    }
+    public boolean redEmpty(){
+        if(redDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardBlue(Card card){
+        blueDiscardPile.add(card);
+    }
+    public Card getLastBlue(){
+        return blueDiscardPile.get(blueDiscardPile.size()-1);
+    }
+    public boolean blueEmpty(){
+        if(blueDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+    public void addCardPurple(Card card){
+        purpleDiscardPile.add(card);
+    }
+    public Card getLastPurple(){
+        return purpleDiscardPile.get(purpleDiscardPile.size()-1);
+    }
+    public boolean purpleEmpty(){
+        if(purpleDiscardPile.size()==0){
+            return true;
+        }
+        return false;
+    }
+
 }

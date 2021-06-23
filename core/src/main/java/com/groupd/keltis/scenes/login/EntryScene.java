@@ -139,11 +139,12 @@ public class EntryScene extends AbstractScene {
 
             // create client & connect it to server
             NetworkClient client = NetworkClient.INSTANCE;
-           client.connect(keltis, textIP.getText(), Integer.parseInt(textPort.getText()), text.getText());
+            client.connect(keltis, textIP.getText(), Integer.parseInt(textPort.getText()), text.getText());
             if(!client.isConnected()){
                 errorLabel.setText(client.getMessage());
 
             } else {
+                keltis.gameLogic.setPlayerNick(text.getText());
                 keltis.sceneManager.setScene(SceneManager.GAMESTATE.LOBBY);
             }
 

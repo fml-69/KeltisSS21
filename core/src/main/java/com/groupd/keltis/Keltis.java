@@ -3,12 +3,17 @@ package com.groupd.keltis;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
+import com.groupd.keltis.utils.CardHelper;
+import com.groupd.keltis.utils.PositionHelper;
+import com.groupd.keltis.utils.RoadcardsHelper;
 
 public class Keltis extends Game {
 
@@ -16,6 +21,9 @@ public class Keltis extends Game {
 	public AssetManager assetManager;
 	public GameLogic gameLogic;
 	public SpriteBatch batch;
+	public CardHelper cardHelper;
+	public PositionHelper positionHelper;
+	public RoadcardsHelper roadcardsHelper;
 
 	public static int SCALE_WIDTH = 1920;
 	public static int SCALE_HEIGHT = 1080;
@@ -24,9 +32,21 @@ public class Keltis extends Game {
 
 	public static int FPS = 60;
 
+	private Music music;
+	private Sound selectCard;
+	private Sound playCard;
+
 
 	@Override
 	public void create () {
+
+		music = Gdx.audio.newMusic(Gdx.files.internal("sounds/background_music.wav"));
+		music.setLooping(true);
+		music.play();
+
+		selectCard = Gdx.audio.newSound(Gdx.files.internal("sounds/select_card.wav"));
+		playCard = Gdx.audio.newSound(Gdx.files.internal("sounds/play_card.wav"));
+
 		if(Gdx.graphics.getHeight()<Gdx.graphics.getWidth()){
 			scaleFactorX = Gdx.graphics.getWidth()/SCALE_WIDTH;
 			scaleFactorY = Gdx.graphics.getHeight()/SCALE_HEIGHT;
@@ -39,7 +59,9 @@ public class Keltis extends Game {
 		assetManager = new AssetManager();
 		loadAssets();
 		sceneManager = new SceneManager(this);
-
+		cardHelper = new CardHelper(this);
+		positionHelper = new PositionHelper();
+		roadcardsHelper = new RoadcardsHelper(this);
 
 	}
 
@@ -59,7 +81,6 @@ public class Keltis extends Game {
 	private void loadAssets(){
 		assetManager.load(AssetPaths.BOARD_BACKGROUND, Texture.class);
 		assetManager.load(AssetPaths.BOARD_BRANCHES, Texture.class);
-		assetManager.load(AssetPaths.PLAYER_PICTURE, Texture.class);
 
 		assetManager.load(AssetPaths.BOARD_HUD_BAR, Texture.class);
 		assetManager.load(AssetPaths.BOARD_MENU_BUTTON, Texture.class);
@@ -144,6 +165,7 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.CARD_EMPTY_HANDCARD, Texture.class);
 
 		assetManager.load(AssetPaths.CARD_HIGHLIGHT, Texture.class);
+		assetManager.load(AssetPaths.CARD_HIGHLIGHT_PLAYABLE, Texture.class);
 		
 		assetManager.load(AssetPaths.MENU_ASSET, Skin.class);
 		assetManager.load(AssetPaths.DIALOG_SKIN, Skin.class);
@@ -174,5 +196,13 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.MENU_BACKGROUND_13, Texture.class);
 
 		assetManager.finishLoading();
+	}
+
+	public Sound getSelectCard() {
+		return selectCard;
+	}
+
+	public Sound getPlayCard() {
+		return playCard;
 	}
 }

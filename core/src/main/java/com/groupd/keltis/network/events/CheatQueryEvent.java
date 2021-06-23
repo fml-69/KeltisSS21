@@ -34,5 +34,4 @@ public class CheatQueryEvent extends NetworkEvent{
         return this.message;
     }
 
-
 }
