@@ -52,15 +52,6 @@ public class GameLogic {
         this.purpleDiscardPile = new ArrayList<Card>();
     }
 
-    public int getNumberInArrayList(){
-        for(int i = 0; i < playerArrayList.size(); i++){
-            if(playerArrayList.get(i).getNick().equals(playerNick)){
-                return i;
-            }
-        }
-        return -1;
-    }
-
     /**-------------------------------Turn Methods & SendTurn------------------------------------**/
 
     //Main Method to play. Call to set everything in motion
@@ -69,11 +60,9 @@ public class GameLogic {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),card.getName(),ColorEnumsToString.getPileColor(colorPile))));
             player.getHandCards().remove(card);
-            //player.getHandCards().add(drawPile.remove(drawPile.size()-1));
             client.sendEvent(turnEvent);
             allowDraw = true;
             Gdx.app.log("NETWORK", "TURN SENT");
-            //der Nachziehstapel muss sync werden
         }
     }
 
@@ -84,13 +73,6 @@ public class GameLogic {
         if(player != getPlayer(playerNick)){
             drawPile.remove(drawPile.size() - 1);
         }
-        //setTurnPlayer(player);
-    }
-
-    public void playCard(Player player, ColorPile colorPile) {
-        move(player, colorPile);
-        setTurnPlayer(player);
-        //drawCard(player);
     }
 
     /**-------------------------------Set Turn of Next Player------------------------------------**/
@@ -125,7 +107,6 @@ public class GameLogic {
 
     public void drawCard(Player player) {
         if(allowDraw) {
-            //player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
             for(CardDisplay cardDisplay: Board.getHandCardDisplayList()){
                 if(cardDisplay.isEmpty()){
                     cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
