@@ -7,7 +7,6 @@ import java.io.IOException;
 public class CheatQueryEvent extends NetworkEvent{
 
     public String message;
-    public int score;
 
 
     @Override
@@ -19,14 +18,12 @@ public class CheatQueryEvent extends NetworkEvent{
     public void encode(DataOutputStream dataOut) throws IOException {
         super.encode(dataOut);
         dataOut.writeUTF(this.message);
-        dataOut.writeInt(this.score);
     }
 
     @Override
     public void decode(DataInputStream dataIn) throws IOException {
         super.decode(dataIn);
         this.message = dataIn.readUTF();
-        this.score = dataIn.readInt();
     }
 
     public void setMessage(String message){
@@ -36,14 +33,5 @@ public class CheatQueryEvent extends NetworkEvent{
     public String getMessage(){
         return this.message;
     }
-
-    public void setScore(int score){
-        this.score = score;
-    }
-
-    public int getScore(){
-        return this.score;
-    }
-
 
 }

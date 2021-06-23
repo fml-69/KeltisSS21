@@ -15,7 +15,7 @@ jacoco {
 }
 
 dependencies {
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 }
 
 test {
