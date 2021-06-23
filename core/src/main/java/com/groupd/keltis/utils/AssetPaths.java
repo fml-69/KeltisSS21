@@ -110,6 +110,23 @@ public final class AssetPaths {
     public static final String INSTRUCTION_ASSET_8 = "instructions/instruction_8.png";
     public static final String INSTRUCTION_ASSET_9 = "instructions/instruction_9.png";
 
+    public static final String MENU_BACKGROUND_0 = "menu/backgroundanimation/menu_0_background.png";
+    public static final String MENU_BACKGROUND_1 = "menu/backgroundanimation/menu_1_background.png";
+    public static final String MENU_BACKGROUND_2 = "menu/backgroundanimation/menu_2_background.png";
+    public static final String MENU_BACKGROUND_3 = "menu/backgroundanimation/menu_3_background.png";
+    public static final String MENU_BACKGROUND_4 = "menu/backgroundanimation/menu_4_background.png";
+    public static final String MENU_BACKGROUND_5 = "menu/backgroundanimation/menu_5_background.png";
+    public static final String MENU_BACKGROUND_6 = "menu/backgroundanimation/menu_6_background.png";
+    public static final String MENU_BACKGROUND_7 = "menu/backgroundanimation/menu_7_background.png";
+    public static final String MENU_BACKGROUND_8 = "menu/backgroundanimation/menu_8_background.png";
+    public static final String MENU_BACKGROUND_9 = "menu/backgroundanimation/menu_9_background.png";
+    public static final String MENU_BACKGROUND_10 = "menu/backgroundanimation/menu_10_background.png";
+    public static final String MENU_BACKGROUND_11= "menu/backgroundanimation/menu_11_background.png";
+    public static final String MENU_BACKGROUND_12 = "menu/backgroundanimation/menu_12_background.png";
+    public static final String MENU_BACKGROUND_13 = "menu/backgroundanimation/menu_13_background.png";
+
+
+
 
 }
 
