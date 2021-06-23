@@ -17,6 +17,7 @@ import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.InfoDialog;
 import com.groupd.keltis.scenes.board.YesNoDialog;
@@ -127,9 +128,6 @@ public class NetworkClient {
                     TurnEvent turnEvent = new TurnEvent();
                     turnEvent.decode(dataIn);
                    keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
-
-                } else if(eventID == 69){
-
                 }
                 else if(eventID == 42) {
                     Gdx.app.log("NETWORK", "EVENT ID: 42 - CARD SYNC");
@@ -162,7 +160,12 @@ public class NetworkClient {
                     CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
                     cheatScoreEvent.decode(dataIn);
                     keltis.gameLogic.cheatScoreUpdate(cheatScoreEvent.getNick(),cheatScoreEvent.getScore());
-                } else {
+                } else if(eventID == 69){
+                    StopGameEvent stopGameEvent = new StopGameEvent();
+                    stopGameEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(stopGameEvent);
+                    disconnect();
+                }else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }
 

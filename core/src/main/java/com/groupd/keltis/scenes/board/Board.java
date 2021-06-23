@@ -4,16 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.management.BranchStackStatus;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
@@ -22,6 +26,7 @@ import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.management.PlayerMove;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
 import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
@@ -96,9 +101,11 @@ public class Board extends AbstractScene {
 
     private boolean isCheatingDialogShowing = false;
 
+    private IngameMenuButton ingameMenuButton;
+
     private static ArrayList<CardDisplay> handCardDisplayList = new ArrayList<>();
 
-
+  
     public Board(final Keltis keltis) {
         super(keltis);
         this.camera = new OrthographicCamera();
@@ -158,7 +165,7 @@ public class Board extends AbstractScene {
         super.render(delta);
         NetworkClient.INSTANCE.receiveEvents();
         if (keltis.gameLogic.verifyEndingCondition()) {
-            //Gdx.app.exit();
+            showWinnerDialog();
         }
         setTextOfScore();
         setTextOfDrawPile();
@@ -168,6 +175,27 @@ public class Board extends AbstractScene {
         setTurnText();
     }
 
+    private void showWinnerDialog() {
+        for (Player player : keltis.gameLogic.getPlayerArrayList()) {
+            if (player.verifyEndCondition()) {
+                WinningDialog dialog = new WinningDialog("Spieler "+player.getNick()+" hat gewonnen!",
+                        keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                        new WinningDialog.Callback() {
+                            @Override
+                            public void result(boolean result) {
+                                if(result){
+                                    //NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
+                                    keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
+                                }else{
+                                    Gdx.app.exit();
+                                }
+                            }
+                        });
+                showDialog(dialog, stage, 5);
+            }
+        }
+    }
+  
     public void setTextOfScore(){
         switch (keltis.gameLogic.getPlayerArrayList().size()){
             case 4:
@@ -272,8 +300,9 @@ public class Board extends AbstractScene {
 
 
         //Menu button on board
-        IngameMenuButton button = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
-        stage.addActor(button.getButton());
+        ingameMenuButton = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
+        stage.addActor(ingameMenuButton.getButton());
+        initIngameMenuButton();
 
         //handcards
 
@@ -323,6 +352,25 @@ public class Board extends AbstractScene {
             }
         }
 
+    }
+
+    private void initIngameMenuButton() {
+        ingameMenuButton.getButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                IngameMenuDialog dialog = new IngameMenuDialog("Keltis-Hauptmenu",
+                        keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                        new IngameMenuDialog.Callback() {
+                            @Override
+                            public void result(boolean result) {
+                                if (result) {
+                                    NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
+                                }
+                            }
+                        });
+                showDialog(dialog, stage, 3);
+            }
+        });
     }
 
     @Override
@@ -474,6 +522,8 @@ public class Board extends AbstractScene {
         else if(event instanceof CheatQueryEvent){
             showDialog(new InfoDialog("Schummelverdacht",
                     keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
+        }else if(event instanceof StopGameEvent){
+            keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
         }
         else if(event instanceof CardDisplaySyncEvent){
             Gdx.app.log("NETWORK", "RECEIVED CARD STATUS");
