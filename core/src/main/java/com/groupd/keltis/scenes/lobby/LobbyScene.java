@@ -2,11 +2,13 @@ package com.groupd.keltis.scenes.lobby;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
@@ -31,6 +33,8 @@ public class LobbyScene extends AbstractScene {
 
     List<String> uIList;
     Array <String> playerList = new Array<>();
+    private float scale = 0.3f;
+
 
     private ArrayList drawPileNames = new ArrayList<>();
     private CardHelper cardHelper = new CardHelper(keltis);
@@ -38,7 +42,10 @@ public class LobbyScene extends AbstractScene {
     public LobbyScene(Keltis keltis) {
         super(keltis);
 
-        stage = new Stage(new ScreenViewport());
+        ScreenViewport sv = new ScreenViewport();
+        sv.setUnitsPerPixel(scale);
+        stage = new Stage(sv);
+
     }
 
     @Override
@@ -75,9 +82,12 @@ public class LobbyScene extends AbstractScene {
 
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        VerticalGroup vg = new VerticalGroup().space(3).pad(5).fill();
-        vg.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        VerticalGroup vg = new VerticalGroup().space(15).pad(15).fill();
+        vg.setBounds(0, 0, Gdx.graphics.getWidth()*scale, Gdx.graphics.getHeight()*scale);
         stage.addActor(vg);
+
+       // vg.setTransform(true);
+       //  vg.setSize(40,10);
 
 
         uIList = new List<>(skin);
@@ -86,6 +96,7 @@ public class LobbyScene extends AbstractScene {
 
         TextButton readyButton = new TextButton("Ready", skin);
         vg.addActor(readyButton);
+
 
         readyButton.addListener(new InputListener(){
             @Override
@@ -97,6 +108,9 @@ public class LobbyScene extends AbstractScene {
                 return true;
             }
         });
+
+       // BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
+       // font.getData().setScale(5,5);
     }
 
     @Override
