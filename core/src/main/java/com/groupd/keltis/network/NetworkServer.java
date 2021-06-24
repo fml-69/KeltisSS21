@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 
-public class NetworkServer {
+public class NetworkServer implements NetworkServerInterface {
 
     private ServerSocket socket;
     private CountDownLatch countDownLatch;
@@ -88,6 +88,7 @@ public class NetworkServer {
     }
 
     // handle events coming from clients to server
+    @Override
     public void receivePackets() {
 
         // check if any clients are sending new events
@@ -173,6 +174,7 @@ public class NetworkServer {
 
 
     // send an event to specific client
+    @Override
     public void sendEvent(String receiver, NetworkEvent event) {
 
         NetworkClientChannel channel = clients.get(receiver);
@@ -191,6 +193,7 @@ public class NetworkServer {
 
 
     // send to all clients
+    @Override
     public void broadCast(NetworkEvent event) {
 
         for (Map.Entry<String, NetworkClientChannel> client : clients.entrySet()) {

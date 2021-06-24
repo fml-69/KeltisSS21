@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClientChannel;
 import com.groupd.keltis.network.NetworkServer;
+import com.groupd.keltis.network.NetworkServerInterface;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.CheatScoreEvent;
@@ -32,14 +33,17 @@ public class ServerRunnable implements Runnable{
     private List<Player> playerList = new ArrayList<>();
 
     private boolean flag;
-
-
-    private final NetworkServer networkServer;
-
+    private final NetworkServerInterface networkServer;
 
     public ServerRunnable(int port, CountDownLatch countDownLatch, Keltis keltis){
         this.keltis = keltis;
         networkServer = new NetworkServer(port, countDownLatch, this);
+        flag = true;
+    }
+
+    public ServerRunnable(Keltis keltis, NetworkServerInterface networkServer){
+        this.keltis = keltis;
+        this.networkServer = networkServer;
         flag = true;
     }
 
