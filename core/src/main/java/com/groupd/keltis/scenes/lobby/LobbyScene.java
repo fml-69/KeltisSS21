@@ -2,6 +2,7 @@ package com.groupd.keltis.scenes.lobby;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.RoadcardsStatus;
 import com.groupd.keltis.management.SceneManager;
@@ -39,6 +41,8 @@ public class LobbyScene extends AbstractScene {
     List<String> uIList;
     Array <String> playerList = new Array<>();
     private float scale = 0.5f;
+    private OrthographicCamera camera;
+
 
 
     private ArrayList drawPileNames = new ArrayList<>();
@@ -47,9 +51,13 @@ public class LobbyScene extends AbstractScene {
     public LobbyScene(Keltis keltis) {
         super(keltis);
 
-        ScreenViewport sv = new ScreenViewport();
-        sv.setUnitsPerPixel(scale);
-        stage = new Stage(sv);
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
+
+        //ScreenViewport sv = new ScreenViewport();
+        //sv.setUnitsPerPixel(scale);
+        //stage = new Stage(sv);
 
     }
 
@@ -102,7 +110,8 @@ public class LobbyScene extends AbstractScene {
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
         VerticalGroup vg = new VerticalGroup().space(15).pad(15).fill();
-        vg.setBounds(0, 0, Gdx.graphics.getWidth()*scale, Gdx.graphics.getHeight()*scale);
+        vg.setBounds(0, 0, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+
         stage.addActor(vg);
 
        // vg.setTransform(true);

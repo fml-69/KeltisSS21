@@ -3,6 +3,7 @@ package com.groupd.keltis.scenes.login;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -31,17 +32,22 @@ public class EntryScene extends AbstractScene {
     private Label errorLabel;
     private TextField textIP;
     private TextField textPort;
-    private float scale = 0.5f;
+    // private float scale = 0.5f;
+    private OrthographicCamera camera;
+
 
 
 
 
     public EntryScene(Keltis keltis) {
         super(keltis);
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
 
-        ScreenViewport sv = new ScreenViewport();
-        sv.setUnitsPerPixel(scale);
-        stage = new Stage(sv);
+        //ScreenViewport sv = new ScreenViewport();
+        //sv.setUnitsPerPixel(scale);
+        //stage = new Stage(sv);
 
     }
 
@@ -59,7 +65,8 @@ public class EntryScene extends AbstractScene {
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
         VerticalGroup vg = new VerticalGroup().space(3).pad(5).fill();
-        vg.setBounds(0, 0, Gdx.graphics.getWidth()*scale, Gdx.graphics.getHeight()*scale);
+        //vg.setBounds(0, 0, Gdx.graphics.getWidth()*scale, Gdx.graphics.getHeight()*scale);
+        vg.setBounds(0, 0, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
 
 
         stage.addActor(vg);
