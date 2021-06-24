@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClientChannel;
 import com.groupd.keltis.network.NetworkServer;
+import com.groupd.keltis.network.NetworkServerInterface;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.CheatScoreEvent;
@@ -14,6 +15,7 @@ import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorFigures;
 
@@ -36,6 +38,7 @@ public class ServerRunnable implements Runnable{
     public NetworkServer networkServer;
 
 
+
     public ServerRunnable(int port, CountDownLatch countDownLatch, Keltis keltis){
         this.keltis = keltis;
         networkServer = new NetworkServer(port, countDownLatch, this);
@@ -43,9 +46,17 @@ public class ServerRunnable implements Runnable{
     }
 
 
+
     //default constructor necessary for cheat tests
     public ServerRunnable(){
+      
+    }  
 
+
+    public ServerRunnable(Keltis keltis, NetworkServerInterface networkServer){
+        this.keltis = keltis;
+        this.networkServer = networkServer;
+        flag = true;
     }
 
     @Override
@@ -61,8 +72,13 @@ public class ServerRunnable implements Runnable{
         } while (flag);
     }
 
-    public void setFlag(boolean flag){
-        this.flag = flag;
+    //called when the game should stop for all users
+    public void stopGameFlag(){
+        this.flag = false;
+    }
+
+    public void stopGame(StopGameEvent stopgameevent){
+        networkServer.broadCast(stopgameevent);
     }
 
 

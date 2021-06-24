@@ -24,11 +24,13 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 
-public class NetworkServer {
+public class NetworkServer implements NetworkServerInterface {
 
     private ServerSocket socket;
     private CountDownLatch countDownLatch;
     private ServerRunnable server;
+
+    private Thread acceptorThread;
 
     // to store clients
     private final Map<String, NetworkClientChannel> clients = new HashMap<>();
@@ -40,10 +42,9 @@ public class NetworkServer {
             this.countDownLatch = countDownLatch;
             this.server = server;
             socket = new ServerSocket(port);
-            Thread acceptorThread = new Thread(new AcceptorRunnable());
+            acceptorThread = new Thread(new AcceptorRunnable());
             acceptorThread.setDaemon(true);
             acceptorThread.start();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,6 +88,7 @@ public class NetworkServer {
     }
 
     // handle events coming from clients to server
+    @Override
     public void receivePackets() {
 
         // check if any clients are sending new events
@@ -115,6 +117,16 @@ public class NetworkServer {
                     } else if(eventID == 69){
                         StopGameEvent stopGameEvent = new StopGameEvent();
                         stopGameEvent.decode(channel.dataIn);
+                        server.stopGame(stopGameEvent);
+                        //so the server doesn't close before all clients received stopgameevent
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        server.stopGameFlag();
+                        acceptorThread.interrupt();
+                        socket.close();
                     } else if(eventID == 6) {
                         /* check if a player has cheated */
                         CheatAccuseEvent cheatAccuseEvent = new CheatAccuseEvent();
@@ -162,6 +174,7 @@ public class NetworkServer {
 
 
     // send an event to specific client
+    @Override
     public void sendEvent(String receiver, NetworkEvent event) {
 
         NetworkClientChannel channel = clients.get(receiver);
@@ -180,6 +193,7 @@ public class NetworkServer {
 
 
     // send to all clients
+    @Override
     public void broadCast(NetworkEvent event) {
 
         for (Map.Entry<String, NetworkClientChannel> client : clients.entrySet()) {
