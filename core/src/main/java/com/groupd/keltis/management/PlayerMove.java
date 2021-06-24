@@ -1,9 +1,5 @@
 package com.groupd.keltis.management;
 
-import com.groupd.keltis.scenes.board.actors.Card;
-import com.groupd.keltis.utils.ColorPile;
-
-import java.awt.Color;
 
 public class PlayerMove {
     private String nick;
