@@ -177,7 +177,7 @@ public class Board extends AbstractScene {
 
     private void showWinnerDialog() {
         for (Player player : keltis.gameLogic.getPlayerArrayList()) {
-            if (player.verifyEndCondition()) {
+            if (keltis.gameLogic.verifyEndingCondition()) {
                 WinningDialog dialog = new WinningDialog("Spieler "+player.getNick()+" hat gewonnen!",
                         keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
                         new WinningDialog.Callback() {

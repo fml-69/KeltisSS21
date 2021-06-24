@@ -297,12 +297,11 @@ public class GameLogic {
 
     //Check if five Figures of one Player are over field 7
     private boolean checkFigureEndingCondition() {
+        int count = 0;
         for (Player player : playerArrayList) {
-            if (player.verifyEndCondition()) {
-                return true;
-            }
+            count += player.verifyEndCondition();
         }
-        return false;
+        return count >= 5;
     }
     /**-----------------------Create unique roadcards for all Player-----------------------------**/
     public void createRoadcards(Keltis keltis){
