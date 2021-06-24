@@ -32,14 +32,6 @@ public class OptionsScreen extends AbstractScene {
 
         super(keltis);
 
-
-        stage = new Stage(new ScreenViewport());
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-
-        initTable();
-        initChangeListenerButtons();
-
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
         stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
@@ -62,9 +54,9 @@ public class OptionsScreen extends AbstractScene {
 
         table.add(instructionsTB).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
         table.row().pad(50, 0, 50, 0);
-        table.add(audioButton).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.add(audioButton).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
         table.row();
-        table.add(mainMenuTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.add(mainMenuTB).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
         table.row();
     }
 

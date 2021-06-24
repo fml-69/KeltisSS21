@@ -49,12 +49,6 @@ public class MenuScreen extends AbstractScene {
 
         framecounter = 0;
         backgroundcounter = 0;
-
-        initTable();
-
-        initChangeListenerButtons();
-
-
     }
 
     private void initTable(){
@@ -125,6 +119,8 @@ public class MenuScreen extends AbstractScene {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        initTable();
+        initChangeListenerButtons();
     }
 
     @Override
