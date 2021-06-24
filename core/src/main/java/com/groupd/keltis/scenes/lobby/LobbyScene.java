@@ -3,10 +3,12 @@ package com.groupd.keltis.scenes.lobby;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -40,6 +42,7 @@ public class LobbyScene extends AbstractScene {
     List<String> uIList;
     Array <String> playerList = new Array<>();
     private OrthographicCamera camera;
+    private Image image;
 
 
 
@@ -51,8 +54,10 @@ public class LobbyScene extends AbstractScene {
 
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
-        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
-
+        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH*0.3f, Keltis.SCALE_HEIGHT*0.3f, camera));
+        image = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
+        image.setHeight(image.getHeight()*0.3f);
+        image.setWidth(image.getWidth()*0.3f);
 
     }
 
@@ -103,10 +108,12 @@ public class LobbyScene extends AbstractScene {
 
         Gdx.input.setInputProcessor(stage);
 
+        stage.addActor(image);
+
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
         VerticalGroup vg = new VerticalGroup().space(15).pad(15).fill();
-        vg.setBounds(0, 0, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+        vg.setBounds(0, 0, Keltis.SCALE_WIDTH*0.3f, Keltis.SCALE_HEIGHT*0.3f);
 
         stage.addActor(vg);
 
