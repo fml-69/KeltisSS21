@@ -2,7 +2,6 @@ package com.groupd.keltis.management;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.Timer;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatEvent;
@@ -10,7 +9,6 @@ import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
-import com.groupd.keltis.scenes.board.BranchDialog;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
