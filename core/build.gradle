@@ -10,9 +10,13 @@ sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 
 eclipse.project.name = appName + "-core"
 
-/*jacoco {
+jacoco {
     toolVersion = "0.8.6"
-}*/
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+}
 
 test {
     useJUnitPlatform {
@@ -29,3 +33,4 @@ test {
 
     finalizedBy(jacocoTestReport)
 }
+java.targetCompatibility = JavaVersion.VERSION_1_8
