@@ -136,7 +136,8 @@ public class Board extends AbstractScene {
     }
 
     private void checkShaking(ArrayList<Player> player) {
-        if (ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing) {
+        if (ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing &&
+                !keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()) {
             isCheatingDialogShowing = true;
             YesNoDialog dialog = new YesNoDialog("Schummelverdacht",
                     keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
