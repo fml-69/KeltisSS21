@@ -156,14 +156,14 @@ public class Player {
         this.wishingStones += 1;
     }
 
-    public boolean verifyEndCondition(){
+    public int verifyEndCondition(){
         int count = 0;
         for(Figure figure: figures.values()){
             if(figure.getCurrentFieldPosition() >= 7){
                 count++;
             }
         }
-        return count == 5;
+        return count;
     }
 
     public void toggleCheat(){
