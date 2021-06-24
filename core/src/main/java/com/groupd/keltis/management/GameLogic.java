@@ -2,7 +2,6 @@ package com.groupd.keltis.management;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.Timer;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatEvent;
@@ -10,7 +9,6 @@ import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
-import com.groupd.keltis.scenes.board.BranchDialog;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
@@ -58,15 +56,6 @@ public class GameLogic {
         this.purpleDiscardPile = new ArrayList<Card>();
     }
 
-    public int getNumberInArrayList(){
-        for(int i = 0; i < playerArrayList.size(); i++){
-            if(playerArrayList.get(i).getNick().equals(playerNick)){
-                return i;
-            }
-        }
-        return -1;
-    }
-
     /**-------------------------------Turn Methods & SendTurn------------------------------------**/
 
     //Main Method to play. Call to set everything in motion
@@ -75,7 +64,6 @@ public class GameLogic {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),card.getName(),ColorEnumsToString.getPileColor(colorPile))));
             player.getHandCards().remove(card);
-            //player.getHandCards().add(drawPile.remove(drawPile.size()-1));
             client.sendEvent(turnEvent);
             allowDraw = true;
             Gdx.app.log("NETWORK", "TURN SENT");
@@ -89,13 +77,6 @@ public class GameLogic {
         if(player != getPlayer(playerNick)){
             drawPile.remove(drawPile.size() - 1);
         }
-        //setTurnPlayer(player);
-    }
-
-    public void playCard(Player player, ColorPile colorPile) {
-        move(player, colorPile);
-        setTurnPlayer(player);
-        //drawCard(player);
     }
 
     /**-------------------------------Set Turn of Next Player------------------------------------**/
@@ -136,7 +117,6 @@ public class GameLogic {
 
     public void drawCard(Player player) {
         if(allowDraw) {
-            //player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
             for(CardDisplay cardDisplay: Board.getHandCardDisplayList()){
                 if(cardDisplay.isEmpty()){
                     cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
@@ -148,7 +128,7 @@ public class GameLogic {
 
     /**-----------------------------Add Card to Pile & Player------------------------------------**/
 
-    public void addCardToPile(Player player, Card card, ColorPile colorPile) {
+    private void addCardToPile(Player player, Card card, ColorPile colorPile) {
         switch (colorPile) {
             case RED:
                 redDiscardPile.add(card);
@@ -192,7 +172,7 @@ public class GameLogic {
         }
     }
 
-    public void addCardToPlayer(Player player, Card card){
+    private void addCardToPlayer(Player player, Card card){
         switch (card.getCardColor()){
             case "green":
                 player.addCardGreen(card);
@@ -241,7 +221,7 @@ public class GameLogic {
         }
     }
 
-    public void moveFigure(Player player, Figure figure){
+    private void moveFigure(Player player, Figure figure){
         board.pause();
         figure.moveUp();
         Thread thread = new Thread(){
@@ -309,18 +289,17 @@ public class GameLogic {
     }
 
     //Check if drawPile is Empty
-    public boolean checkDrawPileEmpty() {
+    private boolean checkDrawPileEmpty() {
         return drawPile.isEmpty();
     }
 
     //Check if five Figures of one Player are over field 7
-    public boolean checkFigureEndingCondition() {
+    private boolean checkFigureEndingCondition() {
+        int count = 0;
         for (Player player : playerArrayList) {
-            if (player.verifyEndCondition()) {
-                return true;
-            }
+            count += player.verifyEndCondition();
         }
-        return false;
+        return count >= 5;
     }
     /**-----------------------Create unique roadcards for all Player-----------------------------**/
     public void createRoadcards(Keltis keltis){

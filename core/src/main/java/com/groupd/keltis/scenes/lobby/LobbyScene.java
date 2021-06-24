@@ -2,15 +2,18 @@ package com.groupd.keltis.scenes.lobby;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.RoadcardsStatus;
 import com.groupd.keltis.management.SceneManager;
@@ -36,6 +39,10 @@ public class LobbyScene extends AbstractScene {
 
     List<String> uIList;
     Array <String> playerList = new Array<>();
+    private OrthographicCamera camera;
+    private Image image;
+
+
 
     private ArrayList drawPileNames = new ArrayList<>();
     private CardHelper cardHelper = new CardHelper(keltis);
@@ -43,7 +50,13 @@ public class LobbyScene extends AbstractScene {
     public LobbyScene(Keltis keltis) {
         super(keltis);
 
-        stage = new Stage(new ScreenViewport());
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH*0.3f, Keltis.SCALE_HEIGHT*0.3f, camera));
+        image = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
+        image.setHeight(image.getHeight()*0.3f);
+        image.setWidth(image.getWidth()*0.3f);
+
     }
 
     @Override
@@ -63,6 +76,7 @@ public class LobbyScene extends AbstractScene {
 
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
+
         } else if(event instanceof RoadcardsSyncEvent){
             ArrayList<RoadcardsStatus> roadcardsStatusArrayList = RoadcardsToJson.convertToObject(((RoadcardsSyncEvent) event).getJson());
             ArrayList<Position> positionArrayList = new ArrayList<>();
@@ -92,10 +106,13 @@ public class LobbyScene extends AbstractScene {
 
         Gdx.input.setInputProcessor(stage);
 
+        stage.addActor(image);
+
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-        VerticalGroup vg = new VerticalGroup().space(3).pad(5).fill();
-        vg.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        VerticalGroup vg = new VerticalGroup().space(15).pad(15).fill();
+        vg.setBounds(0, 0, Keltis.SCALE_WIDTH*0.3f, Keltis.SCALE_HEIGHT*0.3f);
+
         stage.addActor(vg);
 
 
@@ -105,6 +122,7 @@ public class LobbyScene extends AbstractScene {
 
         TextButton readyButton = new TextButton("Ready", skin);
         vg.addActor(readyButton);
+
 
         readyButton.addListener(new InputListener(){
             @Override
@@ -117,6 +135,7 @@ public class LobbyScene extends AbstractScene {
                 return true;
             }
         });
+
     }
 
     @Override
@@ -143,14 +162,12 @@ public class LobbyScene extends AbstractScene {
     }
 
     public void fillHandcards(){
-        Gdx.app.log(String.valueOf(keltis.gameLogic.getNumberInArrayList()), "SWAT");
         for(int j = 0; j < keltis.gameLogic.getPlayerArrayList().size();j++){
             for(int i=1;i<=8;i++) {
                 keltis.gameLogic.getPlayerArrayList().get(j).getHandCards().add(keltis.gameLogic.getDrawPile().remove(keltis.gameLogic.getDrawPile().size() - 1));
             }
         }
 
-        //keltis.gameLogic.setDrawPile(drawPile);
     }
     public void convertStringsToCards(){
         for(Object string:drawPileNames){

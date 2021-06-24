@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -136,7 +135,8 @@ public class Board extends AbstractScene {
     }
 
     private void checkShaking(ArrayList<Player> player) {
-        if (ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing) {
+        if (ShakeDetector.phoneIsShaking() && !isCheatingDialogShowing &&
+                !keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()) {
             isCheatingDialogShowing = true;
             YesNoDialog dialog = new YesNoDialog("Schummelverdacht",
                     keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
@@ -177,21 +177,20 @@ public class Board extends AbstractScene {
 
     private void showWinnerDialog() {
         for (Player player : keltis.gameLogic.getPlayerArrayList()) {
-            if (player.verifyEndCondition()) {
+            if (keltis.gameLogic.verifyEndingCondition()) {
                 WinningDialog dialog = new WinningDialog("Spieler "+player.getNick()+" hat gewonnen!",
                         keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
                         new WinningDialog.Callback() {
                             @Override
                             public void result(boolean result) {
                                 if(result){
-                                    //NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
                                     keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
                                 }else{
                                     Gdx.app.exit();
                                 }
                             }
                         });
-                showDialog(dialog, stage, 5);
+                showDialog(dialog, stage, 3);
             }
         }
     }
@@ -238,7 +237,7 @@ public class Board extends AbstractScene {
     }
 
     public void setTextOfDrawPile(){
-        drawPileCount.setText("Verbleibende Karten: " + keltis.gameLogic.getDrawPile().size());
+        drawPileCount.setText("Verbleibend: " + keltis.gameLogic.getDrawPile().size());
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
@@ -454,7 +453,7 @@ public class Board extends AbstractScene {
 
     public void playerOverview() {
         scoreTitle = LabelHelper.label(30,975);
-        scoreTitle.setText("Score:");
+        scoreTitle.setText("Punkte:");
         stage.addActor(scoreTitle);
         switch (keltis.gameLogic.getPlayerArrayList().size()) {
             case 4:

@@ -11,9 +11,10 @@ import java.util.HashMap;
 
 public class Player {
 
-    private final Keltis keltis;
+
     private String nick;
     private ColorFigures color;
+
 
     private int wishingStones;
     private final ArrayList<Pointcard> pointCards = new ArrayList();
@@ -47,7 +48,6 @@ public class Player {
     }
 
     public Player(Keltis keltis, String nick, ColorFigures color, boolean host) {
-        this.keltis = keltis;
         this.color = color;
 
         this.nick = nick;
@@ -57,10 +57,16 @@ public class Player {
 
         this.turn = false;
         this.cheat = false;
-        initializePlayers();
+        initializePlayers(keltis);
     }
 
-    public void initializePlayers(){
+    //default constructor necessary for cheat tests
+    public Player(){
+
+    }
+
+    public void initializePlayers(Keltis keltis){
+
         figures = new HashMap<String, Figure>();
         switch (this.color){
             case BLUE:
@@ -150,14 +156,14 @@ public class Player {
         this.wishingStones += 1;
     }
 
-    public boolean verifyEndCondition(){
+    public int verifyEndCondition(){
         int count = 0;
         for(Figure figure: figures.values()){
             if(figure.getCurrentFieldPosition() >= 7){
                 count++;
             }
         }
-        return count == 5;
+        return count;
     }
 
     public void toggleCheat(){

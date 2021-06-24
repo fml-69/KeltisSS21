@@ -2,16 +2,19 @@ package com.groupd.keltis.scenes.login;
 
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.network.NetworkClient;
@@ -29,15 +32,24 @@ public class EntryScene extends AbstractScene {
     private Label errorLabel;
     private TextField textIP;
     private TextField textPort;
+    private OrthographicCamera camera;
+    private Image image;
+
+
 
 
 
     public EntryScene(Keltis keltis) {
         super(keltis);
-
-        stage = new Stage(new ScreenViewport());
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
+        this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH*0.4f, Keltis.SCALE_HEIGHT*0.4f, camera));
+        image = new Image((Texture) keltis.assetManager.get(AssetPaths.BOARD_BACKGROUND));
+        image.setHeight(image.getHeight()*0.4f);
+        image.setWidth(image.getWidth()*0.4f);
 
     }
+
 
     @Override
     public void update(float delta) {
@@ -49,12 +61,14 @@ public class EntryScene extends AbstractScene {
 
         Gdx.input.setInputProcessor(stage);
 
+        stage.addActor(image);
 
         Skin skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
-
         VerticalGroup vg = new VerticalGroup().space(3).pad(5).fill();
-        vg.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        vg.setBounds(0, 0, Keltis.SCALE_WIDTH*0.4f, Keltis.SCALE_HEIGHT*0.4f);
+
+
         stage.addActor(vg);
 
 
@@ -125,8 +139,6 @@ public class EntryScene extends AbstractScene {
                 return true;
             }
         });
-
-
 
     }
 

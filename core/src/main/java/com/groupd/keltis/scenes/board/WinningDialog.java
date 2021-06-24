@@ -14,7 +14,7 @@ public class WinningDialog extends Dialog {
     }
 
     private void init() {
-        Label label = new Label("Bitte gehen Sie zum Hauptmenu oder beenden das Spiel!", getSkin());
+        Label label = new Label("Was willst du machen?", getSkin());
         text(label);
 
         button("Hauptmenu", true);

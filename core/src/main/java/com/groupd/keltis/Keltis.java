@@ -25,6 +25,7 @@ public class Keltis extends Game {
 	public PositionHelper positionHelper;
 	public RoadcardsHelper roadcardsHelper;
 
+
 	public static int SCALE_WIDTH = 1920;
 	public static int SCALE_HEIGHT = 1080;
 	public int scaleFactorX;

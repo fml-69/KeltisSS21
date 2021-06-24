@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClientChannel;
 import com.groupd.keltis.network.NetworkServer;
+import com.groupd.keltis.network.NetworkServerInterface;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
 import com.groupd.keltis.network.events.CheatScoreEvent;
@@ -29,17 +30,32 @@ import java.util.concurrent.CountDownLatch;
 public class ServerRunnable implements Runnable{
 
     private Keltis keltis;
-    private List<Player> playerList = new ArrayList<>();
+    protected List<Player> playerList = new ArrayList<>();
 
     private boolean flag;
 
 
-    private final NetworkServer networkServer;
+    public NetworkServer networkServer;
+
 
 
     public ServerRunnable(int port, CountDownLatch countDownLatch, Keltis keltis){
         this.keltis = keltis;
         networkServer = new NetworkServer(port, countDownLatch, this);
+        flag = true;
+    }
+
+
+
+    //default constructor necessary for cheat tests
+    public ServerRunnable(){
+      
+    }  
+
+
+    public ServerRunnable(Keltis keltis, NetworkServerInterface networkServer){
+        this.keltis = keltis;
+        this.networkServer = (NetworkServer) networkServer;
         flag = true;
     }
 
@@ -172,7 +188,7 @@ public class ServerRunnable implements Runnable{
                 if (player.getCheat() && !nick.equals(player.getNick())){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und verlierst 4 Punkte.");
-                    //cheatQueryEvent.setScore(-4);
+                    player.setCheat(false);
                     CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
                     cheatScoreEvent.setScore(-4);
                     cheatScoreEvent.setNick(player.getNick());
@@ -182,7 +198,6 @@ public class ServerRunnable implements Runnable{
                 else if (player.getNick().equals(nick)){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt und erhälst 1 Punkt als Belohnung.");
-                    //cheatQueryEvent.setScore(1);
                     CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
                     cheatScoreEvent.setScore(1);
                     cheatScoreEvent.setNick(player.getNick());
