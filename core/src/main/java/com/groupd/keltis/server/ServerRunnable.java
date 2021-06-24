@@ -30,16 +30,28 @@ import java.util.concurrent.CountDownLatch;
 public class ServerRunnable implements Runnable{
 
     private Keltis keltis;
-    private List<Player> playerList = new ArrayList<>();
+    protected List<Player> playerList = new ArrayList<>();
 
     private boolean flag;
-    private final NetworkServerInterface networkServer;
+
+
+    public NetworkServer networkServer;
+
+
 
     public ServerRunnable(int port, CountDownLatch countDownLatch, Keltis keltis){
         this.keltis = keltis;
         networkServer = new NetworkServer(port, countDownLatch, this);
         flag = true;
     }
+
+
+
+    //default constructor necessary for cheat tests
+    public ServerRunnable(){
+      
+    }  
+
 
     public ServerRunnable(Keltis keltis, NetworkServerInterface networkServer){
         this.keltis = keltis;

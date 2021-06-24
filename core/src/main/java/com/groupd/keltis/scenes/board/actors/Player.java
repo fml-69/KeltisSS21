@@ -11,9 +11,9 @@ import java.util.HashMap;
 
 public class Player {
 
-    private final Keltis keltis;
-    private String nick;
-    private ColorFigures color;
+    protected Keltis keltis;
+    protected String nick;
+    protected ColorFigures color;
 
     private int wishingStones;
     private final ArrayList<Pointcard> pointCards = new ArrayList();
@@ -58,6 +58,11 @@ public class Player {
         this.turn = false;
         this.cheat = false;
         initializePlayers();
+    }
+
+    //default constructor necessary for cheat tests
+    public Player(){
+
     }
 
     public void initializePlayers(){
