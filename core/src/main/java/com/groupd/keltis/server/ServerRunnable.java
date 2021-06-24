@@ -55,7 +55,7 @@ public class ServerRunnable implements Runnable{
 
     public ServerRunnable(Keltis keltis, NetworkServerInterface networkServer){
         this.keltis = keltis;
-        this.networkServer = networkServer;
+        this.networkServer = (NetworkServer) networkServer;
         flag = true;
     }
 

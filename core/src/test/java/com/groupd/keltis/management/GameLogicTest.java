@@ -158,4 +158,6 @@ public class GameLogicTest {
         verify(figureMock,times(1)).getCurrentFieldPosition();
         verify(wishstoneMock,times(2)).getPosition();
     }
+
+
 }
