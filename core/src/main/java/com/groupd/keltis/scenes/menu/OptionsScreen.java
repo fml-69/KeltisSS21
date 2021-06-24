@@ -22,6 +22,7 @@ public class OptionsScreen extends AbstractScene {
 
     private TextButton mainMenuTB;
     private TextButton instructionsTB;
+    private TextButton audioButton;
     private OrthographicCamera camera;
     private Image image;
 
@@ -30,6 +31,14 @@ public class OptionsScreen extends AbstractScene {
     public OptionsScreen(Keltis keltis) {
 
         super(keltis);
+
+
+        stage = new Stage(new ScreenViewport());
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+
+        initTable();
+        initChangeListenerButtons();
 
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
@@ -42,17 +51,20 @@ public class OptionsScreen extends AbstractScene {
         table = new Table();
 
         table.setFillParent(true);
-        //table.setDebug(true);
+        
         stage.addActor(table);
 
         skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
 
         mainMenuTB = new TextButton("HAUPTMENU", skin);
         instructionsTB = new TextButton("SPIELANLEITUNG", skin);
+        audioButton = new TextButton("MUSIK AUSSCHALTEN", skin);
 
         table.add(instructionsTB).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
         table.row().pad(50, 0, 50, 0);
-        table.add(mainMenuTB).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
+        table.add(audioButton).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.row();
+        table.add(mainMenuTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row();
     }
 
@@ -67,6 +79,18 @@ public class OptionsScreen extends AbstractScene {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 keltis.sceneManager.setScene(SceneManager.GAMESTATE.TEXT_INSTRUCTIONS);
+            }
+        });
+        audioButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(keltis.getMusic().isPlaying()){
+                    audioButton.setText("MUSIK ANSCHALTEN");
+                    keltis.getMusic().stop();
+                }else{
+                    audioButton.setText("MUSIK AUSSCHALTEN");
+                    keltis.getMusic().play();
+                }
             }
         });
     }

@@ -206,4 +206,8 @@ public class Keltis extends Game {
 	public Sound getPlayCard() {
 		return playCard;
 	}
+
+	public Music getMusic(){
+		return music;
+	}
 }
