@@ -33,7 +33,7 @@ public class LobbyScene extends AbstractScene {
 
     List<String> uIList;
     Array <String> playerList = new Array<>();
-    private float scale = 0.3f;
+    private float scale = 0.5f;
 
 
     private ArrayList drawPileNames = new ArrayList<>();
