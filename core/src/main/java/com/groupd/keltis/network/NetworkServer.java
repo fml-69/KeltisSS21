@@ -117,12 +117,6 @@ public class NetworkServer {
                         StopGameEvent stopGameEvent = new StopGameEvent();
                         stopGameEvent.decode(channel.dataIn);
                         server.stopGame(stopGameEvent);
-                        //so the server doesn't close before all clients received stopgameevent
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         server.stopGameFlag();
                         acceptorThread.interrupt();
                         socket.close();
