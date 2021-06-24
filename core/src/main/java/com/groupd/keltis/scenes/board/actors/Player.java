@@ -65,7 +65,7 @@ public class Player {
 
     }
 
-    public void initializePlayers(){
+    public void initializePlayers(Keltis keltis){
 
         figures = new HashMap<String, Figure>();
         switch (this.color){
