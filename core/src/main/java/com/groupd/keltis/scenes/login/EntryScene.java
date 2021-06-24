@@ -31,7 +31,7 @@ public class EntryScene extends AbstractScene {
     private Label errorLabel;
     private TextField textIP;
     private TextField textPort;
-    private float scale = 0.3f;
+    private float scale = 0.5f;
 
 
 
