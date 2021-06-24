@@ -2,14 +2,20 @@ package com.groupd.keltis.server;
 
 import com.badlogic.gdx.Gdx;
 import com.groupd.keltis.Keltis;
+import com.groupd.keltis.network.NetworkClientChannel;
 import com.groupd.keltis.network.NetworkServer;
 import com.groupd.keltis.network.NetworkServerInterface;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.CheatScoreEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
 
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorFigures;
 
@@ -54,8 +60,13 @@ public class ServerRunnable implements Runnable{
         } while (flag);
     }
 
-    public void setFlag(boolean flag){
-        this.flag = flag;
+    //called when the game should stop for all users
+    public void stopGameFlag(){
+        this.flag = false;
+    }
+
+    public void stopGame(StopGameEvent stopgameevent){
+        networkServer.broadCast(stopgameevent);
     }
 
 
@@ -63,13 +74,13 @@ public class ServerRunnable implements Runnable{
     public void join(String nick){
 
         for(Player player:playerList){
-           networkServer.sendEvent(nick, new JoinEvent(player.getNick(), player.getColor()));
+           networkServer.sendEvent(nick, new JoinEvent(player.getNick(), player.getColor(),player.isHost()));
         }
 
 
         // first player added will be automatically host by boolean value of isEmpty()
         Player player = new Player(keltis, nick, playerColor() , playerList.isEmpty());
-        networkServer.broadCast(new JoinEvent(nick, player.getColor()));
+        networkServer.broadCast(new JoinEvent(nick, player.getColor(),player.isHost()));
         playerList.add(player);
 
     }
@@ -123,7 +134,6 @@ public class ServerRunnable implements Runnable{
     // can access nick of player who made for a turn
     public void onTurn(TurnEvent turnEvent) {
         networkServer.broadCast(turnEvent);
-
     }
 
     public void branchStackSync(CardDisplaySyncEvent cardDisplaySyncEvent) {
@@ -134,6 +144,16 @@ public class ServerRunnable implements Runnable{
         networkServer.broadCast(nextPlayerEvent);
     }
 
+    public void roadcardsSync(RoadcardsSyncEvent roadcardsSyncEvent){
+        networkServer.broadCast(roadcardsSyncEvent);
+    }
+
+    public void roadcardsRemoveSync(RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent){
+        networkServer.broadCast(roadcardsRemoveSyncEvent);
+    }
+    public void moveBecauseOfShamrock(MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent){
+        networkServer.broadCast(moveBecauseOfShamrockEvent);
+    }
 
     public void setPlayerCheat(boolean cheat, String nick){
         getPlayerNick(nick).setCheat(cheat);
@@ -156,13 +176,21 @@ public class ServerRunnable implements Runnable{
                 if (player.getCheat() && !nick.equals(player.getNick())){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und verlierst 4 Punkte.");
-                    cheatQueryEvent.setScore(-4);
+                    //cheatQueryEvent.setScore(-4);
+                    CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
+                    cheatScoreEvent.setScore(-4);
+                    cheatScoreEvent.setNick(player.getNick());
+                    networkServer.broadCast(cheatScoreEvent);
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                 }
                 else if (player.getNick().equals(nick)){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt und erhälst 1 Punkt als Belohnung.");
-                    cheatQueryEvent.setScore(1);
+                    //cheatQueryEvent.setScore(1);
+                    CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
+                    cheatScoreEvent.setScore(1);
+                    cheatScoreEvent.setNick(player.getNick());
+                    networkServer.broadCast(cheatScoreEvent);
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                 }
                 else{
@@ -185,7 +213,12 @@ public class ServerRunnable implements Runnable{
                 }
                 else{
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
-                    cheatQueryEvent.setScore(-1);
+                    //cheatQueryEvent.setScore(-1);
+                    CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
+                    cheatScoreEvent.setScore(-1);
+                    cheatScoreEvent.setNick(player.getNick());
+                    networkServer.broadCast(cheatScoreEvent);
+
                     cheatQueryEvent.setMessage("Du hast zu unrecht beschuldigt, dir wird 1 Punkt abgezogen." );
                     networkServer.sendEvent(player.getNick(),cheatQueryEvent);
                     Gdx.app.log("Info","cheater not found: " + player.getNick());

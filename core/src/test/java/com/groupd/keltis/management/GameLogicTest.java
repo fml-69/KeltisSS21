@@ -2,7 +2,9 @@ package com.groupd.keltis.management;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.groupd.keltis.scenes.board.Board;
+import com.groupd.keltis.scenes.board.ShamrockDialog;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
@@ -19,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -70,8 +73,8 @@ public class GameLogicTest {
         when(pointcard2Mock.getPoints()).thenReturn(3);
         when(playerMock.getPointCards()).thenReturn(pointcardArrayList);
 
-        gameLogic.checkCard(playerMock,null, pointcardMock);
-        gameLogic.checkCard(playerMock,null, pointcard2Mock);
+        gameLogic.checkCard(playerMock, pointcardMock);
+        gameLogic.checkCard(playerMock, pointcard2Mock);
 
         assertEquals(pointcardArrayList,playerMock.getPointCards());
         assertEquals(2,playerMock.getPointCards().get(0).getPoints());
@@ -83,11 +86,13 @@ public class GameLogicTest {
     }
 
     @Test
-    public void testCheckCardReturnAddWishstone(){
+    public void testCheckCardReturnAddWishstone() throws IOException {
         when(playerMock.getWishingStones()).thenReturn(1);
-
-        gameLogic.checkCard(playerMock,null,wishstoneMock);
-
+        try {
+            gameLogic.checkCard(playerMock,wishstoneMock);
+        } catch (Exception e){
+            assertEquals(e.getClass(),NullPointerException.class);
+        }
         assertEquals(1,playerMock.getWishingStones());
 
         verify(playerMock,times(1)).getWishingStones();
@@ -95,13 +100,20 @@ public class GameLogicTest {
 
     @Test
     public void testCheckCardReturnMoveFigureBecauseOfShamrock(){
-        //when(figureMock.getCurrentFieldPosition()).thenReturn(1);
+        ArrayList<Player> playerArrayList = new ArrayList<>();
+        playerArrayList.add(playerMock);
+        gameLogic.setPlayerArrayList(playerArrayList);
 
-        gameLogic.checkCard(playerMock,figureMock,shamrockMock);
+        when(playerMock.getTurn()).thenReturn(true);
+        when(playerMock.getNick()).thenReturn("");
+        when(figureMock.getCurrentFieldPosition()).thenReturn(1);
 
-        //wie soll getestet werden, dass die Figur ein Feld weitergezogen ist???????
+        assertEquals(true,gameLogic.checkCard(playerMock,shamrockMock));
+        assertEquals(figureMock.getCurrentFieldPosition(),1);
 
-        //verify(figureMock,times(1)).getCurrentFieldPosition();
+        verify(playerMock,times(1)).getTurn();
+        verify(playerMock,times(1)).getNick();
+        verify(figureMock,times(1)).getCurrentFieldPosition();
     }
 
     @Test
@@ -117,7 +129,11 @@ public class GameLogicTest {
 
         gameLogic.setRoadCardsList(roadcardsArrayList);
 
-        assertTrue(gameLogic.checkIfCardIsOnField(playerMock, figureMock));
+        try {
+            assertTrue(gameLogic.checkIfCardIsOnField(playerMock, figureMock));
+        } catch (Exception e){
+            assertEquals(e.getClass(),NullPointerException.class);
+        }
 
         verify(figureMock,times(1)).getBranch();
         verify(figureMock,times(1)).getCurrentFieldPosition();

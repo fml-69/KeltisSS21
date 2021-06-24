@@ -12,6 +12,8 @@ import com.groupd.keltis.management.GameLogic;
 import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.utils.CardHelper;
+import com.groupd.keltis.utils.PositionHelper;
+import com.groupd.keltis.utils.RoadcardsHelper;
 
 public class Keltis extends Game {
 
@@ -20,6 +22,8 @@ public class Keltis extends Game {
 	public GameLogic gameLogic;
 	public SpriteBatch batch;
 	public CardHelper cardHelper;
+	public PositionHelper positionHelper;
+	public RoadcardsHelper roadcardsHelper;
 
 	public static int SCALE_WIDTH = 1920;
 	public static int SCALE_HEIGHT = 1080;
@@ -56,7 +60,8 @@ public class Keltis extends Game {
 		loadAssets();
 		sceneManager = new SceneManager(this);
 		cardHelper = new CardHelper(this);
-
+		positionHelper = new PositionHelper();
+		roadcardsHelper = new RoadcardsHelper(this);
 
 	}
 
@@ -165,6 +170,30 @@ public class Keltis extends Game {
 		assetManager.load(AssetPaths.MENU_ASSET, Skin.class);
 		assetManager.load(AssetPaths.DIALOG_SKIN, Skin.class);
 
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_1, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_2, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_3, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_4, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_5, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_6, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_7, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_8, Texture.class);
+		assetManager.load(AssetPaths.INSTRUCTION_ASSET_9, Texture.class);
+
+		assetManager.load(AssetPaths.MENU_BACKGROUND_0, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_1, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_2, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_3, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_4, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_5, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_6, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_7, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_8, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_9, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_10, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_11, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_12, Texture.class);
+		assetManager.load(AssetPaths.MENU_BACKGROUND_13, Texture.class);
 
 		assetManager.finishLoading();
 	}

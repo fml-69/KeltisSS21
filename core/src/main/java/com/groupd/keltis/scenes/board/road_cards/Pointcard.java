@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Pointcard extends Roadcards {
     private int points;
-    public Pointcard(Texture texture, Position position, int points) {
-        super(texture,position);
+    public Pointcard(String name, Texture texture, Position position, int points) {
+        super(name,texture,position);
         this.points = points;
     }
 

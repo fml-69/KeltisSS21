@@ -9,10 +9,15 @@ import com.badlogic.gdx.utils.Align;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.CheatScoreEvent;
 import com.groupd.keltis.network.events.JoinEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.StartGameEvent;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.InfoDialog;
 import com.groupd.keltis.scenes.board.YesNoDialog;
@@ -113,7 +118,6 @@ public class NetworkClient {
                     Gdx.app.log("Info","Client2: " + cheatQueryEvent.getMessage());
                     if(!message.isEmpty()){
                         Gdx.app.log("Info","Client: " + message);
-                        keltis.gameLogic.setScoreCheatPlayer(getNickName(),cheatQueryEvent.getScore());
                         /*InfoDialog infoDialog = new InfoDialog("Schummelverdacht",
                                 keltis.assetManager.get(AssetPaths.DIALOG_SKIN),message);
                         NetworkClient.INSTANCE.showDialog(infoDialog,keltis.sceneManager.getActiveScene().stage,3);*/
@@ -124,9 +128,6 @@ public class NetworkClient {
                     TurnEvent turnEvent = new TurnEvent();
                     turnEvent.decode(dataIn);
                    keltis.sceneManager.getActiveScene().onNetworkEvent(turnEvent);
-
-                } else if(eventID == 69){
-
                 }
                 else if(eventID == 42) {
                     Gdx.app.log("NETWORK", "EVENT ID: 42 - CARD SYNC");
@@ -141,6 +142,29 @@ public class NetworkClient {
                     nextPlayerEvent.decode(dataIn);
                     keltis.sceneManager.getActiveScene().onNetworkEvent(nextPlayerEvent);
 
+                } else if(eventID == 99){
+                    Gdx.app.log("NETWORK", "EVENT ID: 99 - ROADCARD SYNC");
+                    RoadcardsSyncEvent roadcardsSyncEvent = new RoadcardsSyncEvent();
+                    roadcardsSyncEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(roadcardsSyncEvent);
+                }else if(eventID == 55){
+                    Gdx.app.log("NETWORK", "EVENT ID: 55 - ROADCARDREMOVE SYNC");
+                    RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent();
+                    roadcardsRemoveSyncEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(roadcardsRemoveSyncEvent);
+                }else if(eventID == 70){
+                    MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent = new MoveBecauseOfShamrockEvent();
+                    moveBecauseOfShamrockEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(moveBecauseOfShamrockEvent);
+                }else if(eventID == 9){
+                    CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
+                    cheatScoreEvent.decode(dataIn);
+                    keltis.gameLogic.cheatScoreUpdate(cheatScoreEvent.getNick(),cheatScoreEvent.getScore());
+                } else if(eventID == 69){
+                    StopGameEvent stopGameEvent = new StopGameEvent();
+                    stopGameEvent.decode(dataIn);
+                    keltis.sceneManager.getActiveScene().onNetworkEvent(stopGameEvent);
+                    disconnect();
                 }else {
                     Gdx.app.error("Error", "Invalid Network EventID");
                 }

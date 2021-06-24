@@ -3,21 +3,27 @@ package com.groupd.keltis.management;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import com.groupd.keltis.Keltis;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CheatEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
+import com.groupd.keltis.network.events.RoadcardsSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.board.Board;
+import com.groupd.keltis.scenes.board.BranchDialog;
 import com.groupd.keltis.scenes.board.actors.Card;
 import com.groupd.keltis.scenes.board.actors.CardDisplay;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
 import com.groupd.keltis.scenes.board.road_cards.Roadcards;
+import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.scenes.board.road_cards.Shamrock;
 import com.groupd.keltis.scenes.board.road_cards.Wishstone;
 import com.groupd.keltis.utils.ColorEnumsToString;
 import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.JsonConverter;
+import com.groupd.keltis.utils.RoadcardsToJson;
 
 
 import java.util.ArrayList;
@@ -52,15 +58,6 @@ public class GameLogic {
         this.purpleDiscardPile = new ArrayList<Card>();
     }
 
-    public int getNumberInArrayList(){
-        for(int i = 0; i < playerArrayList.size(); i++){
-            if(playerArrayList.get(i).getNick().equals(playerNick)){
-                return i;
-            }
-        }
-        return -1;
-    }
-
     /**-------------------------------Turn Methods & SendTurn------------------------------------**/
 
     //Main Method to play. Call to set everything in motion
@@ -69,11 +66,9 @@ public class GameLogic {
             NetworkClient client = NetworkClient.INSTANCE;
             TurnEvent turnEvent = new TurnEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),card.getName(),ColorEnumsToString.getPileColor(colorPile))));
             player.getHandCards().remove(card);
-            //player.getHandCards().add(drawPile.remove(drawPile.size()-1));
             client.sendEvent(turnEvent);
             allowDraw = true;
             Gdx.app.log("NETWORK", "TURN SENT");
-            //der Nachziehstapel muss sync werden
         }
     }
 
@@ -84,13 +79,6 @@ public class GameLogic {
         if(player != getPlayer(playerNick)){
             drawPile.remove(drawPile.size() - 1);
         }
-        //setTurnPlayer(player);
-    }
-
-    public void playCard(Player player, ColorPile colorPile) {
-        move(player, colorPile);
-        setTurnPlayer(player);
-        //drawCard(player);
     }
 
     /**-------------------------------Set Turn of Next Player------------------------------------**/
@@ -103,17 +91,23 @@ public class GameLogic {
             case 2:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);
+                player.setCheat(false);
+                sendCheat(player);
                 break;
             case 3:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else if (playerArrayList.indexOf(player) == 1) playerArrayList.get(2).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);
+                player.setCheat(false);
+                sendCheat(player);
                 break;
             case 4:
                 if (playerArrayList.indexOf(player) == 0) playerArrayList.get(1).setTurn(true);
                 else if (playerArrayList.indexOf(player) == 1) playerArrayList.get(2).setTurn(true);
                 else if (playerArrayList.indexOf(player) == 2) playerArrayList.get(3).setTurn(true);
                 else playerArrayList.get(0).setTurn(true);
+                player.setCheat(false);
+                sendCheat(player);
                 break;
             default:
                 throw new IllegalArgumentException("Number of Players isn't allowed");
@@ -125,7 +119,6 @@ public class GameLogic {
 
     public void drawCard(Player player) {
         if(allowDraw) {
-            //player.getHandCards().add(drawPile.remove(drawPile.size() - 1));
             for(CardDisplay cardDisplay: Board.getHandCardDisplayList()){
                 if(cardDisplay.isEmpty()){
                     cardDisplay.setCard(drawPile.remove(drawPile.size() - 1));
@@ -141,28 +134,38 @@ public class GameLogic {
         switch (colorPile) {
             case RED:
                 redDiscardPile.add(card);
-                if (checkCheatNumber(redDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(redDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case BLUE:
                 blueDiscardPile.add(card);
-                if (checkCheatNumber(blueDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(blueDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case GREEN:
                 greenDiscardPile.add(card);
-                if (checkCheatNumber(greenDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(greenDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case YELLOW:
                 yellowDiscardPile.add(card);
-                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(yellowDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case PURPLE:
                 purpleDiscardPile.add(card);
-                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) player.setCheat(true);
-                sendCheat(player);
+                if (checkCheatNumber(purpleDiscardPile, card.getNumber())) {
+                    player.setCheat(true);
+                    sendCheat(player);
+                }
                 break;
             case DISCARD:
                 discardPile.add(card);
@@ -242,7 +245,7 @@ public class GameLogic {
         board.resume();
     }
 
-    /**-------------------------------Check Cards on Field----------------------------------------*/
+    /**-------------------------Check Cards on Field & sync roadcards-----------------------------*/
 
     public boolean checkIfCardIsOnField(Player player, Figure figure) {
         for (Roadcards roadcards : roadCardsList) {
@@ -250,7 +253,7 @@ public class GameLogic {
             if (figure.getBranch() == roadcards.getPosition().getBranch() &&
                     figure.getCurrentFieldPosition() == roadcards.getPosition().getField()) {
 
-                checkCard(player, figure, roadcards);
+                checkCard(player, roadcards);
                 if(roadcards instanceof Wishstone){
                     roadCardsList.remove(roadcards);
                 }
@@ -260,22 +263,19 @@ public class GameLogic {
         return false;
     }
 
-    public boolean checkCard(Player player, Figure figure, Roadcards roadcards) {
+    public boolean checkCard(Player player,Roadcards roadcards) {
+        NetworkClient client = NetworkClient.INSTANCE;
         if (roadcards instanceof Wishstone) {
             Gdx.app.log("Wishstone: ", "get WishStone");
             player.addWishStone();
             roadcards.addAction(Actions.removeActor());
+            RoadcardsRemoveSyncEvent roadcardsRemoveSyncEvent = new RoadcardsRemoveSyncEvent(JsonConverter.convertToJson(roadcards.getName()));
+            client.sendEvent(roadcardsRemoveSyncEvent);
         } else if (roadcards instanceof Shamrock) {
             Gdx.app.log("Shamrock: ", "get Shamrock");
-            board.showDialog(board.getShamrockDialog(),board.stage,3);
-            float delay = 2; // seconds
-            Timer.schedule(new Timer.Task(){
-                @Override
-                public void run() {
-                    board.getShamrockDialog().hide();
-                    moveFigure(player,figure);
-                }
-            }, delay);
+            if(getCurrentPlayer().getNick().equals(playerNick)){
+                board.createBranchDialog(player);
+            }
             return true;
         } else if (roadcards instanceof Pointcard) {
             Gdx.app.log("PointCard: ", "get PointCard");
@@ -304,16 +304,34 @@ public class GameLogic {
         }
         return false;
     }
+    /**-----------------------Create unique roadcards for all Player-----------------------------**/
+    public void createRoadcards(Keltis keltis){
+        NetworkClient client = NetworkClient.INSTANCE;
+        for(Player player:playerArrayList){
+            if(player.getNick().equals(playerNick)&&player.isHost()){
+                RoadcardsList roadcardsList = new RoadcardsList();
+                roadcardsList.assignRoadcards(keltis);
+                board.setRoadcardsList(roadcardsList);
+                roadCardsList = roadcardsList.getRoadcardsArrayList();
 
+                ArrayList<RoadcardsStatus> roadcardsStatusArrayList = new ArrayList<>();
+                for(Roadcards roadcards:roadCardsList){
+                    roadcardsStatusArrayList.add(new RoadcardsStatus(roadcards.getName(),roadcards.getPosition().getName()));
+                }
+                RoadcardsSyncEvent roadcardsSyncEvent = new RoadcardsSyncEvent(RoadcardsToJson.convertToJson(roadcardsStatusArrayList));
+                client.sendEvent(roadcardsSyncEvent);
+            }
+        }
+    }
     /**-------------------------Get the Score of a certain Player--------------------------------**/
 
     public int getScoreOfPlayer(Player player) {
         return player.getOverallScore();
     }
 
-    public void setRoadCardsList(ArrayList<Roadcards> roadCardsList) {
-        this.roadCardsList = roadCardsList;
-    }
+    /**
+     *      Check Cheat Condition
+     */
 
     /**-----------------------------------Cheat Methods------------------------------------------**/
 
@@ -323,12 +341,26 @@ public class GameLogic {
         if (pile.size() <= 2) {
             return false;
         }
-        for (int i = 0; i < pile.size() - 1; i++) {
-            greater = pile.get(i).getNumber() < pile.get(i + 1).getNumber();
+        if(pile.get(0).getNumber() > pile.get(1).getNumber()){
+            if(numberCard > pile.get(pile.size()-2).getNumber()){
+                return true;
+            }
         }
-        if (greater && numberCard > pile.get(pile.size() - 1).getNumber()) {
-            return true;
-        } else return !greater && numberCard < pile.get(pile.size() - 1).getNumber();
+        else{
+            if(numberCard < pile.get(pile.size()-2).getNumber()){
+                return true;
+            }
+        }
+
+        /*
+        for (int i = 0; i < pile.size() - 1; i++) {
+            // greater = pile.get(i).getNumber() < pile.get(i + 1).getNumber();
+            greater |= pile.get(i).getNumber() > pile.get(i + 1).getNumber();
+        }*/
+        // if (greater && numberCard > pile.get(pile.size() - 1).getNumber()) {
+        //     return true;
+        //} else return !greater && numberCard < pile.get(pile.size() - 1).getNumber();
+        return greater;
     }
 
     public boolean checkCheat(ArrayList<Player> player) {
@@ -340,15 +372,6 @@ public class GameLogic {
             }
         }
         return false;
-    }
-
-    //Add Score to player, because of cheat
-    public void setScoreCheatPlayer(String nick, int score){
-        for (Player p : playerArrayList) {
-            if (p.getNick().equals(nick)) {
-                p.addScoreCheat(score);
-            }
-        }
     }
 
     //Send CheatEvent to Server
@@ -414,10 +437,20 @@ public class GameLogic {
         return purpleDiscardPile;
     }
 
-    /**---------------------------------Board setter---------------------------------------------**/
+    /**------------------------------roadCardsList Setter-----------------------------------**/
+
+    public void setRoadCardsList(ArrayList<Roadcards> roadCardsList) {
+        this.roadCardsList = roadCardsList;
+    }
+
+    /**---------------------------------Board Getter & Setter---------------------------------------------**/
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     /**------------------------------PlayerNick Getter & Setter----------------------------------**/
@@ -459,4 +492,16 @@ public class GameLogic {
     public void setAllowDraw(boolean allowPlay) {
         this.allowDraw = allowDraw;
     }
+
+    /**----------------------------------Cheat-Score-Update--------------------------------------**/
+
+    public void cheatScoreUpdate(String playerNick, int score){
+        for(Player player:playerArrayList){
+            if(player.getNick().equals(playerNick)){
+                player.addScoreCheat(score);
+            }
+        }
+
+    }
+
 }

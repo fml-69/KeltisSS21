@@ -4,23 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.groupd.keltis.Keltis;
 import com.groupd.keltis.accelerometer.ShakeDetector;
+import com.groupd.keltis.management.SceneManager;
 import com.groupd.keltis.management.BranchStackStatus;
 import com.groupd.keltis.network.NetworkClient;
 import com.groupd.keltis.network.events.CardDisplaySyncEvent;
 import com.groupd.keltis.network.events.CheatAccuseEvent;
 import com.groupd.keltis.network.events.CheatQueryEvent;
+import com.groupd.keltis.network.events.MoveBecauseOfShamrockEvent;
 import com.groupd.keltis.network.events.NetworkEvent;
 import com.groupd.keltis.management.PlayerMove;
+import com.groupd.keltis.network.events.StopGameEvent;
 import com.groupd.keltis.network.events.NextPlayerEvent;
+import com.groupd.keltis.network.events.RoadcardsRemoveSyncEvent;
 import com.groupd.keltis.network.events.TurnEvent;
 import com.groupd.keltis.scenes.AbstractScene;
 import com.groupd.keltis.scenes.board.actors.Card;
@@ -32,9 +40,11 @@ import com.groupd.keltis.scenes.board.road_cards.RoadcardsList;
 import com.groupd.keltis.utils.AssetPaths;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.utils.ColorEnumsToString;
+import com.groupd.keltis.utils.ColorPile;
 import com.groupd.keltis.utils.JsonConverter;
 import com.groupd.keltis.utils.LabelHelper;
 import com.groupd.keltis.utils.PositioningConstants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -68,7 +78,7 @@ public class Board extends AbstractScene {
     private Label turnText;
 
     private RoadcardsList roadcardsList = new RoadcardsList();
-    private ShamrockDialog shamrockDialog;
+    private BranchDialog branchDialog;
 
     private String greenStackTop = "";
     private String yellowStackTop = "";
@@ -91,9 +101,11 @@ public class Board extends AbstractScene {
 
     private boolean isCheatingDialogShowing = false;
 
+    private IngameMenuButton ingameMenuButton;
+
     private static ArrayList<CardDisplay> handCardDisplayList = new ArrayList<>();
 
-
+  
     public Board(final Keltis keltis) {
         super(keltis);
         this.camera = new OrthographicCamera();
@@ -108,9 +120,6 @@ public class Board extends AbstractScene {
 
         //GameLogic setDrawPile
         keltis.gameLogic.setRoadCardsList(roadcardsList.getRoadcardsArrayList());
-
-        shamrockDialog = new ShamrockDialog("Herzlichen Glückwunsch!", keltis.assetManager.get(AssetPaths.DIALOG_SKIN,Skin.class));
-
 
         keltis.gameLogic.setBoard(this);
     }
@@ -156,7 +165,7 @@ public class Board extends AbstractScene {
         super.render(delta);
         NetworkClient.INSTANCE.receiveEvents();
         if (keltis.gameLogic.verifyEndingCondition()) {
-            //Gdx.app.exit();
+            showWinnerDialog();
         }
         setTextOfScore();
         setTextOfDrawPile();
@@ -166,6 +175,27 @@ public class Board extends AbstractScene {
         setTurnText();
     }
 
+    private void showWinnerDialog() {
+        for (Player player : keltis.gameLogic.getPlayerArrayList()) {
+            if (player.verifyEndCondition()) {
+                WinningDialog dialog = new WinningDialog("Spieler "+player.getNick()+" hat gewonnen!",
+                        keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                        new WinningDialog.Callback() {
+                            @Override
+                            public void result(boolean result) {
+                                if(result){
+                                    //NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
+                                    keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
+                                }else{
+                                    Gdx.app.exit();
+                                }
+                            }
+                        });
+                showDialog(dialog, stage, 5);
+            }
+        }
+    }
+  
     public void setTextOfScore(){
         switch (keltis.gameLogic.getPlayerArrayList().size()){
             case 4:
@@ -208,7 +238,7 @@ public class Board extends AbstractScene {
     }
 
     public void setTextOfDrawPile(){
-        drawPileCount.setText("Verbleibende Karten: " + keltis.gameLogic.getDrawPile().size());
+        drawPileCount.setText("Verbleibend: " + keltis.gameLogic.getDrawPile().size());
     }
 
     public void showDialog(Dialog dialog, Stage stage, float scale) {
@@ -226,7 +256,6 @@ public class Board extends AbstractScene {
         stage.addActor(board);
         stage.addActor(branches);
 
-        roadcardsList.assignRoadcards(keltis);
         for (Roadcards roadcards : roadcardsList.getRoadcardsArrayList()) {
             stage.addActor(roadcards);
         }
@@ -271,8 +300,9 @@ public class Board extends AbstractScene {
 
 
         //Menu button on board
-        IngameMenuButton button = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
-        stage.addActor(button.getButton());
+        ingameMenuButton = new IngameMenuButton(keltis, keltis.assetManager.get(AssetPaths.BOARD_MENU_BUTTON));
+        stage.addActor(ingameMenuButton.getButton());
+        initIngameMenuButton();
 
         //handcards
 
@@ -322,6 +352,25 @@ public class Board extends AbstractScene {
             }
         }
 
+    }
+
+    private void initIngameMenuButton() {
+        ingameMenuButton.getButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                IngameMenuDialog dialog = new IngameMenuDialog("Keltis-Hauptmenu",
+                        keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                        new IngameMenuDialog.Callback() {
+                            @Override
+                            public void result(boolean result) {
+                                if (result) {
+                                    NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
+                                }
+                            }
+                        });
+                showDialog(dialog, stage, 3);
+            }
+        });
     }
 
     @Override
@@ -405,7 +454,7 @@ public class Board extends AbstractScene {
 
     public void playerOverview() {
         scoreTitle = LabelHelper.label(30,975);
-        scoreTitle.setText("Score:");
+        scoreTitle.setText("Punkte:");
         stage.addActor(scoreTitle);
         switch (keltis.gameLogic.getPlayerArrayList().size()) {
             case 4:
@@ -433,9 +482,6 @@ public class Board extends AbstractScene {
 
 
 
-    public ShamrockDialog getShamrockDialog() {
-        return shamrockDialog;
-    }
 
     public static void setHighlightedCardDisplay(CardDisplay cardDisplay){
         highlightedCardDisplay = cardDisplay;
@@ -476,6 +522,8 @@ public class Board extends AbstractScene {
         else if(event instanceof CheatQueryEvent){
             showDialog(new InfoDialog("Schummelverdacht",
                     keltis.assetManager.get(AssetPaths.DIALOG_SKIN),((CheatQueryEvent) event).message),stage, 3);
+        }else if(event instanceof StopGameEvent){
+            keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
         }
         else if(event instanceof CardDisplaySyncEvent){
             Gdx.app.log("NETWORK", "RECEIVED CARD STATUS");
@@ -517,6 +565,67 @@ public class Board extends AbstractScene {
             } else{
                 branchStackPurple.setCard(new Card(keltis.assetManager.get(AssetPaths.CARD_EMPTY_STACK_PURPLE), "emptyPurple", "", -1));
             }
+        } else if(event instanceof RoadcardsRemoveSyncEvent){
+            for(Roadcards roadcards:roadcardsList.getRoadcardsArrayList()){
+                if(roadcards.getName().equals(((RoadcardsRemoveSyncEvent) event).getJson().substring(1,((RoadcardsRemoveSyncEvent) event).getJson().length()-1))){
+                    roadcards.addAction(Actions.removeActor());
+                }
+            }
+        } else if(event instanceof MoveBecauseOfShamrockEvent){
+            PlayerMove playerMove = JsonConverter.convertToPlayerMove(((MoveBecauseOfShamrockEvent) event).getJson());
+            if(!keltis.gameLogic.getPlayerNick().equals(playerMove.getNick())) {
+                keltis.gameLogic.move(keltis.gameLogic.getPlayer(playerMove.getNick()), ColorEnumsToString.getPileColor(playerMove.getColor()));
+            }
         }
+
+    }
+    public void createBranchDialog(Player player){
+        branchDialog = new BranchDialog("Herzlichen Glueckwunsch", keltis.assetManager.get(AssetPaths.DIALOG_SKIN, Skin.class),
+                new BranchDialog.Callback() {
+                    @Override
+                    public void result(int result) {
+                        switch (result) {
+                            case 1:
+                                keltis.gameLogic.move(player, ColorPile.GREEN);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent1 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.GREEN))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent1);
+                                break;
+                            case 2:
+                                keltis.gameLogic.move(player, ColorPile.YELLOW);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent2 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.YELLOW))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent2);
+                                break;
+                            case 3:
+                                keltis.gameLogic.move(player, ColorPile.RED);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent3 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.RED))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent3);
+                                break;
+                            case 4:
+                                keltis.gameLogic.move(player, ColorPile.BLUE);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent4 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.BLUE))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent4);
+                                break;
+                            case 5:
+                                keltis.gameLogic.move(player, ColorPile.PURPLE);
+                                MoveBecauseOfShamrockEvent moveBecauseOfShamrockEvent5 = new MoveBecauseOfShamrockEvent(JsonConverter.convertToJson(new PlayerMove(player.getNick(),"",ColorEnumsToString.getPileColor(ColorPile.PURPLE))));
+                                NetworkClient.INSTANCE.sendEvent(moveBecauseOfShamrockEvent5);
+                                break;
+                            default:
+                        }
+                    }
+                });
+        showDialog(branchDialog, stage, 3);
+        }
+
+    public void setRoadcardsList(RoadcardsList roadcardsList) {
+        this.roadcardsList = roadcardsList;
+    }
+
+    public BranchDialog getBranchDialog() {
+        return branchDialog;
+    }
+
+    public void setBranchDialog(BranchDialog branchDialog) {
+        this.branchDialog = branchDialog;
     }
 }

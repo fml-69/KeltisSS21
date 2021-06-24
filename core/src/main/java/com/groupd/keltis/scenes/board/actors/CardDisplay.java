@@ -27,7 +27,7 @@ public class CardDisplay extends Actor {
     private Texture emptyHandcardTexture;
     private final CardDisplay itsaMe = this;
     private final Texture highlightTexture;
-    private final Texture highlightPlayableTexture;
+    private final Sprite highlightPlayableTexture;
     private final boolean isHandCard;
     private final boolean isDrawPile;
     private boolean isEmpty = true;
@@ -38,7 +38,7 @@ public class CardDisplay extends Actor {
     public CardDisplay(Keltis keltis, Texture texture, final String name, String color, boolean isHandCard, boolean isDrawPile){
         this.keltis = keltis;
         this.highlightTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT);
-        this.highlightPlayableTexture = keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT_PLAYABLE);
+        this.highlightPlayableTexture = new Sprite((Texture) keltis.assetManager.get(AssetPaths.CARD_HIGHLIGHT_PLAYABLE));
         this.isHandCard = isHandCard;
         this.isDrawPile = isDrawPile;
         if(isHandCard){
@@ -111,6 +111,7 @@ public class CardDisplay extends Actor {
 
     public void spritePos(float x, float y){
         sprite.setPosition(x, y);
+        highlightPlayableTexture.setPosition(x-15,y-15);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
     }
 
@@ -124,12 +125,10 @@ public class CardDisplay extends Actor {
         if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
                 &&!isDrawPile
                 &&!isHandCard
-                &&Board.getHighlightedCardDisplay()!=null){
+                &&Board.getHighlightedCardDisplay()!=null
+                &&!keltis.gameLogic.isAllowDraw()){
             if(Board.getHighlightedCardDisplay().isHandCard) {
-                Color c = batch.getColor();
-                batch.setColor(c.r, c.g, c.b, counter / 100);
-                batch.draw(highlightPlayableTexture, sprite.getX() - 15, sprite.getY() - 15);
-                batch.setColor(c);
+                highlightPlayableTexture.draw(batch, counter/100);
                 if (countUp) {
                     counter++;
                 } else {
@@ -146,10 +145,7 @@ public class CardDisplay extends Actor {
         if(keltis.gameLogic.getPlayer(keltis.gameLogic.getPlayerNick()).getTurn()
                 &&isDrawPile
                 &&keltis.gameLogic.isAllowDraw()){
-            Color c = batch.getColor();
-            batch.setColor(c.r, c.g, c.b, counter/100);
-            batch.draw(highlightPlayableTexture, sprite.getX()-15, sprite.getY()-15);
-            batch.setColor(c);
+            highlightPlayableTexture.draw(batch, counter/100);
             if(countUp){
                 counter++;
             } else{
@@ -167,10 +163,7 @@ public class CardDisplay extends Actor {
                 &&Board.getHighlightedCardDisplay()!=null
                 &&keltis.gameLogic.isAllowPlay()){
             if(!Board.getHighlightedCardDisplay().isHandCard) {
-                Color c = batch.getColor();
-                batch.setColor(c.r, c.g, c.b, counter / 100);
-                batch.draw(highlightPlayableTexture, sprite.getX() - 15, sprite.getY() - 15);
-                batch.setColor(c);
+                highlightPlayableTexture.draw(batch, counter/100);
                 if (countUp) {
                     counter++;
                 } else {
@@ -188,10 +181,7 @@ public class CardDisplay extends Actor {
                 &&isHandCard
                 &&Board.getHighlightedCardDisplay()==null
                 &&keltis.gameLogic.isAllowPlay()){
-            Color c = batch.getColor();
-            batch.setColor(c.r, c.g, c.b, counter / 100);
-            batch.draw(highlightPlayableTexture, sprite.getX() - 15, sprite.getY() - 15);
-            batch.setColor(c);
+            highlightPlayableTexture.draw(batch, counter/100);
             if (countUp) {
                 counter++;
             } else {
