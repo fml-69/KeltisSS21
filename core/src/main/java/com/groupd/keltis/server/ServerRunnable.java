@@ -188,7 +188,7 @@ public class ServerRunnable implements Runnable{
                 if (player.getCheat() && !nick.equals(player.getNick())){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du wurdest beim Schummeln erwischt und verlierst 4 Punkte.");
-                    //cheatQueryEvent.setScore(-4);
+                    player.setCheat(false);
                     CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
                     cheatScoreEvent.setScore(-4);
                     cheatScoreEvent.setNick(player.getNick());
@@ -198,7 +198,6 @@ public class ServerRunnable implements Runnable{
                 else if (player.getNick().equals(nick)){
                     CheatQueryEvent cheatQueryEvent = new CheatQueryEvent();
                     cheatQueryEvent.setMessage("Du hast einen Spieler beim Schummeln erwischt und erhälst 1 Punkt als Belohnung.");
-                    //cheatQueryEvent.setScore(1);
                     CheatScoreEvent cheatScoreEvent = new CheatScoreEvent();
                     cheatScoreEvent.setScore(1);
                     cheatScoreEvent.setNick(player.getNick());
