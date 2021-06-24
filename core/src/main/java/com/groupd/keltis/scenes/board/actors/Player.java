@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 public class Player {
 
-    private final Keltis keltis;
     private String nick;
     private ColorFigures color;
 
@@ -47,7 +46,6 @@ public class Player {
     }
 
     public Player(Keltis keltis, String nick, ColorFigures color, boolean host) {
-        this.keltis = keltis;
         this.color = color;
 
         this.nick = nick;
@@ -57,10 +55,10 @@ public class Player {
 
         this.turn = false;
         this.cheat = false;
-        initializePlayers();
+        initializePlayers(keltis);
     }
 
-    public void initializePlayers(){
+    private void initializePlayers(Keltis keltis){
         figures = new HashMap<String, Figure>();
         switch (this.color){
             case BLUE:

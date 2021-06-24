@@ -4,7 +4,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.groupd.keltis.scenes.board.Board;
-import com.groupd.keltis.scenes.board.ShamrockDialog;
 import com.groupd.keltis.scenes.board.actors.Figure;
 import com.groupd.keltis.scenes.board.actors.Player;
 import com.groupd.keltis.scenes.board.road_cards.Pointcard;
@@ -159,4 +158,6 @@ public class GameLogicTest {
         verify(figureMock,times(1)).getCurrentFieldPosition();
         verify(wishstoneMock,times(2)).getPosition();
     }
+
+
 }

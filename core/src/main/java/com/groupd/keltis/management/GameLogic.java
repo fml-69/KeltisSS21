@@ -130,7 +130,7 @@ public class GameLogic {
 
     /**-----------------------------Add Card to Pile & Player------------------------------------**/
 
-    public void addCardToPile(Player player, Card card, ColorPile colorPile) {
+    private void addCardToPile(Player player, Card card, ColorPile colorPile) {
         switch (colorPile) {
             case RED:
                 redDiscardPile.add(card);
@@ -174,7 +174,7 @@ public class GameLogic {
         }
     }
 
-    public void addCardToPlayer(Player player, Card card){
+    private void addCardToPlayer(Player player, Card card){
         switch (card.getCardColor()){
             case "green":
                 player.addCardGreen(card);
@@ -223,7 +223,7 @@ public class GameLogic {
         }
     }
 
-    public void moveFigure(Player player, Figure figure){
+    private void moveFigure(Player player, Figure figure){
         board.pause();
         figure.moveUp();
         Thread thread = new Thread(){
@@ -291,12 +291,12 @@ public class GameLogic {
     }
 
     //Check if drawPile is Empty
-    public boolean checkDrawPileEmpty() {
+    private boolean checkDrawPileEmpty() {
         return drawPile.isEmpty();
     }
 
     //Check if five Figures of one Player are over field 7
-    public boolean checkFigureEndingCondition() {
+    private boolean checkFigureEndingCondition() {
         for (Player player : playerArrayList) {
             if (player.verifyEndCondition()) {
                 return true;
