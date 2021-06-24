@@ -1,7 +1,6 @@
 package com.groupd.keltis.scenes.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -68,7 +67,7 @@ public class MenuScreen extends AbstractScene {
 
         stage.addActor(table);
 
-        skin = new Skin(Gdx.files.internal(AssetPaths.MENU_ASSET));
+        skin = keltis.assetManager.get(AssetPaths.MENU_ASSET);
 
         newGame = new TextButton("SPIEL STARTEN", skin);
         preferences = new TextButton("OPTIONEN", skin);
