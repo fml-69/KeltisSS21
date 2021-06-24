@@ -20,13 +20,12 @@ public class OptionsScreen extends AbstractScene {
 
     private TextButton mainMenuTB;
     private TextButton instructionsTB;
-
+    private TextButton audioButton;
     private Skin skin;
 
     public OptionsScreen(Keltis keltis) {
 
         super(keltis);
-
 
 
         stage = new Stage(new ScreenViewport());
@@ -48,9 +47,12 @@ public class OptionsScreen extends AbstractScene {
 
         mainMenuTB = new TextButton("HAUPTMENU", skin);
         instructionsTB = new TextButton("SPIELANLEITUNG", skin);
+        audioButton = new TextButton("MUSIK AUSSCHALTEN", skin);
 
         table.add(instructionsTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row().pad(50, 0, 50, 0);
+        table.add(audioButton).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.row();
         table.add(mainMenuTB).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
         table.row();
     }
@@ -66,6 +68,18 @@ public class OptionsScreen extends AbstractScene {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 keltis.sceneManager.setScene(SceneManager.GAMESTATE.TEXT_INSTRUCTIONS);
+            }
+        });
+        audioButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(keltis.getMusic().isPlaying()){
+                    audioButton.setText("MUSIK ANSCHALTEN");
+                    keltis.getMusic().stop();
+                }else{
+                    audioButton.setText("MUSIK AUSSCHALTEN");
+                    keltis.getMusic().play();
+                }
             }
         });
     }
