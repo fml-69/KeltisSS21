@@ -184,14 +184,13 @@ public class Board extends AbstractScene {
                             @Override
                             public void result(boolean result) {
                                 if(result){
-                                    //NetworkClient.INSTANCE.sendEvent(new StopGameEvent());
                                     keltis.sceneManager.setScene(SceneManager.GAMESTATE.MENU);
                                 }else{
                                     Gdx.app.exit();
                                 }
                             }
                         });
-                showDialog(dialog, stage, 5);
+                showDialog(dialog, stage, 3);
             }
         }
     }
