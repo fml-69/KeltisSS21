@@ -57,4 +57,30 @@ public class CheatTest {
                 "Du wurdest beim Schummeln erwischt und verlierst 4 Punkte.");
     }
 
+    @Test
+    public void testNotCheating() {
+
+        ArgumentCaptor<String> recipientCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<CheatQueryEvent> eventCaptor = ArgumentCaptor.forClass(CheatQueryEvent.class);
+
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(new PlayerTestable(null, "P1", ColorFigures.BLUE, true));
+        players.add(new PlayerTestable(null, "P2", ColorFigures.RED, false));
+        players.add(new PlayerTestable(null, "P3", ColorFigures.GREEN, false));
+
+        ServerRunnableTestable srt = new ServerRunnableTestable();
+        srt.setPlayers(players);
+        srt.checkCheat("P2");
+
+        Mockito.verify(srt.networkServer, times(3)).sendEvent(recipientCaptor.capture(), eventCaptor.capture());
+
+        //test each player for their received message
+        assertEquals(eventCaptor.getAllValues().get(0).message,
+                "Ein Spieler hat jemanden zu unrecht beschuldigt.");
+        assertEquals(eventCaptor.getAllValues().get(1).message,
+                "Du hast zu unrecht beschuldigt, dir wird 1 Punkt abgezogen.");
+        assertEquals(eventCaptor.getAllValues().get(2).message,
+                "Ein Spieler hat jemanden zu unrecht beschuldigt.");
+    }
+
 }
