@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
@@ -40,7 +39,6 @@ public class LobbyScene extends AbstractScene {
 
     List<String> uIList;
     Array <String> playerList = new Array<>();
-    private float scale = 0.5f;
     private OrthographicCamera camera;
 
 
@@ -55,9 +53,6 @@ public class LobbyScene extends AbstractScene {
         this.camera.setToOrtho(false, Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT);
         this.stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
 
-        //ScreenViewport sv = new ScreenViewport();
-        //sv.setUnitsPerPixel(scale);
-        //stage = new Stage(sv);
 
     }
 
@@ -78,6 +73,7 @@ public class LobbyScene extends AbstractScene {
 
             //Set allowed turn of first player to true for everyone
             keltis.gameLogic.getPlayerArrayList().get(0).setTurn(true);
+
         } else if(event instanceof RoadcardsSyncEvent){
             ArrayList<RoadcardsStatus> roadcardsStatusArrayList = RoadcardsToJson.convertToObject(((RoadcardsSyncEvent) event).getJson());
             ArrayList<Position> positionArrayList = new ArrayList<>();
@@ -114,9 +110,6 @@ public class LobbyScene extends AbstractScene {
 
         stage.addActor(vg);
 
-       // vg.setTransform(true);
-       //  vg.setSize(40,10);
-
 
         uIList = new List<>(skin);
         vg.addActor(uIList);
@@ -138,8 +131,6 @@ public class LobbyScene extends AbstractScene {
             }
         });
 
-       // BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
-       // font.getData().setScale(5,5);
     }
 
     @Override
@@ -172,7 +163,6 @@ public class LobbyScene extends AbstractScene {
             }
         }
 
-        //keltis.gameLogic.setDrawPile(drawPile);
     }
     public void convertStringsToCards(){
         for(Object string:drawPileNames){
