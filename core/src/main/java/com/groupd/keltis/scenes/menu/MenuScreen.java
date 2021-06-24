@@ -43,8 +43,6 @@ public class MenuScreen extends AbstractScene {
         background_animated = new Texture[14];
         stage = new Stage(new StretchViewport(Keltis.SCALE_WIDTH, Keltis.SCALE_HEIGHT, camera));
         keltis.batch.setProjectionMatrix(camera.combined);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
 
         initBackgroundTextures();
         background = new Image(background_animated[0]);
@@ -77,11 +75,11 @@ public class MenuScreen extends AbstractScene {
         exit = new TextButton("BEENDEN", skin);
 
         //before .uniform and .fill methods were used
-        table.add(newGame).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.add(newGame).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
         table.row().pad(50, 0, 50, 0);
-        table.add(preferences).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.add(preferences).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
         table.row();
-        table.add(exit).width(Gdx.graphics.getWidth() * 1/5f).height(Gdx.graphics.getHeight() * 1/6f);
+        table.add(exit).width(Keltis.SCALE_WIDTH/5f).height(Keltis.SCALE_HEIGHT/6f);
 
     }
 
@@ -137,8 +135,7 @@ public class MenuScreen extends AbstractScene {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        super.render(delta);
         stage.draw();
         if(framecounter>2&&backgroundcounter!=0){
             framecounter= 0;
